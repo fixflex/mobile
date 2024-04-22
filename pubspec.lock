@@ -404,10 +404,10 @@ packages:
     dependency: "direct main"
     description:
       name: lottie
-      sha256: a93542cc2d60a7057255405f62252533f8e8956e7e06754955669fd32fb4b216
+      sha256: ce2bb2605753915080e4ee47f036a64228c88dc7f56f7bc1dbe912d75b55b1e2
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.7.0"
+    version: "3.1.0"
   matcher:
     dependency: transitive
     description:
@@ -548,10 +548,18 @@ packages:
     dependency: transitive
     description:
       name: pointycastle
-      sha256: "70fe966348fe08c34bf929582f1d8247d9d9408130723206472b4687227e4333"
+      sha256: "79fbafed02cfdbe85ef3fd06c7f4bc2cbcba0177e61b765264853d4253b21744"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.8.0"
+    version: "3.9.0"
+  pretty_dio_logger:
+    dependency: "direct main"
+    description:
+      name: pretty_dio_logger
+      sha256: "00b80053063935cf9a6190da344c5373b9d0e92da4c944c878ff2fbef0ef6dc2"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.3.1"
   provider:
     dependency: transitive
     description:
