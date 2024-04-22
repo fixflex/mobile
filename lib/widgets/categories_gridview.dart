@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../cubits/get_categories_cubit/get_categories_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../services/get_all_categories_service.dart';
 
 class CategoriesGridview extends StatelessWidget {
   CategoriesGridview({super.key});
@@ -11,7 +10,7 @@ class CategoriesGridview extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          GetCategoriesCubit(GetAllCategoriesService())..getCategories(),
+          GetCategoriesCubit()..getCategories(),
       child: BlocBuilder<GetCategoriesCubit, GetCategoriesState>(
         builder: (context, state) {
           if (state is LoadingIndicatorInitial) {

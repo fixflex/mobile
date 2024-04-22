@@ -1,27 +1,33 @@
-import 'package:bloc/bloc.dart';
+import 'package:fix_flex/helper/network/dio_api_helper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+import '../../constants/end_points/end_points.dart';
 import '../../models/category_model.dart';
-import '../../services/get_all_categories_service.dart';
 part 'get_categories_state.dart';
 
 class GetCategoriesCubit extends Cubit<GetCategoriesState> {
-  GetCategoriesCubit(this.getAllCategoriesService) : super(LoadingIndicatorInitial());
+  GetCategoriesCubit() : super(LoadingIndicatorInitial());
 
   static GetCategoriesCubit get(context) => BlocProvider.of(context);
-  GetAllCategoriesService getAllCategoriesService;
+  List<DataModel> dataList = [];
 
-Future<void> getCategories() async {
-  try {
-    emit(LoadingIndicatorInitial());
-    final categories = await getAllCategoriesService.GetAllCategories();
-    if (categories.isEmpty) {
-      emit(NoCategoriesState());
-    } else {
-      emit(CategoriesLoadedState(categories));
+  Future<void> getCategories() async {
+    try {
+      emit(LoadingIndicatorInitial());
+      var jsonData = (await DioApiHelper.getData(
+          url: EndPoints.baseUrl + EndPoints.categories));
+      List<dynamic> categories = jsonData.data['data'];
+      if (categories.isEmpty) {
+        emit(NoCategoriesState());
+      } else {
+        for (var category in categories) {
+          DataModel dataModel = DataModel.fromJson(category);
+          dataList.add(dataModel);
+        }
+        emit(CategoriesLoadedState(dataList));
+      }
+    } catch (e) {
+      emit(CategoriesErrorState());
     }
-  } catch (e) {
-    emit(CategoriesErrorState());
   }
-}
 }
