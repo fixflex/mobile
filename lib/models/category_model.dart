@@ -1,20 +1,3 @@
-// class CategoryModel {
-//   CategoryModel({
-//     // required this.onTap,
-//     required this.data,
-//   });
-//
-//   // final Function onTap;
-//   final DataModel data;
-//
-//   factory CategoryModel.fromJson(jsonData) {
-//     return CategoryModel(
-//       // onTap: jsonData['onTap'],
-//       data: DataModel.fromJson(jsonData['data']),
-//     );
-//   }
-// }
-
 class DataModel {
   DataModel({
     required this.name,
