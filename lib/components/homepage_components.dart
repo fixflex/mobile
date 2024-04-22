@@ -5,18 +5,10 @@ import '../widgets/sliver_appbar.dart';
 import 'offers.dart';
 
 
-class HomePageComponents extends StatefulWidget {
+class HomePageComponents extends StatelessWidget {
   HomePageComponents({
     super.key,
   });
-
-  @override
-  State<HomePageComponents> createState() => _HomePageComponentsState();
-}
-
-class _HomePageComponentsState extends State<HomePageComponents> {
-  var searchController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Padding(

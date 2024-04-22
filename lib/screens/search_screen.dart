@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 
 
-class SearchScreen extends StatefulWidget {
+class SearchScreen extends StatelessWidget {
   SearchScreen({super.key});
 
-  @override
-  State<SearchScreen> createState() => _SearchScreenState();
-}
 
-class _SearchScreenState extends State<SearchScreen> {
-  var searchController = TextEditingController();
+  static var searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
