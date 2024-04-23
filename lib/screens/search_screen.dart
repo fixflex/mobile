@@ -5,6 +5,9 @@ class SearchScreen extends StatelessWidget {
   SearchScreen({super.key});
 
 
+  static const String id ='SearchScreen';
+
+
   static var searchController = TextEditingController();
 
   @override

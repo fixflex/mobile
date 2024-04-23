@@ -7,6 +7,8 @@ import '../cubits/bottom_navigation_bar_cubit/bottom_navigation_bar_cubit.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
+  static const String id = 'HomeScreen';
+
   @override
   Widget build(BuildContext context) {
     return

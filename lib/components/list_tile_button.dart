@@ -5,13 +5,15 @@ class ListTileButton extends StatelessWidget {
   const ListTileButton({
     super.key,
     required this.listTileModel,
+    required this.onTap,
   });
 final ListTileModel listTileModel;
+final Function onTap;
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-
+        onTap;
       },
       contentPadding: EdgeInsets.all(0),
       leading: Icon(

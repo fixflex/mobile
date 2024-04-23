@@ -1,3 +1,4 @@
+import 'package:fix_flex/cubits/logout_cubit/logout_cubit.dart';
 import 'package:flutter/material.dart';
 
 import '../components/list_tile_button.dart';
@@ -6,41 +7,65 @@ import '../models/list_tile_model.dart';
 
 class UserProfile extends StatelessWidget {
   UserProfile({super.key});
+
+  static const String id = 'UserProfile';
+
   final List<ListTileModel> listTileOptions = [
     ListTileModel(
       leading: Icons.credit_card,
       title: 'Payment Options',
       trailing: Icons.arrow_forward_ios,
+      onTap: () {
+        print('Payment Options');
+      },
     ),
     ListTileModel(
       leading: Icons.notifications,
       title: 'Notifications',
       trailing: Icons.arrow_forward_ios,
+      onTap: () {
+        print('Notifications');
+      },
     ),
     ListTileModel(
       leading: Icons.lock_person,
       title: 'Personal Information',
       trailing: Icons.arrow_forward_ios,
+      onTap: () {
+        print('Personal Information');
+      },
     ),
     ListTileModel(
       leading: Icons.help,
       title: 'Help',
       trailing: Icons.arrow_forward_ios,
+      onTap: () {
+        print('Help');
+      },
     ),
     ListTileModel(
       leading: Icons.message,
       title: 'Contact Us',
       trailing: Icons.arrow_forward_ios,
+      onTap: () {
+        print('Contact Us');
+      },
     ),
     ListTileModel(
       leading: Icons.policy,
       title: 'Policy',
       trailing: Icons.arrow_forward_ios,
+      onTap: () {
+        print('Policy');
+      },
     ),
     ListTileModel(
       leading: Icons.logout,
       title: 'Log Out',
       trailing: Icons.arrow_forward_ios,
+      onTap: (BuildContext context) {
+        LogoutCubit.get(context).logout();
+      },
     ),
   ];
   @override
@@ -101,7 +126,7 @@ class UserProfile extends StatelessWidget {
                             SizedBox(
                               width: 100,
                               child: Text(
-                                'Cairo, Egypt PlaPla' ,
+                                'Cairo, Egypt PlaPla',
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 style: TextStyle(
@@ -138,13 +163,17 @@ class UserProfile extends StatelessWidget {
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
                             return ListTileButton(
+                              onTap: listTileOptions[index].onTap,
                               listTileModel: listTileOptions[index],
                             );
                           },
                           itemCount: 3,
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top:25,bottom: 8,),
+                          padding: const EdgeInsets.only(
+                            top: 25,
+                            bottom: 8,
+                          ),
                           child: Text(
                             'HELP & SUPPORT',
                             style: TextStyle(
@@ -160,12 +189,16 @@ class UserProfile extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return ListTileButton(
                               listTileModel: listTileOptions[index + 3],
+                              onTap: listTileOptions[index + 3].onTap,
                             );
                           },
                           itemCount: 2,
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top:25,bottom: 8,),
+                          padding: const EdgeInsets.only(
+                            top: 25,
+                            bottom: 8,
+                          ),
                           child: Text(
                             'SAFETY',
                             style: TextStyle(
@@ -181,11 +214,11 @@ class UserProfile extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return ListTileButton(
                               listTileModel: listTileOptions[index + 5],
+                              onTap: listTileOptions[index + 5].onTap,
                             );
                           },
                           itemCount: 2,
                         ),
-
                       ],
                     ),
                   ),

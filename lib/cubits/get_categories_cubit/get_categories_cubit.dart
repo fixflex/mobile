@@ -15,7 +15,7 @@ class GetCategoriesCubit extends Cubit<GetCategoriesState> {
     try {
       emit(LoadingIndicatorInitial());
       var jsonData = (await DioApiHelper.getData(
-          url: EndPoints.baseUrl + EndPoints.categories));
+          url:EndPoints.categories));
       List<dynamic> categories = jsonData.data['data'];
       if (categories.isEmpty) {
         emit(NoCategoriesState());
