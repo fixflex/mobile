@@ -1,7 +1,8 @@
 import 'package:fix_flex/cubits/logout_cubit/logout_cubit.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../components/list_tile_button.dart';
+import '../cubits/logout_cubit/logout_state.dart';
 import '../models/custom_clippers.dart';
 import '../models/list_tile_model.dart';
 
@@ -15,7 +16,7 @@ class UserProfile extends StatelessWidget {
       leading: Icons.credit_card,
       title: 'Payment Options',
       trailing: Icons.arrow_forward_ios,
-      onTap: () {
+      onTap: (BuildContext context) {
         print('Payment Options');
       },
     ),
@@ -23,7 +24,7 @@ class UserProfile extends StatelessWidget {
       leading: Icons.notifications,
       title: 'Notifications',
       trailing: Icons.arrow_forward_ios,
-      onTap: () {
+      onTap: (BuildContext context) {
         print('Notifications');
       },
     ),
@@ -31,7 +32,7 @@ class UserProfile extends StatelessWidget {
       leading: Icons.lock_person,
       title: 'Personal Information',
       trailing: Icons.arrow_forward_ios,
-      onTap: () {
+      onTap: (BuildContext context) {
         print('Personal Information');
       },
     ),
@@ -39,7 +40,7 @@ class UserProfile extends StatelessWidget {
       leading: Icons.help,
       title: 'Help',
       trailing: Icons.arrow_forward_ios,
-      onTap: () {
+      onTap: (BuildContext context) {
         print('Help');
       },
     ),
@@ -47,7 +48,7 @@ class UserProfile extends StatelessWidget {
       leading: Icons.message,
       title: 'Contact Us',
       trailing: Icons.arrow_forward_ios,
-      onTap: () {
+      onTap: (BuildContext context) {
         print('Contact Us');
       },
     ),
@@ -55,7 +56,7 @@ class UserProfile extends StatelessWidget {
       leading: Icons.policy,
       title: 'Policy',
       trailing: Icons.arrow_forward_ios,
-      onTap: () {
+      onTap: (BuildContext context) {
         print('Policy');
       },
     ),
@@ -64,7 +65,7 @@ class UserProfile extends StatelessWidget {
       title: 'Log Out',
       trailing: Icons.arrow_forward_ios,
       onTap: (BuildContext context) {
-        LogoutCubit.get(context).logout();
+        LogoutCubit.get(context).logout(context);
       },
     ),
   ];
@@ -163,7 +164,7 @@ class UserProfile extends StatelessWidget {
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
                             return ListTileButton(
-                              onTap: listTileOptions[index].onTap,
+                              onTap: (){listTileOptions[index].onTap;},
                               listTileModel: listTileOptions[index],
                             );
                           },
@@ -189,7 +190,7 @@ class UserProfile extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return ListTileButton(
                               listTileModel: listTileOptions[index + 3],
-                              onTap: listTileOptions[index + 3].onTap,
+                              onTap: (){listTileOptions[index + 3].onTap;},
                             );
                           },
                           itemCount: 2,
@@ -207,17 +208,27 @@ class UserProfile extends StatelessWidget {
                             ),
                           ),
                         ),
-                        ListView.builder(
-                          padding: EdgeInsets.all(0),
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return ListTileButton(
-                              listTileModel: listTileOptions[index + 5],
-                              onTap: listTileOptions[index + 5].onTap,
+                        BlocBuilder<LogoutCubit,LogoutState>(
+                          builder: (context, state) {
+                            return ListView.builder(
+                              padding: EdgeInsets.all(0),
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                return ListTileButton(
+                                  listTileModel: listTileOptions[index + 5],
+                                  onTap: () {
+                                    final onTap =
+                                        listTileOptions[index + 5].onTap;
+                                    if (onTap != null) {
+                                      onTap(context);
+                                    }
+                                  },
+                                );
+                              },
+                              itemCount: 2,
                             );
                           },
-                          itemCount: 2,
                         ),
                       ],
                     ),

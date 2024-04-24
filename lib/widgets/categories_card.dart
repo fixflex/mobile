@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import '../cubits/button_clicked_color_cubit/button_clicked_cubit.dart';
+import '../cubits/get_categories_cubit/get_categories_cubit.dart';
 import '../models/category_model.dart';
 
 class CategoryCard extends StatelessWidget {
-  const CategoryCard({super.key, required this.categoryModel});
+  const CategoryCard({super.key, required this.categoryModel, required this.index});
 
   final DataModel categoryModel;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -18,40 +18,33 @@ class CategoryCard extends StatelessWidget {
           children: [
             Flexible(
               flex: 1,
-              child: BlocProvider(
-                create: (context) => ButtonClickedCubit(),
-                child: BlocBuilder<ButtonClickedCubit, ButtonClickedState>(
-                  builder: (context, state) {
-                    return GestureDetector(
-                      onTap: () {
-                        ButtonClickedCubit.get(context).changeColor();
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: ButtonClickedCubit.get(context).boxColor,
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black,
-                              blurRadius: 2,
-                              spreadRadius: 0.3,
-                              offset: Offset(0.7, 0.7),
-                            )
-                          ],
-                        ),
-                        width: 80,
-                        height: 80,
-                        child: Center(
-                          child: SvgPicture.network(
-                            categoryModel.image.imageUrl!,
-                            width: 45,
-                            height: 45,
-                            color: ButtonClickedCubit.get(context).iconColor,
-                          ),
-                        ),
-                      ),
-                    );
-                  },
+              child: GestureDetector(
+                onTap: () {
+                  GetCategoriesCubit.get(context).handleButtonTap(index);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: GetCategoriesCubit.get(context).buttonClickedStates[index] ? Color(0xff134161) : Colors.white,
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black,
+                        blurRadius: 2,
+                        spreadRadius: 0.3,
+                        offset: Offset(0.7, 0.7),
+                      )
+                    ],
+                  ),
+                  width: 80,
+                  height: 80,
+                  child: Center(
+                    child: SvgPicture.network(
+                      categoryModel.image.imageUrl!,
+                      width: 45,
+                      height: 45,
+                      color: GetCategoriesCubit.get(context).buttonClickedStates[index] ? Colors.white : Color(0xff134161),
+                    ),
+                  ),
                 ),
               ),
             ),

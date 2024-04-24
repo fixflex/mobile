@@ -46,6 +46,7 @@ dependencies:
   flutter_secure_storage: ^4.2.1
   animated_conditional_builder: ^0.0.5
   connectivity_plus: ^6.0.3
+  fluttertoast: ^8.2.5
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import '../models/list_tile_model.dart';
+
 class ListTileButton extends StatelessWidget {
   const ListTileButton({
     super.key,
@@ -13,7 +13,7 @@ final Function onTap;
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-        onTap;
+        onTap();
       },
       contentPadding: EdgeInsets.all(0),
       leading: Icon(

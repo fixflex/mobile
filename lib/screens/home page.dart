@@ -1,8 +1,10 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:fix_flex/cubits/logout_cubit/logout_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../components/navigation_drawer.dart';
 import '../cubits/bottom_navigation_bar_cubit/bottom_navigation_bar_cubit.dart';
+
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -11,33 +13,34 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-        BlocProvider(
-          create: (context) => BottomNavigationBarCubit(),
-          child: BlocConsumer<BottomNavigationBarCubit,BottomNavigationBarState>(
-            listener: (context, state) {},
-            builder:(context, state) {
+    return BlocProvider(
+      create: (context) => BottomNavigationBarCubit(),
+      child: BlocConsumer<BottomNavigationBarCubit, BottomNavigationBarState>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          BottomNavigationBarCubit cubit =
+              BottomNavigationBarCubit.get(context);
 
-              BottomNavigationBarCubit cubit = BottomNavigationBarCubit.get(context);
+          return BlocProvider(
+            create: (context) => LogoutCubit(),
+            child:  Scaffold(
+                  drawer: NavigationDrawerWidget(),
+                  body: cubit.screens[cubit.currentIndex],
 
-              return  Scaffold(
-                drawer: NavigationDrawerWidget(),
-                body: cubit.screens[cubit.currentIndex],
-
-                //Bottom Navigation Bar
-                bottomNavigationBar: CurvedNavigationBar(
-                  items: cubit.navigationBarIcons,
-                  color: Color(0xff134161),
-                  index: cubit.currentIndex,
-                  backgroundColor: Colors.transparent,
-                  onTap: (index) {
-                    cubit.changeBottomNavBar(index);
-                  },
+                  //Bottom Navigation Bar
+                  bottomNavigationBar: CurvedNavigationBar(
+                    items: cubit.navigationBarIcons,
+                    color: Color(0xff134161),
+                    index: cubit.currentIndex,
+                    backgroundColor: Colors.transparent,
+                    onTap: (index) {
+                      cubit.changeBottomNavBar(index);
+                    },
+                  ),
                 ),
-              );
-            },
-          ),
-        );
+          );
+        },
+      ),
+    );
   }
 }
-

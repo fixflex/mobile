@@ -14,4 +14,9 @@ final class CategoriesLoadedState extends GetCategoriesState {
 
 final class CategoriesErrorState extends GetCategoriesState {}
 
+final class ButtonIsClicked extends GetCategoriesState {
+  ButtonIsClicked(this.categories);
+  final List<DataModel> categories;
+}
+
 
