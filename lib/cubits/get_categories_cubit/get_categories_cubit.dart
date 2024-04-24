@@ -10,12 +10,14 @@ class GetCategoriesCubit extends Cubit<GetCategoriesState> {
 
   static GetCategoriesCubit get(context) => BlocProvider.of(context);
   List<DataModel> dataList = [];
+  List<bool> buttonClickedStates = [false, false, false, false, false, false];
+
 
   Future<void> getCategories() async {
     try {
       emit(LoadingIndicatorInitial());
       var jsonData = (await DioApiHelper.getData(
-          url: EndPoints.baseUrl + EndPoints.categories));
+          url:EndPoints.categories));
       List<dynamic> categories = jsonData.data['data'];
       if (categories.isEmpty) {
         emit(NoCategoriesState());
@@ -29,5 +31,16 @@ class GetCategoriesCubit extends Cubit<GetCategoriesState> {
     } catch (e) {
       emit(CategoriesErrorState());
     }
+  }
+
+  void handleButtonTap(int index) {
+    for (int i = 0; i < buttonClickedStates.length; i++) {
+      if (i == index) {
+        buttonClickedStates[i] = !buttonClickedStates[i]; // Toggle the state of the clicked button
+      } else {
+        buttonClickedStates[i] = false; // Reset the state of other buttons
+      }
+    }
+    emit(ButtonIsClicked(dataList));
   }
 }

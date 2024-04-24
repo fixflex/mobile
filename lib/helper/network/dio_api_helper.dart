@@ -3,7 +3,6 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import '../../constants/end_points/end_points.dart';
 
 class DioApiHelper {
-
   static late Dio dio;
   static init() {
     dio = Dio(
@@ -22,7 +21,6 @@ class DioApiHelper {
         maxWidth: 90));
   }
 
-
   static Future<Response> postData({
     required String url,
     Map<String, dynamic>? query,
@@ -32,8 +30,8 @@ class DioApiHelper {
   }) async {
     try {
       dio.options.headers = {
-        'Authorization': 'bearer $token',
-        "Accept": "application/json"
+        'authorization': 'Bearer $token',
+        'accept': 'application/json',
       };
       return await dio.post(url,
           queryParameters: query,
@@ -49,8 +47,7 @@ class DioApiHelper {
     }
   }
 
-
-    static Future<Response> putData({
+  static Future<Response> putData({
     required String url,
     dynamic data,
     Map<String, dynamic>? query,
@@ -58,7 +55,7 @@ class DioApiHelper {
   }) async {
     try {
       dio.options.headers = {
-        'Authorization': 'bearer $token',
+        'authorization': 'Bearer $token',
       };
       Response response = await dio.put(
         url,
@@ -71,7 +68,6 @@ class DioApiHelper {
     }
   }
 
-
   static Future<Response> getData({
     required String url,
     Map<String, dynamic>? query,
@@ -80,8 +76,8 @@ class DioApiHelper {
   }) async {
     try {
       dio.options.headers = {
-        'Authorization': 'bearer $token',
-        "Accept": "application/json"
+        'authorization': 'Bearer $token',
+        'accept': 'application/json',
       };
       return await dio.get(url,
           queryParameters: query,
@@ -96,7 +92,6 @@ class DioApiHelper {
     }
   }
 
-
   static Future<Response> deleteData({
     required String url,
     Map<String, dynamic>? query,
@@ -106,7 +101,7 @@ class DioApiHelper {
   }) async {
     try {
       dio.options.headers = {
-        'Authorization': 'Bearer $token',
+        'authorization': 'Bearer $token',
       };
       return await dio.delete(url, queryParameters: query, data: data);
     } catch (error) {
@@ -115,24 +110,3 @@ class DioApiHelper {
     }
   }
 }
-
-
-
-
-// import 'package:dio/dio.dart';
-//
-// final Dio dio = Dio();
-//
-// class Api{
-//   Future<dynamic> get({required String url}) async{
-//     Response response = await dio.get(url);
-//     if(response.statusCode == 200){
-//       return response.data;
-//     }else{
-//       throw Exception('error in get request with status code:${response.statusCode}');
-//     }
-//   }
-// }
-
-
-

@@ -39,11 +39,14 @@ dependencies:
   lottie: ^3.1.0
   curved_navigation_bar: ^1.0.3
   flutter_svg: ^2.0.9
-  http: ^1.2.1
   dio: ^5.4.2+1
   cached_network_image: ^3.3.1
   flutter_bloc: ^8.1.5
   pretty_dio_logger: ^1.3.1
+  flutter_secure_storage: ^4.2.1
+  animated_conditional_builder: ^0.0.5
+  connectivity_plus: ^6.0.3
+  fluttertoast: ^8.2.5
 
 dev_dependencies:
   flutter_test:

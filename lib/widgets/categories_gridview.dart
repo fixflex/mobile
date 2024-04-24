@@ -10,7 +10,7 @@ class CategoriesGridview extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          GetCategoriesCubit()..getCategories(),
+      GetCategoriesCubit()..getCategories(),
       child: BlocBuilder<GetCategoriesCubit, GetCategoriesState>(
         builder: (context, state) {
           if (state is LoadingIndicatorInitial) {
@@ -18,6 +18,8 @@ class CategoriesGridview extends StatelessWidget {
           } else if (state is NoCategoriesState) {
             return Center(child: Text('No Categories'));
           } else if (state is CategoriesLoadedState) {
+            return BuildCategoriesGrid(state);
+          }else if (state is ButtonIsClicked){
             return BuildCategoriesGrid(state);
           } else {
             return Center(child: BuildError());
@@ -27,7 +29,7 @@ class CategoriesGridview extends StatelessWidget {
     );
   }
 
-  SizedBox BuildCategoriesGrid(CategoriesLoadedState state) {
+  SizedBox BuildCategoriesGrid(state) {
     return SizedBox(
       height: 245,
       child: GridView.builder(
@@ -40,7 +42,7 @@ class CategoriesGridview extends StatelessWidget {
         // itemCount: state.categories.length,
         itemCount: 6,
         itemBuilder: (context, index) {
-          return CategoryCard(categoryModel: state.categories[index]);
+          return CategoryCard(categoryModel: state.categories[index], index: index,);
         },
       ),
     );
