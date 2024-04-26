@@ -164,7 +164,9 @@ class UserProfile extends StatelessWidget {
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
                             return ListTileButton(
-                              onTap: (){listTileOptions[index].onTap;},
+                              onTap: () {
+                                listTileOptions[index].onTap;
+                              },
                               listTileModel: listTileOptions[index],
                             );
                           },
@@ -190,7 +192,9 @@ class UserProfile extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return ListTileButton(
                               listTileModel: listTileOptions[index + 3],
-                              onTap: (){listTileOptions[index + 3].onTap;},
+                              onTap: () {
+                                listTileOptions[index + 3].onTap;
+                              },
                             );
                           },
                           itemCount: 2,
@@ -208,7 +212,7 @@ class UserProfile extends StatelessWidget {
                             ),
                           ),
                         ),
-                        BlocBuilder<LogoutCubit,LogoutState>(
+                        BlocBuilder<LogoutCubit, LogoutState>(
                           builder: (context, state) {
                             return ListView.builder(
                               padding: EdgeInsets.all(0),

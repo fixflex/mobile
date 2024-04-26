@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 //TFF
 Widget defaultFormField({
@@ -8,6 +9,9 @@ Widget defaultFormField({
   Function(String)? onChanged,
   required String? Function(String?)? validate,
   required IconData prefix,
+  AutovalidateMode autoValidateMode = AutovalidateMode.disabled,
+  List<TextInputFormatter>? inputFormatters,
+  void Function(String?)? onSaved,
   String? label,
   IconData? suffix,
   String? hint,
@@ -18,11 +22,14 @@ Widget defaultFormField({
     SizedBox(
       width: 330,
       child: TextFormField(
+        inputFormatters: inputFormatters,
+        autovalidateMode: autoValidateMode,
         controller: controller,
         keyboardType: keyType,
         onFieldSubmitted: onSubmit,
         onChanged: onChanged,
         validator: validate,
+        onSaved: onSaved,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.symmetric(vertical: 10),
           filled: true,
