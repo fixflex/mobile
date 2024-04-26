@@ -4,6 +4,7 @@ import 'package:fix_flex/models/custom_clippers.dart';
 import 'package:fix_flex/screens/home%20page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../components/default_form_field.dart';
 import '../cubits/login_cubit/login_state.dart';
@@ -12,9 +13,10 @@ import '../helper/secure_storage/secure_keys/secure_variable.dart';
 import '../helper/secure_storage/secure_storage.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({super.key,});
 
   static const String id = 'LoginScreen';
+
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +70,8 @@ class LoginScreen extends StatelessWidget {
                             ),
                           ),
                         );
+                        LoginCubit.get(context).isLoading = false;
+                        LoginCubit.get(context).isLoading = false;
                       } else if (state is LoginSuccessState) {
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
                         Duration(milliseconds: 500);
@@ -75,21 +79,10 @@ class LoginScreen extends StatelessWidget {
                             await SecureStorage.getData(key: SecureKey.token);
                         // ignore: use_build_context_synchronously
                         Navigator.pushReplacementNamed(context, HomeScreen.id);
-                      }else if (state is LoginLoadingState){
+                      } else if (state is LoginLoadingState) {
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            backgroundColor: Colors.blue,
-                            duration: Duration(days: 1),
-                            content: const Text(
-                              'Loading...',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-
-                        );
+                        LoginCubit.get(context).isLoading = true;
+                        LoginCubit.get(context).isLoading = true;
                       }
                     },
                     builder: (context, state) {
@@ -113,12 +106,11 @@ class LoginScreen extends StatelessWidget {
                             defaultFormField(
                               controller: cubit.emailController,
                               keyType: TextInputType.emailAddress,
-                              validate: (value) {
-                                if (value!.isEmpty) {
-                                  return 'emai can\'t be empty';
-                                }
-                                return null;
-                              },
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.allow(
+                                    RegExp("[0-9@a-zA-Z.]")),
+                              ],
+                              validate: cubit.validateEmail,
                               fillColor: Colors.white,
                               prefix: Icons.email,
                               label: 'Email',
@@ -133,6 +125,8 @@ class LoginScreen extends StatelessWidget {
                                   ObscurePasswordState>(
                                 builder: (context, state) {
                                   return defaultFormField(
+                                    autoValidateMode:
+                                        AutovalidateMode.onUserInteraction,
                                     controller: cubit.passwordController,
                                     keyType: TextInputType.visiblePassword,
                                     validate: (value) {
@@ -168,26 +162,22 @@ class LoginScreen extends StatelessWidget {
                                 color: const Color(0xff134161),
                                 // color: Color(0xff222a32),
                               ),
-                              child: TextButton(
+                              child: AbsorbPointer(
+                                absorbing: LoginCubit.get(context).isLoading,
+                                child: TextButton(
                                   onPressed: () {
                                     if (cubit.formKey.currentState!.validate()) {
-                                      if (cubit.emailController.text.isNotEmpty && cubit.passwordController.text.isNotEmpty){
+                                      if (cubit.emailController.text.isNotEmpty &&
+                                          cubit.passwordController.text
+                                              .isNotEmpty) {
                                         cubit.login(
-                                          email: cubit.emailController.text,
+                                          email: cubit.emailController.text.toLowerCase(),
                                           password: cubit.passwordController.text,
                                         );
                                       }
-                                      if (kDebugMode) {
-                                        print(
-                                            'email: ${cubit.emailController.text}');
-                                      }
-                                      if (kDebugMode) {
-                                        print(
-                                            'password: ${cubit.passwordController.text}');
-                                      }
                                     }
                                   },
-                                  child: const Text(
+                                  child: LoginCubit.get(context).isLoading ? CircularProgressIndicator(color: Colors.white,) :Text(
                                     'Login',
                                     style: TextStyle(
                                       // color: Color(0xff222a32),
@@ -196,6 +186,7 @@ class LoginScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
+                            ),
                             //Register line
                             const SizedBox(
                               height: 50,

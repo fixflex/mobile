@@ -9,14 +9,22 @@ final class NoCategoriesState extends GetCategoriesState {}
 
 final class CategoriesLoadedState extends GetCategoriesState {
   CategoriesLoadedState(this.categories);
-  final List<DataModel> categories;
+  final List<CategoryModel> categories;
 }
 
 final class CategoriesErrorState extends GetCategoriesState {}
 
 final class ButtonIsClicked extends GetCategoriesState {
-  ButtonIsClicked(this.categories);
-  final List<DataModel> categories;
+  ButtonIsClicked(
+      {required this.categories,
+      required this.clickedCategoryId,
+      required this.index});
+  final List<CategoryModel> categories;
+  final String clickedCategoryId;
+  final int index;
 }
 
-
+final class ResetButtonStates extends GetCategoriesState {
+  ResetButtonStates({required this.categories});
+  final List<CategoryModel> categories;
+}

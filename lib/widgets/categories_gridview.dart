@@ -3,35 +3,58 @@ import 'package:flutter/material.dart';
 import '../cubits/get_categories_cubit/get_categories_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 class CategoriesGridview extends StatelessWidget {
   CategoriesGridview({super.key});
 
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-      GetCategoriesCubit()..getCategories(),
-      child: BlocBuilder<GetCategoriesCubit, GetCategoriesState>(
-        builder: (context, state) {
-          if (state is LoadingIndicatorInitial) {
-            return Center(child: CircularProgressIndicator());
-          } else if (state is NoCategoriesState) {
-            return Center(child: Text('No Categories'));
-          } else if (state is CategoriesLoadedState) {
-            return BuildCategoriesGrid(state);
-          }else if (state is ButtonIsClicked){
-            return BuildCategoriesGrid(state);
-          } else {
-            return Center(child: BuildError());
-          }
-        },
-      ),
+    return BlocBuilder<GetCategoriesCubit, GetCategoriesState>(
+      builder: (context, state) {
+        if (state is LoadingIndicatorInitial) {
+          return Center(child: CircularProgressIndicator());
+        }
+        else if (state is NoCategoriesState) {
+          return Center(child: Text('No Categories'));
+        } else if (state is CategoriesLoadedState) {
+          return BuildCategoriesGrid(
+            categoriesGridViewHeight: 245,
+            categoriesItemCount: 6,
+            builderIndex: 0,
+          );
+        } else if (state is ButtonIsClicked) {
+          return BuildCategoriesGrid(
+            categoriesGridViewHeight: 245,
+            categoriesItemCount: 6,
+            builderIndex: 0,
+          );
+        } else if (state is ResetButtonStates) {
+          return BuildCategoriesGrid(
+            categoriesGridViewHeight: 245,
+            categoriesItemCount: 6,
+            builderIndex: 0,
+          );
+        } else {
+          return Center(child: BuildError());
+        }
+      },
     );
   }
+}
 
-  SizedBox BuildCategoriesGrid(state) {
+class BuildCategoriesGrid extends StatelessWidget {
+  const BuildCategoriesGrid({
+    super.key,
+    required this.categoriesGridViewHeight,
+    required this.categoriesItemCount,
+    required this.builderIndex,
+  });
+  final double categoriesGridViewHeight;
+  final int categoriesItemCount;
+  final int builderIndex;
+
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
-      height: 245,
+      height: categoriesGridViewHeight,
       child: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
@@ -39,10 +62,13 @@ class CategoriesGridview extends StatelessWidget {
           crossAxisSpacing: 10,
         ),
         padding: EdgeInsets.all(8.0), // padding around the grid
-        // itemCount: state.categories.length,
-        itemCount: 6,
+        itemCount: categoriesItemCount,
         itemBuilder: (context, index) {
-          return CategoryCard(categoryModel: state.categories[index], index: index,);
+          return CategoryCard(
+            categoryModel: GetCategoriesCubit.get(context)
+                .categoriesDataList[index + builderIndex],
+            index: index+builderIndex,
+          );
         },
       ),
     );
