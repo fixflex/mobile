@@ -60,17 +60,33 @@ class CategoryCard extends StatelessWidget {
                     ),
                     width: 80,
                     height: 80,
-                    child: Center(
-                      child: SvgPicture.network(
-                        categoryModel.image.imageUrl!,
-                        width: 45,
-                        height: 45,
-                        color: GetCategoriesCubit.get(context)
-                                .buttonClickedStates[index]
-                            ? Colors.white
-                            : Color(0xff134161),
-                      ),
-                    ),
+                    child: categoryModel.image.imageUrl != null
+                        ? Center(
+                          child: SvgPicture.network(
+                              categoryModel.image.imageUrl!,
+                              width: 45,
+                              height: 45,
+                              color: GetCategoriesCubit.get(context)
+                                      .buttonClickedStates[index]
+                                  ? Colors.white
+                                  : Color(0xff134161),
+                            ),
+                        )
+                        : Center(child: SvgPicture.asset('assets/images/question-mark-svgrepo-com.svg',width: 45,height: 45, color: GetCategoriesCubit.get(context)
+                        .buttonClickedStates[index]
+                        ? Colors.white
+                        : Color(0xff134161),)),
+                    // child: Center(
+                    //   child: SvgPicture.network(
+                    //     categoryModel.image.imageUrl ?? '',
+                    //     width: 45,
+                    //     height: 45,
+                    //     color: GetCategoriesCubit.get(context)
+                    //             .buttonClickedStates[index]
+                    //         ? Colors.white
+                    //         : Color(0xff134161),
+                    //   ),
+                    // ),
                   ),
                 ),
               ),
