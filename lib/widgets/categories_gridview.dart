@@ -1,4 +1,4 @@
-import 'package:fix_flex/widgets/categories_card.dart';
+import 'package:fix_flex/components/categories_card.dart';
 import 'package:flutter/material.dart';
 import '../cubits/get_categories_cubit/get_categories_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

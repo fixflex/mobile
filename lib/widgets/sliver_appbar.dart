@@ -60,31 +60,19 @@ class SliverAppBarWidget extends StatelessWidget {
       actions: [
         Padding(
           padding: const EdgeInsets.only(right: 20),
-          child: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return UserProfile();
-                  },
-                ),
-              );
-            },
-            child: Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                CircleAvatar(
-                  radius: 22,
-                  backgroundColor: Colors.white,
-                ),
-                CircleAvatar(
-                  radius: 18,
-                  backgroundImage:
-                  AssetImage('assets/images/person.png'),
-                ),
-              ],
-            ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              CircleAvatar(
+                radius: 22,
+                backgroundColor: Colors.white,
+              ),
+              CircleAvatar(
+                radius: 18,
+                backgroundImage:
+                AssetImage('assets/images/person.png'),
+              ),
+            ],
           ),
         ),
       ],
