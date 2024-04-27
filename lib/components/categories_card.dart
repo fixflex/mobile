@@ -1,7 +1,7 @@
 import 'package:fix_flex/screens/home%20page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import '../components/more_bottom_sheet.dart';
+import 'more_bottom_sheet.dart';
 import '../cubits/get_categories_cubit/get_categories_cubit.dart';
 import '../models/category_model.dart';
 import '../screens/category_screen.dart';
