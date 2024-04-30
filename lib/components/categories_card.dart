@@ -1,3 +1,4 @@
+import 'package:fix_flex/cubits/tasks_cubits/get_tasks_by_category_id_cubit/get_tasks_by_category_id_cubit.dart';
 import 'package:fix_flex/screens/home%20page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -33,12 +34,16 @@ class CategoryCard extends StatelessWidget {
                             .id) {
                       MoreBottomSheet(context);
                     } else {
+                       GetTasksByCategoryIdCubit.get(context).getTasksByCategoryId(
+                        categoryId:
+                            GetCategoriesCubit.get(context).clickedCategoryId,
+                      );
                       Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(builder: (context) => CategoryScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => CategoryScreen()),
                           ModalRoute.withName(HomeScreen.id));
-                      // Navigator.pushNamed(context, CategoryScreen.id);
-                      await Future.delayed(Duration(milliseconds: 300));
+                      await Future.delayed(Duration(milliseconds: 500));
                       GetCategoriesCubit.get(context).resetButtonStates();
                     }
                   },
@@ -62,7 +67,7 @@ class CategoryCard extends StatelessWidget {
                     height: 80,
                     child: categoryModel.image.imageUrl != null
                         ? Center(
-                          child: SvgPicture.network(
+                            child: SvgPicture.network(
                               categoryModel.image.imageUrl!,
                               width: 45,
                               height: 45,
@@ -71,22 +76,17 @@ class CategoryCard extends StatelessWidget {
                                   ? Colors.white
                                   : Color(0xff134161),
                             ),
-                        )
-                        : Center(child: SvgPicture.asset('assets/images/question-mark-svgrepo-com.svg',width: 45,height: 45, color: GetCategoriesCubit.get(context)
-                        .buttonClickedStates[index]
-                        ? Colors.white
-                        : Color(0xff134161),)),
-                    // child: Center(
-                    //   child: SvgPicture.network(
-                    //     categoryModel.image.imageUrl ?? '',
-                    //     width: 45,
-                    //     height: 45,
-                    //     color: GetCategoriesCubit.get(context)
-                    //             .buttonClickedStates[index]
-                    //         ? Colors.white
-                    //         : Color(0xff134161),
-                    //   ),
-                    // ),
+                          )
+                        : Center(
+                            child: SvgPicture.asset(
+                            'assets/images/question-mark-svgrepo-com.svg',
+                            width: 45,
+                            height: 45,
+                            color: GetCategoriesCubit.get(context)
+                                    .buttonClickedStates[index]
+                                ? Colors.white
+                                : Color(0xff134161),
+                          )),
                   ),
                 ),
               ),

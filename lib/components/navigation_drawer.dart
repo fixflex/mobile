@@ -1,5 +1,7 @@
+import 'package:fix_flex/cubits/get_my_data_cubit/get_my_data_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../constants/constants.dart';
 import '../cubits/logout_cubit/logout_cubit.dart';
 import '../cubits/logout_cubit/logout_state.dart';
 import '../models/custom_clippers.dart';
@@ -22,28 +24,50 @@ class NavigationDrawerWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Color(0xff134161),
                 ),
-                child: Column(
-                  children: [
-                    Stack(
-                      alignment: Alignment.center,
-                      children: <Widget>[
-                        CircleAvatar(
-                          radius: 35,
-                          backgroundColor: Colors.white,
+                child: BlocBuilder<GetMyDataCubit, GetMyDataState>(
+                  builder: (context, state) {
+                    return Column(
+                      children: [
+                        Stack(
+                          alignment: Alignment.center,
+                          children: <Widget>[
+                            CircleAvatar(
+                              radius: 42,
+                              backgroundColor: Colors.white,
+                            ),
+                            CircleAvatar(
+                              radius: 40,
+                              backgroundImage: NetworkImage(
+                                state is GetMyDataSuccess
+                                    ? state.myDataList[0].profilePicture?.url !=
+                                            null
+                                        ? state.myDataList[0].profilePicture!
+                                            .url as String
+                                        : kDefaultUserImage
+                                    : kDefaultUserImage,
+                              ),
+                            ),
+                          ],
                         ),
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundImage: AssetImage(
-                            'assets/images/person.png',
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          state is GetMyDataSuccess
+                              ? state.myDataList[0].FirstName +
+                                  ' ' +
+                                  state.myDataList[0].LastName
+                              : 'User',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
                           ),
                         ),
                       ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text("Fix Flex", style: TextStyle(color: Colors.white)),
-                  ],
+                    );
+                  },
                 ),
               ),
             ),
@@ -72,8 +96,7 @@ class NavigationDrawerWidget extends StatelessWidget {
               title: Text("Privacy Policies "),
               onTap: () {},
             ),
-           BlocBuilder<LogoutCubit,LogoutState>(
-             builder: (context, state) {
+            BlocBuilder<LogoutCubit, LogoutState>(builder: (context, state) {
               return ListTile(
                 leading: Icon(Icons.exit_to_app),
                 title: Text("log out"),

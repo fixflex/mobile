@@ -1,3 +1,5 @@
+import 'package:fix_flex/cubits/tasks_cubits/get_tasks_by_user_id/get_tasks_by_user_id_cubit.dart';
+import 'package:fix_flex/helper/secure_storage/secure_keys/secure_variable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../components/homepage_components.dart';
@@ -48,8 +50,12 @@ class BottomNavigationBarCubit extends Cubit<BottomNavigationBarState> {
     UserProfile(),
   ];
 
-  void changeBottomNavBar(int index) {
+  void changeBottomNavBar(int index, context) {
     currentIndex = index;
+    if(index == 3){
+      GetTasksByUserIdCubit.get(context).getTasksByUserId(userId: SecureVariables.userId);
+    }
     emit(AppChangeBottomNavBar());
   }
 }
+

@@ -5,7 +5,7 @@
 // @HiveType(typeId: 1)
 class ImageModel /*extends HiveObject */{
   ImageModel({
-    required this.imageUrl,
+    this.imageUrl,
   });
   // @HiveField(0)
   final String? imageUrl;

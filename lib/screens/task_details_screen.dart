@@ -1,194 +1,353 @@
-import 'dart:io';
+import 'package:fix_flex/constants/constants.dart';
+import 'package:fix_flex/cubits/tasks_cubits/get_task_details_cubit/get_task_details_cubit.dart';
+import 'package:fix_flex/helper/secure_storage/secure_keys/secure_variable.dart';
+import 'package:fix_flex/widgets/sliver_appbar.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
-class TaskDetailsScreen extends StatefulWidget {
-  const TaskDetailsScreen({super.key});
+class TaskDetailsScreen extends StatelessWidget {
+  const TaskDetailsScreen({Key? key});
 
-  @override
-  State<TaskDetailsScreen> createState() => _TaskDetailsScreenState();
-}
-
-TextEditingController titleController = TextEditingController();
-TextEditingController descriptionController = TextEditingController();
-TextEditingController budgetController = TextEditingController();
-TextEditingController dateController = TextEditingController();
-
-DateTime _selectedDate = DateTime.now();
-File? _image;
-
-class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate,
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2101),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: ThemeData(
-            colorScheme: ColorScheme.light(
-              primary: Color(0xff134161),
-              onPrimary: Colors.white,
-              surface: Colors.white,
-              onSurface: Color(0xff134161),
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-
-    if (picked != null)
-      setState(() {
-        dateController.text = picked.toString().split(" ")[0];
-      });
-  }
-
-  Future<void> _getImage() async {
-    final picker = ImagePicker();
-    try {
-      final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-
-      if (pickedImage != null) {
-        setState(() {
-          _image = File(pickedImage.path);
-        });
-      } else {
-        print('No image selected.');
-      }
-    } catch (e) {
-      print('Error picking image: $e');
-    }
-  }
-
-  void _clearImage() {
-    setState(() {
-      _image = null;
-    });
-  }
+  static const String id = 'TaskDetailsScreen';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Task Details',
-          style: TextStyle(color: Color(0xff134161)),
-        ),
+      body: BlocBuilder<GetTaskDetailsCubit, GetTaskDetailsState>(
+        builder: (context, state) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) {
+                return [
+                  SliverAppBarWidget(
+                    title: 'Task Details',
+                    icon: Icons.arrow_back,
+                    iconSize: 35,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    image: state is GetTaskDetailsSuccess
+                        ? state.taskDetailsList[0].userId.profilePicture?.url !=
+                                null
+                            ? state.taskDetailsList[0].userId.profilePicture
+                                ?.url as String
+                            : kDefaultUserImage
+                        : kDefaultUserImage,
+                  ),
+                ];
+              },
+              body: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 25),
+                child: state is GetTaskDetailsLoading
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : state is GetTaskDetailsEmpty
+                        ? Center(
+                            child: Text('No data found'),
+                          )
+                        : state is GetTaskDetailsFailure
+                            ? Center(
+                                child: Text(
+                                    'There was an error, Please try again later'),
+                              )
+                            : state is GetTaskDetailsSuccess
+                                ? TaskDetailsScreenComponents(state)
+                                : Container(),
+              ),
+            ),
+          );
+        },
       ),
-      body: Padding(
-        padding: EdgeInsets.all(20),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              //TFF Title
-              TextFormField(
-                controller: titleController,
-                cursorColor: Color(0xff134161),
-                decoration: InputDecoration(
-                  labelText: 'Title',
-                  labelStyle: TextStyle(color: Color(0xff134161)),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xff134161),
+    );
+  }
+
+  SingleChildScrollView TaskDetailsScreenComponents(
+      GetTaskDetailsSuccess state) {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          state.taskDetailsList[0].status == 'CANCELLED'
+              ? Center(
+                  child: statusContainer(Colors.red, 'CANCELLED'),
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    statusContainer(
+                        state.taskDetailsList[0].status == 'OPEN'
+                            ? Colors.blue
+                            : Colors.grey,
+                        'OPEN'),
+                    statusContainer(
+                        state.taskDetailsList[0].status == 'ASSIGNED'
+                            ? Colors.orange
+                            : Colors.grey,
+                        'ASSIGNED'),
+                    statusContainer(
+                        state.taskDetailsList[0].status == 'COMPLETED'
+                            ? Colors.green
+                            : Colors.grey,
+                        'COMPLETED'),
+                  ],
+                ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            child: Text(
+              state.taskDetailsList[0].title,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+              style: TextStyle(
+                fontSize: 35,
+                fontWeight: FontWeight.w800,
+                color: Color(0xff134161),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Posted by',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey,
+                        )),
+                    Container(
+                      width: 120,
+                      child: Text(
+                          state.taskDetailsList[0].userId.firstName +
+                              ' ' +
+                              state.taskDetailsList[0].userId.lastName,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          softWrap: false,
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.grey,
+                          )),
                     ),
-                  ),
+                  ],
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              //TFF Description
-              TextFormField(
-                controller: descriptionController,
-                cursorColor: Color(0xff134161),
-                decoration: InputDecoration(
-                  labelText: 'Description',
-                  labelStyle: TextStyle(color: Color(0xff134161)),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xff134161),
+                Container(
+                  width: 2,
+                  height: 30,
+                  color: Colors.grey,
+                ),
+                Spacer(),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Location',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey,
+                        )),
+                    Text(state.taskDetailsList[0].city as String,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        softWrap: false,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey,
+                        )),
+                  ],
+                ),
+                Spacer(),
+                Container(
+                  width: 2,
+                  height: 30,
+                  color: Colors.grey,
+                ),
+                Spacer(),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('To be Done',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey,
+                        )),
+                    Container(
+                      width: 120,
+                      child: Text(
+                          state.taskDetailsList[0].dueDate?.flexible == true
+                              ? 'Flexible'
+                              : state.taskDetailsList[0].dueDate?.on != null
+                                  ? ' On ${DateFormat.yMMMMd().format(DateTime.parse(state.taskDetailsList[0].dueDate?.on as String))}'
+                                  : ' Before: ${DateFormat.yMMMMd().format(DateTime.parse(state.taskDetailsList[0].dueDate?.before as String))}',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          softWrap: false,
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.grey,
+                          )),
                     ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              //TFF Budget
-              TextFormField(
-                controller: budgetController,
-                cursorColor: Color(0xff134161),
-                decoration: InputDecoration(
-                  labelText: 'Budget',
-                  labelStyle: TextStyle(color: Color(0xff134161)),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xff134161),
-                    ),
-                  ),
-                ),
-                keyboardType: TextInputType.number,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              // TFF Deadline
-              TextFormField(
-                controller: dateController,
-                style: TextStyle(color: Color(0xff134161)),
-                cursorColor: Color(0xff134161),
-                decoration: InputDecoration(
-                  labelText: 'Deadline',
-                  labelStyle: TextStyle(color: Color(0xff134161)),
-                  prefixIcon: Icon(Icons.date_range),
-                  prefixIconColor: Color(0xff134161),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xff134161),
-                    ),
-                  ),
-                ),
-                readOnly: true,
-                onTap: () => _selectDate(context),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              // Display selected image
-              ElevatedButton.icon(
-                onPressed: _getImage,
-                icon: Icon(
-                  Icons.photo,
-                  color: Color(0xff134161),
-                ),
-                label: Text(
-                  'Upload Photo',
-                  style: TextStyle(color: Color(0xff134161)),
-                ),
-              ),
-              // delete select image
-              if (_image != null) ...[
-                Image.file(_image!),
-                SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: _clearImage,
-                  child: Text('Delete Image',
-                      style: TextStyle(color: Color(0xff134161))),
+                  ],
                 ),
               ],
-              SizedBox(
-                height: 50,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 25),
+            child: Container(
+              height: 200,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(50),
               ),
-              // post offer
-              ElevatedButton(
-                onPressed: () {},
-                child: Text('Post Offer',
-                    style: TextStyle(color: Color(0xff134161))),
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    Spacer(),
+                    Text('Task Budget',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                        )),
+                    Spacer(),
+                    Text(
+                      '\$${state.taskDetailsList[0].budget}',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      softWrap: false,
+                      style: TextStyle(
+                        fontSize: 45,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    Spacer(),
+                    state.taskDetailsList[0].userId.id == SecureVariables.userId
+                        ? Container()
+                        : Container(
+                            width: 300,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: const Color(0xff134161),
+                              // color: Color(0xff222a32),
+                            ),
+                            child: TextButton(
+                              onPressed: () {},
+                              child: Text(
+                                'Make An Offer',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                    Spacer(),
+                  ],
+                ),
               ),
-            ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 15,
+            ),
+            child: Text(
+              'Details',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            child: Text(
+              state.taskDetailsList[0].details as String,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: state.taskDetailsList[0].images?.isEmpty == true
+                ? 0
+                : state.taskDetailsList[0].images!.length <= 4
+                    ? 100
+                    : state.taskDetailsList[0].images!.length <= 8
+                        ? 200
+                        : 300,
+            child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              padding: EdgeInsets.all(8.0), // padding around the grid
+              itemBuilder: (context, index) {
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(10), // Image border
+                  child: SizedBox.fromSize(
+                    size: Size.fromRadius(48), // Image radius
+                    child: Image.network(
+                        state.taskDetailsList[0].images?[index].url as String,
+                        fit: BoxFit.cover),
+                  ),
+                );
+              },
+              itemCount: state.taskDetailsList[0].images?.length,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 15,
+            ),
+            child: Text(
+              'Offers (${state.taskDetailsList[0].offerDetails?.length})',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            child: Container(
+              width: double.infinity,
+              height: 50,
+              color: Colors.grey[200],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container statusContainer(Color color, String text) {
+    return Container(
+      width: 110,
+      height: 40,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: color,
+          width: 2,
+        ),
+        borderRadius: BorderRadius.circular(100),
+      ),
+      child: Center(
+        child: Text(
+          text,
+          style: TextStyle(
+            color: color,
+            fontWeight: FontWeight.bold,
+            fontSize: 15,
           ),
         ),
       ),

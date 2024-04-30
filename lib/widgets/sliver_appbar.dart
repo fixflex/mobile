@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
 
 import '../screens/user_profile.dart';
+
 class SliverAppBarWidget extends StatelessWidget {
   const SliverAppBarWidget({
     super.key,
+    required this.title,
+    required this.icon,
+    required this.onPressed,
+    required this.iconSize,
+    required this.image,
   });
+
+  final String title;
+  final IconData icon;
+  final double? iconSize;
+  final void Function()? onPressed;
+  final String image;
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +40,10 @@ class SliverAppBarWidget extends StatelessWidget {
       leading: Padding(
         padding: const EdgeInsets.only(left: 10),
         child: IconButton(
-          onPressed: () {
-            Scaffold.of(context).openDrawer();
-          },
+          onPressed: onPressed,
           icon: Icon(
-            size: 40,
-            Icons.menu,
+            icon,
+            size: iconSize,
             color: Colors.white,
           ),
         ),
@@ -42,18 +52,12 @@ class SliverAppBarWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'User',
+            title,
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w500,
             ),
           ),
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.keyboard_arrow_down,
-                color: Colors.white,
-              ))
         ],
       ),
       centerTitle: true,
@@ -68,9 +72,9 @@ class SliverAppBarWidget extends StatelessWidget {
                 backgroundColor: Colors.white,
               ),
               CircleAvatar(
-                radius: 18,
-                backgroundImage:
-                AssetImage('assets/images/person.png'),
+                radius: 20,
+                backgroundImage: NetworkImage(image),
+                // backgroundImage: AssetImage('assets/images/person.png'),
               ),
             ],
           ),

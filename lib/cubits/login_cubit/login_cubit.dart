@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../constants/end_points/end_points.dart';
 import '../../helper/secure_storage/secure_keys/secure_key.dart';
+import '../../helper/secure_storage/secure_keys/secure_variable.dart';
 import '../../helper/secure_storage/secure_storage.dart';
 import 'login_state.dart';
 
@@ -23,9 +24,11 @@ class LoginCubit extends Cubit<LoginState> {
         "password": password,
       });
       if (response.statusCode == 200) {
-        // if( response.data["data"]["token"] == ){}
         SecureStorage.saveData(
             key: SecureKey.token, value: response.data["accessToken"]);
+        SecureStorage.saveData(
+            key: SecureKey.userId, value: response.data["data"]["_id"]);
+
         emit(LoginSuccessState());
       }else if(response.statusCode == 400){
         emit(LoginErrorState(error: response.data['errors'][0]['msg']));
