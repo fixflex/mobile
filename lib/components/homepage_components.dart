@@ -1,9 +1,12 @@
+import 'package:fix_flex/cubits/get_my_data_cubit/get_my_data_cubit.dart';
+import 'package:fix_flex/cubits/login_cubit/login_state.dart';
 import 'package:fix_flex/screens/search_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../constants/constants.dart';
 import '../widgets/categories_gridview.dart';
 import '../widgets/sliver_appbar.dart';
 import 'offers.dart';
-
 
 class HomePageComponents extends StatelessWidget {
   HomePageComponents({
@@ -17,7 +20,23 @@ class HomePageComponents extends StatelessWidget {
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
             //Sliver App Bar Widget
-            SliverAppBarWidget(),
+            BlocBuilder<GetMyDataCubit, GetMyDataState>(
+              builder: (context, state) {
+                return SliverAppBarWidget(
+                  title: state is GetMyDataSuccess ? state.myDataList[0].role : 'User',
+                  icon: Icons.menu,
+                  iconSize: 40,
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  },
+                  image: state is GetMyDataSuccess
+                      ? state.myDataList[0].profilePicture?.url != null
+                          ? state.myDataList[0].profilePicture!.url as String
+                          : kDefaultUserImage
+                      : kDefaultUserImage,
+                );
+              },
+            ),
           ];
         },
         body: Padding(
@@ -50,7 +69,8 @@ class HomePageComponents extends StatelessWidget {
                         child: Row(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(left: 10, right: 10),
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 10),
                               child: Icon(
                                 Icons.search,
                                 size: 25.0,
@@ -70,7 +90,7 @@ class HomePageComponents extends StatelessWidget {
                     ),
                   ),
                 ),
-            
+
                 //Services Categories Text
                 Padding(
                   padding: const EdgeInsets.only(top: 25, bottom: 20),
@@ -85,10 +105,10 @@ class HomePageComponents extends StatelessWidget {
                     ),
                   ),
                 ),
-            
+
                 //Categories Grid view
                 CategoriesGridview(),
-            
+
                 //Offers Text
                 Padding(
                   padding: const EdgeInsets.only(top: 20, bottom: 20),
@@ -103,7 +123,7 @@ class HomePageComponents extends StatelessWidget {
                     ),
                   ),
                 ),
-            
+
                 //Offers Container
                 Offers(),
               ],

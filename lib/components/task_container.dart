@@ -1,18 +1,39 @@
+import 'package:fix_flex/cubits/tasks_cubits/get_task_details_cubit/get_task_details_cubit.dart';
+import 'package:fix_flex/screens/task_details_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import '../models/task_model.dart';
 
 class TaskContainer extends StatelessWidget {
   const TaskContainer({
     super.key,
+    required this.title,
+    required this.budget,
+    required this.location,
+    required this.date,
+    required this.status,
+    required this.offersId,
+    required this.taskId,
   });
+
+  final String title;
+  final int budget;
+  final String? location;
+  final DueDate? date;
+  final String status;
+  final List<dynamic>? offersId;
+  final String taskId;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-          horizontal: 15, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: GestureDetector(
-        onTap: () {},
+        onTap: () {
+          GetTaskDetailsCubit.get(context).getTaskDetails(taskId: taskId);
+          Navigator.pushNamed(context, TaskDetailsScreen.id);
+        },
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
@@ -38,7 +59,7 @@ class TaskContainer extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       width: 230,
                       child: Text(
-                        'Title Of The Task',
+                        title,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         softWrap: false,
@@ -53,7 +74,7 @@ class TaskContainer extends StatelessWidget {
                       alignment: Alignment.centerRight,
                       width: 80,
                       child: Text(
-                        '\$200',
+                        '\$${budget}',
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         softWrap: false,
@@ -79,7 +100,7 @@ class TaskContainer extends StatelessWidget {
                               color: CupertinoColors.inactiveGray,
                             ),
                             Text(
-                              'Location',
+                              location!,
                               style: TextStyle(
                                 fontSize: 15,
                                 color: CupertinoColors.inactiveGray,
@@ -97,7 +118,12 @@ class TaskContainer extends StatelessWidget {
                               color: CupertinoColors.inactiveGray,
                             ),
                             Text(
-                              'Date',
+                              date?.flexible == true
+                                  ? 'flexible'
+                                  : date?.on != null
+                                      ? ' ON ${DateFormat.yMMMMd().format(DateTime.parse(date!.on!))}'
+                                      : ' Before: ${DateFormat.yMMMMd().format(DateTime.parse(date!.before!))}'
+                              ,
                               style: TextStyle(
                                 fontSize: 15,
                                 color: CupertinoColors.inactiveGray,
@@ -111,25 +137,34 @@ class TaskContainer extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              'Open',
+                              status,
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w900,
-                                color: Colors.blue,
+                                color: status == 'OPEN'
+                                    ? Colors.blue
+                                    : status == 'CANCELLED'
+                                        ? Colors.red
+                                        : status == 'COMPLETED'
+                                            ? Colors.green
+                                            : status == 'ASSIGNED'
+                                                ? Colors.orange
+                                                : Colors.black,
                               ),
                             ),
                             SizedBox(
                               width: 15,
                             ),
                             Text(
-                              '2 Offers',
-                              style: TextStyle(
+                              // 'Offers',
+                              offersId?.length == 0
+                                  ? 'No Offers':'${offersId?.length} Offers',
+                                style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w400,
                                 color: CupertinoColors.inactiveGray,
                               ),
                             ),
-
                           ],
                         ),
                       ],
@@ -145,8 +180,12 @@ class TaskContainer extends StatelessWidget {
                             ),
                             CircleAvatar(
                               radius: 25,
+                              // backgroundImage: profilePhoto == null
+                              //     ? AssetImage('assets/images/person.png')
+                              //     : NetworkImage(profilePhoto),
+
                               backgroundImage:
-                              AssetImage('assets/images/person.png'),
+                                  AssetImage('assets/images/person.png'),
                             ),
                           ],
                         ),

@@ -11,8 +11,7 @@ class CategoriesGridview extends StatelessWidget {
       builder: (context, state) {
         if (state is LoadingIndicatorInitial) {
           return Center(child: CircularProgressIndicator());
-        }
-        else if (state is NoCategoriesState) {
+        } else if (state is NoCategoriesState) {
           return Center(child: Text('No Categories'));
         } else if (state is CategoriesLoadedState) {
           return BuildCategoriesGrid(
@@ -67,7 +66,7 @@ class BuildCategoriesGrid extends StatelessWidget {
           return CategoryCard(
             categoryModel: GetCategoriesCubit.get(context)
                 .categoriesDataList[index + builderIndex],
-            index: index+builderIndex,
+            index: index + builderIndex,
           );
         },
       ),

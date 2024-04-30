@@ -1,10 +1,7 @@
 import 'package:fix_flex/cubits/get_categories_cubit/get_categories_cubit.dart';
-import 'package:fix_flex/components/categories_card.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:fix_flex/cubits/tasks_cubits/get_tasks_by_category_id_cubit/get_tasks_by_category_id_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../components/task_container.dart';
 
 class CategoryScreen extends StatelessWidget {
@@ -14,53 +11,47 @@ class CategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GetCategoriesCubit, GetCategoriesState>(
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                GetCategoriesCubit.get(context).resetButtonStates();
-                Navigator.pop(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          GetCategoriesCubit.get(context)
+              .categoriesDataList[
+                  GetCategoriesCubit.get(context).clickedCategoryIndex]
+              .name,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+      ),
+      body: BlocBuilder<GetTasksByCategoryIdCubit, GetTasksByCategoryIdState>(
+        builder: (context, state) {
+          if (state is GetTasksByCategoryIdLoading) {
+            return Center(child: CircularProgressIndicator());
+          } else if (state is GetTasksByCategoryIdEmpty) {
+            return Center(child: Text('No tasks available'));
+          } else if (state is GetTasksByCategoryIdFailure) {
+            return Center(child: Text('Failed to load tasks'));
+          } else if (state is GetTasksByCategoryIdSuccess) {
+            return ListView.builder(
+              itemBuilder: (context, index) {
+                return TaskContainer(
+                  title: state.tasksDataList[index].title,
+                  budget: state.tasksDataList[index].budget,
+                  offersId: state.tasksDataList[index].offersId,
+                  location: state.tasksDataList[index].city,
+                  date: state.tasksDataList[index].dueDate,
+                  status: state.tasksDataList[index].status,
+                  taskId: state.tasksDataList[index].id,
+                );
               },
-            ),
-            title: Text(
-              GetCategoriesCubit.get(context)
-                  .categoriesDataList[
-                      GetCategoriesCubit.get(context).clickedCategoryIndex]
-                  .name,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            ),
-          ),
-          body: Container(
-            color: Colors.white,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  TaskContainer(),
-                  TaskContainer(),
-                  TaskContainer(),
-                  TaskContainer(),
-                  TaskContainer(),
-                  TaskContainer(),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
+              itemCount:state.tasksDataList.length,
+            );
+          } else {
+            return Center(child: Text('Failed to load tasks'));
+          }
+        },
+      ),
     );
   }
 }
-
-
-// Center(
-// child: Text(GetCategoriesCubit.get(context)
-//     .categoriesDataList[
-// GetCategoriesCubit.get(context).clickedCategoryIndex]
-// .name),
-// ))

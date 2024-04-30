@@ -20,20 +20,24 @@ class GetCategoriesCubit extends Cubit<GetCategoriesState> {
     try {
       emit(LoadingIndicatorInitial());
       // var categoriesBox = Hive.box<CategoryModel>(kCategoriesBox);
-      var jsonData = (await DioApiHelper.getData(url: EndPoints.categories));
-      List<dynamic> categories = jsonData.data['data'];
-      if (categories.isEmpty) {
-        emit(NoCategoriesState());
-      } else {
-        for (var category in categories) {
-          buttonClickedStates.add(false);
-          CategoryModel categoryModel = CategoryModel.fromJson(category);
-          categoriesDataList.add(categoryModel);
-          // await categoriesBox.add(categoryModel);
-          // var accessCategoriesBox = Hive.box<CategoryModel>(kCategoriesBox);
-          // categoriesDataList = accessCategoriesBox.values.toList();
+      var response = (await DioApiHelper.getData(url: EndPoints.categories));
+      if(response.statusCode == 200){
+        List<dynamic> categories = response.data['data'];
+        if (categories.isEmpty) {
+          emit(NoCategoriesState());
+        } else {
+          for (var category in categories) {
+            buttonClickedStates.add(false);
+            CategoryModel categoryModel = CategoryModel.fromJson(category);
+            categoriesDataList.add(categoryModel);
+            // await categoriesBox.add(categoryModel);
+            // var accessCategoriesBox = Hive.box<CategoryModel>(kCategoriesBox);
+            // categoriesDataList = accessCategoriesBox.values.toList();
+          }
+          emit(CategoriesLoadedState(categoriesDataList));
         }
-        emit(CategoriesLoadedState(categoriesDataList));
+      }else{
+        emit(CategoriesErrorState());
       }
     } catch (e) {
       emit(CategoriesErrorState());

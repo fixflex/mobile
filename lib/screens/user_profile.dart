@@ -2,6 +2,8 @@ import 'package:fix_flex/cubits/logout_cubit/logout_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../components/list_tile_button.dart';
+import '../constants/constants.dart';
+import '../cubits/get_my_data_cubit/get_my_data_cubit.dart';
 import '../cubits/logout_cubit/logout_state.dart';
 import '../models/custom_clippers.dart';
 import '../models/list_tile_model.dart';
@@ -76,169 +78,178 @@ class UserProfile extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ClipPath(
-                  clipper: FifthClipper(),
-                  child: Container(
-                    width: double.infinity,
-                    height: 250,
-                    color: Color(0xff134161),
-                    child: Row(
-                      // mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            left: 25,
-                            right: 20,
-                          ),
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: <Widget>[
-                              CircleAvatar(
-                                radius: 43,
-                                backgroundColor: Colors.white,
-                              ),
-                              CircleAvatar(
-                                radius: 40,
-                                backgroundImage:
-                                    AssetImage('assets/images/person.png'),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
+            BlocBuilder<GetMyDataCubit,GetMyDataState>(
+              builder: (context, state) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ClipPath(
+                      clipper: FifthClipper(),
+                      child: Container(
+                        width: double.infinity,
+                        height: 250,
+                        color: Color(0xff134161),
+                        child: Row(
+                          // mainAxisSize: MainAxisSize.min,
                           children: [
-                            SizedBox(
-                              width: 140,
-                              child: Text(
-                                'Fix Flex Fix Flex',
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 30,
-                                ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 25,
+                                right: 20,
+                              ),
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: <Widget>[
+                                  CircleAvatar(
+                                    radius: 43,
+                                    backgroundColor: Colors.white,
+                                  ),
+                                  CircleAvatar(
+                                    radius: 40,
+                                    backgroundImage:NetworkImage(state is GetMyDataSuccess
+                                        ? state.myDataList[0].profilePicture?.url != null
+                                        ? state.myDataList[0].profilePicture!.url as String
+                                        : kDefaultUserImage
+                                        : kDefaultUserImage,),
+                                  ),
+                                ],
                               ),
                             ),
-                            SizedBox(
-                              width: 100,
-                              child: Text(
-                                'Cairo, Egypt PlaPla',
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: TextStyle(
-                                  color: Colors.white.withOpacity(0.7),
-                                  fontSize: 15,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  width: 230,
+                                  child: Text(
+                                    state is GetMyDataSuccess
+                                        ? state.myDataList[0].FirstName + ' ' + state.myDataList[0].LastName
+                                        : 'User',
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 30,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                SizedBox(
+                                  width: 100,
+                                  child: Text(
+                                    'Cairo, Egypt PlaPla',
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                      color: Colors.white.withOpacity(0.7),
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Text(
-                            'ACCOUNT SETTINGS',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey[700],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: Text(
+                                'ACCOUNT SETTINGS',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey[700],
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        ListView.builder(
-                          padding: EdgeInsets.all(0),
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return ListTileButton(
-                              onTap: () {
-                                listTileOptions[index].onTap;
-                              },
-                              listTileModel: listTileOptions[index],
-                            );
-                          },
-                          itemCount: 3,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: 25,
-                            bottom: 8,
-                          ),
-                          child: Text(
-                            'HELP & SUPPORT',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey[700],
-                            ),
-                          ),
-                        ),
-                        ListView.builder(
-                          padding: EdgeInsets.all(0),
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return ListTileButton(
-                              listTileModel: listTileOptions[index + 3],
-                              onTap: () {
-                                listTileOptions[index + 3].onTap;
-                              },
-                            );
-                          },
-                          itemCount: 2,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: 25,
-                            bottom: 8,
-                          ),
-                          child: Text(
-                            'SAFETY',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey[700],
-                            ),
-                          ),
-                        ),
-                        BlocBuilder<LogoutCubit, LogoutState>(
-                          builder: (context, state) {
-                            return ListView.builder(
+                            ListView.builder(
                               padding: EdgeInsets.all(0),
                               physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
                                 return ListTileButton(
-                                  listTileModel: listTileOptions[index + 5],
                                   onTap: () {
-                                    final onTap =
-                                        listTileOptions[index + 5].onTap;
-                                    if (onTap != null) {
-                                      onTap(context);
-                                    }
+                                    listTileOptions[index].onTap;
+                                  },
+                                  listTileModel: listTileOptions[index],
+                                );
+                              },
+                              itemCount: 3,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: 25,
+                                bottom: 8,
+                              ),
+                              child: Text(
+                                'HELP & SUPPORT',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey[700],
+                                ),
+                              ),
+                            ),
+                            ListView.builder(
+                              padding: EdgeInsets.all(0),
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                return ListTileButton(
+                                  listTileModel: listTileOptions[index + 3],
+                                  onTap: () {
+                                    listTileOptions[index + 3].onTap;
                                   },
                                 );
                               },
                               itemCount: 2,
-                            );
-                          },
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: 25,
+                                bottom: 8,
+                              ),
+                              child: Text(
+                                'SAFETY',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey[700],
+                                ),
+                              ),
+                            ),
+                            BlocBuilder<LogoutCubit, LogoutState>(
+                              builder: (context, state) {
+                                return ListView.builder(
+                                  padding: EdgeInsets.all(0),
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    return ListTileButton(
+                                      listTileModel: listTileOptions[index + 5],
+                                      onTap: () {
+                                        final onTap =
+                                            listTileOptions[index + 5].onTap;
+                                        if (onTap != null) {
+                                          onTap(context);
+                                        }
+                                      },
+                                    );
+                                  },
+                                  itemCount: 2,
+                                );
+                              },
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              ],
+                  ],
+                );
+              },
             ),
             Positioned(
               top: 220,

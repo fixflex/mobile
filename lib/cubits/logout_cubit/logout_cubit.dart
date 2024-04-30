@@ -16,7 +16,8 @@ void logout(BuildContext context) async {
       msg: 'Logout Successfully',
       fontSize: 20,
       backgroundColor: Colors.green);
-  SecureStorage.deleteData(key: SecureKey.token)
+  SecureStorage.deleteData(key: SecureKey.token);
+  SecureStorage.deleteData(key: SecureKey.userId)
       .then((value) {
     Navigator.pushNamedAndRemoveUntil(
         context, LoginScreen.id, (route) => false);

@@ -77,6 +77,8 @@ class LoginScreen extends StatelessWidget {
                         Duration(milliseconds: 500);
                         SecureVariables.token =
                             await SecureStorage.getData(key: SecureKey.token);
+                        SecureVariables.userId =
+                            await SecureStorage.getData(key: SecureKey.userId);
                         // ignore: use_build_context_synchronously
                         Navigator.pushReplacementNamed(context, HomeScreen.id);
                       } else if (state is LoginLoadingState) {
