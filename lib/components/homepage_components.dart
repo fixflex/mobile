@@ -1,9 +1,10 @@
-import 'package:fix_flex/cubits/get_my_data_cubit/get_my_data_cubit.dart';
-import 'package:fix_flex/cubits/login_cubit/login_state.dart';
+import 'package:fix_flex/cubits/users_cubits/check_personal_information_cubit/check_personal_information_cubit.dart';
+import 'package:fix_flex/screens/personal_information_screen.dart';
 import 'package:fix_flex/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../constants/constants.dart';
+import '../cubits/users_cubits/get_my_data_cubit/get_my_data_cubit.dart';
 import '../widgets/categories_gridview.dart';
 import '../widgets/sliver_appbar.dart';
 import 'offers.dart';
@@ -23,6 +24,13 @@ class HomePageComponents extends StatelessWidget {
             BlocBuilder<GetMyDataCubit, GetMyDataState>(
               builder: (context, state) {
                 return SliverAppBarWidget(
+                  onTap: () {
+                    CheckPersonalInformationCubit.get(context)
+                        .checkPersonalInformation(state is GetMyDataSuccess
+                            ? state.myDataList[0].uId
+                            : '');
+                    Navigator.pushNamed(context, PersonalInformationScreen.id);
+                  },
                   title: state is GetMyDataSuccess ? state.myDataList[0].role : 'User',
                   icon: Icons.menu,
                   iconSize: 40,

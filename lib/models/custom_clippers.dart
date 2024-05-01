@@ -5,7 +5,7 @@ class FirstClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     Path path = Path();
     final double xScaling = size.width / 414;
-    final double yScaling = size.height / 700;
+    final double yScaling = size.height / 650;
     path.lineTo(0 * xScaling, 466.5 * yScaling);
     path.cubicTo(
       0 * xScaling,
@@ -61,7 +61,7 @@ class SecondClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     Path path = Path();
     final double xScaling = size.width / 414;
-    final double yScaling = size.height / 700;
+    final double yScaling = size.height / 650;
     path.lineTo(414 * xScaling, 480 * yScaling);
     path.cubicTo(
       414 * xScaling,
@@ -109,7 +109,7 @@ class ThirdClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     Path path = Path();
     final double xScaling = size.width / 414;
-    final double yScaling = size.height / 700;
+    final double yScaling = size.height /650;
     path.lineTo(414 * xScaling, 449.5 * yScaling);
     path.cubicTo(
       414 * xScaling,
@@ -157,7 +157,7 @@ class FourthClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     Path path = Path();
     final double xScaling = size.width / 414;
-    final double yScaling = size.height / 700;
+    final double yScaling = size.height / 650;
     path.lineTo(0 * xScaling, 423.5 * yScaling);
     path.cubicTo(
       0 * xScaling,

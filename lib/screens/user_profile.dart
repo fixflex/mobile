@@ -1,10 +1,11 @@
 import 'package:fix_flex/cubits/logout_cubit/logout_cubit.dart';
+import 'package:fix_flex/screens/personal_information_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../components/list_tile_button.dart';
 import '../constants/constants.dart';
-import '../cubits/get_my_data_cubit/get_my_data_cubit.dart';
 import '../cubits/logout_cubit/logout_state.dart';
+import '../cubits/users_cubits/get_my_data_cubit/get_my_data_cubit.dart';
 import '../models/custom_clippers.dart';
 import '../models/list_tile_model.dart';
 
@@ -35,7 +36,7 @@ class UserProfile extends StatelessWidget {
       title: 'Personal Information',
       trailing: Icons.arrow_forward_ios,
       onTap: (BuildContext context) {
-        print('Personal Information');
+        Navigator.pushNamed(context, PersonalInformationScreen.id);
       },
     ),
     ListTileModel(
@@ -78,7 +79,7 @@ class UserProfile extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            BlocBuilder<GetMyDataCubit,GetMyDataState>(
+            BlocBuilder<GetMyDataCubit, GetMyDataState>(
               builder: (context, state) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,11 +107,16 @@ class UserProfile extends StatelessWidget {
                                   ),
                                   CircleAvatar(
                                     radius: 40,
-                                    backgroundImage:NetworkImage(state is GetMyDataSuccess
-                                        ? state.myDataList[0].profilePicture?.url != null
-                                        ? state.myDataList[0].profilePicture!.url as String
-                                        : kDefaultUserImage
-                                        : kDefaultUserImage,),
+                                    backgroundImage: NetworkImage(
+                                      state is GetMyDataSuccess
+                                          ? state.myDataList[0].profilePicture
+                                                      ?.url !=
+                                                  null
+                                              ? state.myDataList[0]
+                                                  .profilePicture!.url as String
+                                              : kDefaultUserImage
+                                          : kDefaultUserImage,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -123,7 +129,9 @@ class UserProfile extends StatelessWidget {
                                   width: 230,
                                   child: Text(
                                     state is GetMyDataSuccess
-                                        ? state.myDataList[0].FirstName + ' ' + state.myDataList[0].LastName
+                                        ? state.myDataList[0].FirstName +
+                                            ' ' +
+                                            state.myDataList[0].LastName
                                         : 'User',
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
@@ -174,7 +182,10 @@ class UserProfile extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 return ListTileButton(
                                   onTap: () {
-                                    listTileOptions[index].onTap;
+                                    final onTap = listTileOptions[index].onTap;
+                                    if (onTap != null) {
+                                      onTap(context);
+                                    }
                                   },
                                   listTileModel: listTileOptions[index],
                                 );
@@ -202,7 +213,11 @@ class UserProfile extends StatelessWidget {
                                 return ListTileButton(
                                   listTileModel: listTileOptions[index + 3],
                                   onTap: () {
-                                    listTileOptions[index + 3].onTap;
+                                    final onTap =
+                                        listTileOptions[index + 3].onTap;
+                                    if (onTap != null) {
+                                      onTap(context);
+                                    }
                                   },
                                 );
                               },

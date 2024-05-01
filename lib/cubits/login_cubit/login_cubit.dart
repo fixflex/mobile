@@ -52,9 +52,9 @@ class LoginCubit extends Cubit<LoginState> {
     final regex = RegExp(pattern);
 
     if (value?.isEmpty ?? true) {
-      return 'emai can\'t be empty';
+      return '• Email can\'t be empty';
     } else if (!regex.hasMatch(value!)) {
-      return 'Please enter a valid email address';
+      return '• Please enter a valid email address';
     }
     return null;
   }

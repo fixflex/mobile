@@ -3,11 +3,12 @@ import 'package:fix_flex/cubits/tasks_cubits/get_tasks_by_category_id_cubit/get_
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../components/task_container.dart';
+import '../constants/constants.dart';
 
 class CategoryScreen extends StatelessWidget {
   const CategoryScreen({super.key});
 
-  static const String id = 'category_screen';
+  static const String id = 'categoryScreen';
 
   @override
   Widget build(BuildContext context) {
@@ -36,16 +37,20 @@ class CategoryScreen extends StatelessWidget {
             return ListView.builder(
               itemBuilder: (context, index) {
                 return TaskContainer(
-                  title: state.tasksDataList[index].title,
-                  budget: state.tasksDataList[index].budget,
-                  offersId: state.tasksDataList[index].offersId,
-                  location: state.tasksDataList[index].city,
-                  date: state.tasksDataList[index].dueDate,
-                  status: state.tasksDataList[index].status,
-                  taskId: state.tasksDataList[index].id,
-                );
+                    title: state.tasksDataList[index].title,
+                    budget: state.tasksDataList[index].budget,
+                    offersId: state.tasksDataList[index].offersId,
+                    location: state.tasksDataList[index].city,
+                    date: state.tasksDataList[index].dueDate,
+                    status: state.tasksDataList[index].status,
+                    taskId: state.tasksDataList[index].id,
+                    backgroundImage: NetworkImage(
+                      state.tasksDataList[index].userId.profilePicture?.url != null
+                          ? state.tasksDataList[index].userId.profilePicture?.url as String
+                          : kDefaultUserImage,
+                    ));
               },
-              itemCount:state.tasksDataList.length,
+              itemCount: state.tasksDataList.length,
             );
           } else {
             return Center(child: Text('Failed to load tasks'));

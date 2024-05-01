@@ -15,6 +15,7 @@ class TaskContainer extends StatelessWidget {
     required this.status,
     required this.offersId,
     required this.taskId,
+    this.backgroundImage,
   });
 
   final String title;
@@ -24,6 +25,7 @@ class TaskContainer extends StatelessWidget {
   final String status;
   final List<dynamic>? offersId;
   final String taskId;
+  final ImageProvider<Object>? backgroundImage;
 
   @override
   Widget build(BuildContext context) {
@@ -180,12 +182,7 @@ class TaskContainer extends StatelessWidget {
                             ),
                             CircleAvatar(
                               radius: 25,
-                              // backgroundImage: profilePhoto == null
-                              //     ? AssetImage('assets/images/person.png')
-                              //     : NetworkImage(profilePhoto),
-
-                              backgroundImage:
-                                  AssetImage('assets/images/person.png'),
+                              backgroundImage: backgroundImage,
                             ),
                           ],
                         ),

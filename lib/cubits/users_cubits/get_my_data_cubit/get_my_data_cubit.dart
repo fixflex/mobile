@@ -2,8 +2,8 @@ import 'package:fix_flex/helper/secure_storage/secure_keys/secure_variable.dart'
 import 'package:fix_flex/models/user_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
-import '../../constants/end_points/end_points.dart';
-import '../../helper/network/dio_api_helper.dart';
+import '../../../constants/end_points/end_points.dart';
+import '../../../helper/network/dio_api_helper.dart';
 
 part 'get_my_data_state.dart';
 

@@ -1,3 +1,4 @@
+import 'package:fix_flex/screens/personal_information_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../screens/user_profile.dart';
@@ -10,6 +11,7 @@ class SliverAppBarWidget extends StatelessWidget {
     required this.onPressed,
     required this.iconSize,
     required this.image,
+    required this.onTap,
   });
 
   final String title;
@@ -17,6 +19,7 @@ class SliverAppBarWidget extends StatelessWidget {
   final double? iconSize;
   final void Function()? onPressed;
   final String image;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -64,19 +67,22 @@ class SliverAppBarWidget extends StatelessWidget {
       actions: [
         Padding(
           padding: const EdgeInsets.only(right: 20),
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              CircleAvatar(
-                radius: 22,
-                backgroundColor: Colors.white,
-              ),
-              CircleAvatar(
-                radius: 20,
-                backgroundImage: NetworkImage(image),
-                // backgroundImage: AssetImage('assets/images/person.png'),
-              ),
-            ],
+          child: GestureDetector(
+            onTap: onTap,
+            child: Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                CircleAvatar(
+                  radius: 22,
+                  backgroundColor: Colors.white,
+                ),
+                CircleAvatar(
+                  radius: 20,
+                  backgroundImage: NetworkImage(image),
+                  // backgroundImage: AssetImage('assets/images/person.png'),
+                ),
+              ],
+            ),
           ),
         ),
       ],

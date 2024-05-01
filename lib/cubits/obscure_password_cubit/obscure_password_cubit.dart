@@ -8,17 +8,43 @@ class ObscurePasswordCubit extends Cubit<ObscurePasswordState> {
 
   static ObscurePasswordCubit get(context) => BlocProvider.of(context);
 
-  bool isPasswordShow = true;
-  IconData passwordIcon = Icons.visibility;
+  bool isLoginPasswordShow = true;
+  IconData LoginPasswordIcon = Icons.visibility;
 
-  void changePasswordVisibility() {
-    isPasswordShow = !isPasswordShow;
-    if (isPasswordShow) {
-      passwordIcon = Icons.visibility;
-      emit(ObscurePasswordVisibility());
+  bool isRegisterPasswordShow = true;
+  IconData RegisterPasswordIcon = Icons.visibility;
+
+  bool isRegisterConfirmPasswordShow = true;
+  IconData RegisterConfirmPasswordIcon = Icons.visibility;
+
+  void changeLoginPasswordVisibility() {
+    isLoginPasswordShow = !isLoginPasswordShow;
+    if (isLoginPasswordShow) {
+      LoginPasswordIcon = Icons.visibility;
+      emit(LoginObscurePasswordVisibility());
     } else {
-      passwordIcon = Icons.visibility_off;
-      emit(ObscurePasswordVisibilityOff());
+      LoginPasswordIcon = Icons.visibility_off;
+      emit(LoginObscurePasswordVisibilityOff());
+    }
+  }
+  void changeRegisterPasswordShowVisibility() {
+    isRegisterPasswordShow = !isRegisterPasswordShow;
+    if (isRegisterPasswordShow) {
+      RegisterPasswordIcon = Icons.visibility;
+      emit(RegisterObscurePasswordVisibility());
+    } else {
+      RegisterPasswordIcon = Icons.visibility_off;
+      emit(RegisterObscurePasswordVisibilityOff());
+    }
+  }
+  void changeRegisterConfirmPasswordShowVisibility() {
+    isRegisterConfirmPasswordShow = !isRegisterConfirmPasswordShow;
+    if (isRegisterConfirmPasswordShow) {
+      RegisterConfirmPasswordIcon = Icons.visibility;
+      emit(RegisterObscureConfirmPasswordVisibility());
+    } else {
+      RegisterConfirmPasswordIcon = Icons.visibility_off;
+      emit(RegisterObscureConfirmPasswordVisibilityOff());
     }
   }
 }

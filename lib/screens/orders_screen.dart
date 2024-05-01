@@ -3,6 +3,8 @@ import 'package:fix_flex/cubits/tasks_cubits/get_tasks_by_user_id/get_tasks_by_u
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../constants/constants.dart';
+
 class OrdersScreen extends StatelessWidget {
   const OrdersScreen({super.key});
 
@@ -33,6 +35,9 @@ if (state is GetTasksByUserIdLoading) {
                   date: state.MyTasksList[index].dueDate,
                   status: state.MyTasksList[index].status,
                   taskId: state.MyTasksList[index].id,
+                  backgroundImage: NetworkImage( state.MyTasksList[index].userId.profilePicture?.url != null
+                      ? state.MyTasksList[index].userId.profilePicture?.url as String : kDefaultUserImage,
+                  ),
                 );
               },
               itemCount: state.MyTasksList.length,
