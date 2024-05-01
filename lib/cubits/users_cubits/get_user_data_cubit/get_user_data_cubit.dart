@@ -2,8 +2,8 @@ import 'package:fix_flex/constants/end_points/end_points.dart';
 import 'package:fix_flex/helper/network/dio_api_helper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+import '../../../models/user_model.dart';
 
-import '../../models/user_model.dart';
 
 part 'get_user_data_state.dart';
 

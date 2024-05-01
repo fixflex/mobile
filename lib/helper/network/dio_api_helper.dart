@@ -68,6 +68,30 @@ class DioApiHelper {
     }
   }
 
+
+
+
+  static Future<Response> patchData({
+    required String url,
+    dynamic data,
+    Map<String, dynamic>? query,
+    String? token,
+  }) async {
+    try {
+      dio.options.headers = {
+        'authorization': 'Bearer $token',
+      };
+      Response response = await dio.patch(
+        url,
+        data: data,
+        queryParameters: query,
+      );
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   static Future<Response> getData({
     required String url,
     Map<String, dynamic>? query,

@@ -12,6 +12,7 @@ Widget defaultFormField({
   AutovalidateMode autoValidateMode = AutovalidateMode.disabled,
   List<TextInputFormatter>? inputFormatters,
   void Function(String?)? onSaved,
+  int? maxLength,
   String? label,
   IconData? suffix,
   String? hint,
@@ -22,6 +23,7 @@ Widget defaultFormField({
     SizedBox(
       width: 330,
       child: TextFormField(
+        maxLength: maxLength,
         inputFormatters: inputFormatters,
         autovalidateMode: autoValidateMode,
         controller: controller,

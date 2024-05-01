@@ -1,10 +1,14 @@
 import 'package:fix_flex/constants/constants.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_task_details_cubit/get_task_details_cubit.dart';
+import 'package:fix_flex/cubits/users_cubits/get_user_data_cubit/get_user_data_cubit.dart';
 import 'package:fix_flex/helper/secure_storage/secure_keys/secure_variable.dart';
+import 'package:fix_flex/screens/personal_information_screen.dart';
 import 'package:fix_flex/widgets/sliver_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+
+import '../cubits/users_cubits/check_personal_information_cubit/check_personal_information_cubit.dart';
 
 class TaskDetailsScreen extends StatelessWidget {
   const TaskDetailsScreen({Key? key});
@@ -22,6 +26,16 @@ class TaskDetailsScreen extends StatelessWidget {
               headerSliverBuilder: (context, innerBoxIsScrolled) {
                 return [
                   SliverAppBarWidget(
+                    onTap: () async{
+                      await GetUserDataCubit.get(context).getUserData(state is GetTaskDetailsSuccess
+                          ? state.taskDetailsList[0].userId.id
+                          : '');
+                      CheckPersonalInformationCubit.get(context)
+                          .checkPersonalInformation(state is GetTaskDetailsSuccess
+                              ? state.taskDetailsList[0].userId.id
+                              : '');
+                      Navigator.pushNamed(context, PersonalInformationScreen.id);
+                    },
                     title: 'Task Details',
                     icon: Icons.arrow_back,
                     iconSize: 35,

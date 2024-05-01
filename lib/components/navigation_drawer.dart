@@ -1,9 +1,12 @@
-import 'package:fix_flex/cubits/get_my_data_cubit/get_my_data_cubit.dart';
+import 'package:fix_flex/screens/personal_information_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../constants/constants.dart';
 import '../cubits/logout_cubit/logout_cubit.dart';
 import '../cubits/logout_cubit/logout_state.dart';
+import '../cubits/users_cubits/check_personal_information_cubit/check_personal_information_cubit.dart';
+import '../cubits/users_cubits/get_my_data_cubit/get_my_data_cubit.dart';
 import '../models/custom_clippers.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
@@ -28,26 +31,35 @@ class NavigationDrawerWidget extends StatelessWidget {
                   builder: (context, state) {
                     return Column(
                       children: [
-                        Stack(
-                          alignment: Alignment.center,
-                          children: <Widget>[
-                            CircleAvatar(
-                              radius: 42,
-                              backgroundColor: Colors.white,
-                            ),
-                            CircleAvatar(
-                              radius: 40,
-                              backgroundImage: NetworkImage(
-                                state is GetMyDataSuccess
-                                    ? state.myDataList[0].profilePicture?.url !=
-                                            null
-                                        ? state.myDataList[0].profilePicture!
-                                            .url as String
-                                        : kDefaultUserImage
-                                    : kDefaultUserImage,
+                        GestureDetector(
+                          onTap: () {
+                            CheckPersonalInformationCubit.get(context)
+                                .checkPersonalInformation(state is GetMyDataSuccess
+                                    ? state.myDataList[0].uId
+                                    : '');
+                            Navigator.pushNamed(context, PersonalInformationScreen.id);
+                          },
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: <Widget>[
+                              CircleAvatar(
+                                radius: 42,
+                                backgroundColor: Colors.white,
                               ),
-                            ),
-                          ],
+                              CircleAvatar(
+                                radius: 40,
+                                backgroundImage: NetworkImage(
+                                  state is GetMyDataSuccess
+                                      ? state.myDataList[0].profilePicture?.url !=
+                                              null
+                                          ? state.myDataList[0].profilePicture!
+                                              .url as String
+                                          : kDefaultUserImage
+                                      : kDefaultUserImage,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         SizedBox(
                           height: 10,

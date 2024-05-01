@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
 
-const kPrimaryColor = Color(0xff1B202D);
+const kPrimaryColor = Color(0xff134161);
 const kCategoriesBox = 'categories_box';
 const kDefaultUserImage = 'https://t4.ftcdn.net/jpg/00/65/77/27/360_F_65772719_A1UV5kLi5nCEWI0BNLLiFaBPEkUbv5Fv.jpg';
-// const kElectricalId = '66115f84857a0db926ef85f7';
-// const kPlumbingId = '66115fb6857a0db926ef85fd';
-// const kCleaningId = '66115fcb857a0db926ef8601';
-// const kFlooringId = '66115fe3857a0db926ef8606';
-// const kPaintingId = '66115ff0857a0db926ef860a';
-// const kMoreId = '66116006857a0db926ef860e';
