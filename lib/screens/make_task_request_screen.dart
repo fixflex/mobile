@@ -1,9 +1,125 @@
+// import 'package:flutter/material.dart';
+// class MakeTaskRequestScreen extends StatelessWidget {
+//   const MakeTaskRequestScreen({super.key});
+//
+//   static const String id = 'MakeTaskRequestScreen';
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text(
+//           'Task Details',
+//           style: TextStyle(color: Color(0xff134161)),
+//         ),
+//       ),
+//       body: Padding(
+//         padding: EdgeInsets.all(20),
+//         child: SingleChildScrollView(
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               //TFF Title
+//               TextFormField(
+//                 cursorColor: Color(0xff134161),
+//                 decoration: InputDecoration(
+//                   labelText: 'Title',
+//                   labelStyle: TextStyle(color: Color(0xff134161)),
+//                   focusedBorder: UnderlineInputBorder(
+//                     borderSide: BorderSide(
+//                       color: Color(0xff134161),
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//               SizedBox(
+//                 height: 20,
+//               ),
+//               //TFF Description
+//               TextFormField(
+//                 cursorColor: Color(0xff134161),
+//                 decoration: InputDecoration(
+//                   labelText: 'Description',
+//                   labelStyle: TextStyle(color: Color(0xff134161)),
+//                   focusedBorder: UnderlineInputBorder(
+//                     borderSide: BorderSide(
+//                       color: Color(0xff134161),
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//               SizedBox(
+//                 height: 20,
+//               ),
+//               //TFF Budget
+//               TextFormField(
+//                 cursorColor: Color(0xff134161),
+//                 decoration: InputDecoration(
+//                   labelText: 'Budget',
+//                   labelStyle: TextStyle(color: Color(0xff134161)),
+//                   focusedBorder: UnderlineInputBorder(
+//                     borderSide: BorderSide(
+//                       color: Color(0xff134161),
+//                     ),
+//                   ),
+//                 ),
+//                 keyboardType: TextInputType.number,
+//               ),
+//               SizedBox(
+//                 height: 20,
+//               ),
+//               // TFF Deadline
+//               TextFormField(
+//                 style: TextStyle(color: Color(0xff134161)),
+//                 cursorColor: Color(0xff134161),
+//                 decoration: InputDecoration(
+//                   labelText: 'Deadline',
+//                   labelStyle: TextStyle(color: Color(0xff134161)),
+//                   prefixIcon: Icon(Icons.date_range),
+//                   prefixIconColor: Color(0xff134161),
+//                   focusedBorder: UnderlineInputBorder(
+//                     borderSide: BorderSide(
+//                       color: Color(0xff134161),
+//                     ),
+//                   ),
+//                 ),
+//                 readOnly: true,
+//                 onTap: () {},
+//               ),
+//               SizedBox(
+//                 height: 20,
+//               )
+//     ]))));
+//               // Display selected image
+//   }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class MakeTaskRequestScreen extends StatefulWidget {
   const MakeTaskRequestScreen({super.key});
+
+  static const String id = 'MakeTaskRequestScreen';
 
   @override
   State<MakeTaskRequestScreen> createState() => _TaskDetailsScreenState();

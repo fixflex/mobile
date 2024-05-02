@@ -1,5 +1,6 @@
 import 'package:fix_flex/cubits/login_cubit/login_cubit.dart';
 import 'package:fix_flex/cubits/obscure_password_cubit/obscure_password_cubit.dart';
+import 'package:fix_flex/cubits/users_cubits/get_my_data_cubit/get_my_data_cubit.dart';
 import 'package:fix_flex/screens/home%20page.dart';
 import 'package:fix_flex/screens/register_screen.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +61,7 @@ class LoginScreen extends StatelessWidget {
                             await SecureStorage.getData(key: SecureKey.token);
                         SecureVariables.userId =
                             await SecureStorage.getData(key: SecureKey.userId);
-                        // ignore: use_build_context_synchronously
+                        await GetMyDataCubit.get(context).getMyData();
                         Navigator.pushReplacementNamed(context, HomeScreen.id);
                       }
                     },
