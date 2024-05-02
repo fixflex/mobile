@@ -1,5 +1,6 @@
 import 'package:fix_flex/cubits/get_categories_cubit/get_categories_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_tasks_by_category_id_cubit/get_tasks_by_category_id_cubit.dart';
+import 'package:fix_flex/screens/make_task_request_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../components/task_container.dart';
@@ -14,6 +15,15 @@ class CategoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: kPrimaryColor,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: Text(
           GetCategoriesCubit.get(context)
               .categoriesDataList[
@@ -56,6 +66,27 @@ class CategoryScreen extends StatelessWidget {
             return Center(child: Text('Failed to load tasks'));
           }
         },
+      ),
+      floatingActionButton:SizedBox(
+        width: 65,
+        height: 65,
+        child: FittedBox(
+          child: FloatingActionButton(
+            onPressed: (){
+              Navigator.pushNamed(context, MakeTaskRequestScreen.id );
+            },
+            backgroundColor: kPrimaryColor,
+
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Icon(
+              Icons.add,
+              color: Colors.white,
+              size: 30,
+            ),
+          ),
+        ),
       ),
     );
   }

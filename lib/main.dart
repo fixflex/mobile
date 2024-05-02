@@ -9,6 +9,7 @@ import 'package:fix_flex/screens/category_screen.dart';
 import 'package:fix_flex/screens/home%20page.dart';
 import 'package:fix_flex/screens/inbox_screen.dart';
 import 'package:fix_flex/screens/login_screen.dart';
+import 'package:fix_flex/screens/make_task_request_screen.dart';
 import 'package:fix_flex/screens/orders_screen.dart';
 import 'package:fix_flex/screens/personal_information_screen.dart';
 import 'package:fix_flex/screens/register_screen.dart';
@@ -79,6 +80,7 @@ class MyApp extends StatelessWidget {
       LoginScreen.id: (context) => LoginScreen(),
       UpdateProfilePictureScreen.id: (context) => UpdateProfilePictureScreen(),
       PersonalInformationScreen.id: (context) => PersonalInformationScreen(),
+      MakeTaskRequestScreen.id: (context) => MakeTaskRequestScreen(),
       RegisterScreen.id: (context) => RegisterScreen(),
       OrdersScreen.id: (context) => OrdersScreen(),
       SearchScreen.id: (context) => SearchScreen(),
