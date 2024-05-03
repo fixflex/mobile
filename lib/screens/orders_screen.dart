@@ -31,7 +31,9 @@ if (state is GetTasksByUserIdLoading) {
                   title: state.MyTasksList[index].title,
                   budget: state.MyTasksList[index].budget,
                   offersId: state.MyTasksList[index].offersId,
-                  location: state.MyTasksList[index].city,
+                  location: state.MyTasksList[index].city != null && state.MyTasksList[index].city != ''
+                      ? state.MyTasksList[index].city as String
+                      : 'No location',
                   date: state.MyTasksList[index].dueDate,
                   status: state.MyTasksList[index].status,
                   taskId: state.MyTasksList[index].id,

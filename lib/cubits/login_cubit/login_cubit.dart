@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../constants/end_points/end_points.dart';
 import '../../helper/secure_storage/secure_keys/secure_key.dart';
-import '../../helper/secure_storage/secure_keys/secure_variable.dart';
 import '../../helper/secure_storage/secure_storage.dart';
 import 'login_state.dart';
 

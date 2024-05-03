@@ -1,5 +1,6 @@
 import 'package:fix_flex/cubits/login_cubit/login_cubit.dart';
 import 'package:fix_flex/cubits/obscure_password_cubit/obscure_password_cubit.dart';
+import 'package:fix_flex/cubits/users_cubits/check_my_role_cubit/check_my_role_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/get_my_data_cubit/get_my_data_cubit.dart';
 import 'package:fix_flex/screens/home%20page.dart';
 import 'package:fix_flex/screens/register_screen.dart';
@@ -62,6 +63,8 @@ class LoginScreen extends StatelessWidget {
                         SecureVariables.userId =
                             await SecureStorage.getData(key: SecureKey.userId);
                         await GetMyDataCubit.get(context).getMyData();
+                        SecureVariables.role =
+                            await SecureStorage.getData(key: SecureKey.role);
                         Navigator.pushReplacementNamed(context, HomeScreen.id);
                       }
                     },
@@ -85,6 +88,7 @@ class LoginScreen extends StatelessWidget {
 
                             //Email TFF
                             defaultFormField(
+                              width: 330,
                               controller: cubit.emailController,
                               keyType: TextInputType.emailAddress,
                               inputFormatters: <TextInputFormatter>[
@@ -104,6 +108,7 @@ class LoginScreen extends StatelessWidget {
                                 ObscurePasswordState>(
                               builder: (context, state) {
                                 return defaultFormField(
+                                  width: 330,
                                   autoValidateMode:
                                       AutovalidateMode.onUserInteraction,
                                   controller: cubit.passwordController,
@@ -142,19 +147,20 @@ class LoginScreen extends StatelessWidget {
                               child: AbsorbPointer(
                                 absorbing: LoginCubit.get(context).isLoading,
                                 child: TextButton(
-                                  onPressed: () {
+                                  onPressed: () async{
                                     if (cubit.formKey.currentState!
                                         .validate()) {
                                       if (cubit.emailController.text
                                               .isNotEmpty &&
                                           cubit.passwordController.text
                                               .isNotEmpty) {
-                                        cubit.login(
+                                        await cubit.login(
                                           email: cubit.emailController.text
                                               .toLowerCase(),
                                           password:
                                               cubit.passwordController.text,
                                         );
+                                        await CheckMyRoleCubit.get(context).checkMyRole();
                                         ObscurePasswordCubit.get(context).isLoginPasswordShow = true;
                                         ObscurePasswordCubit.get(context).isRegisterPasswordShow = true ;
                                         ObscurePasswordCubit.get(context).isRegisterConfirmPasswordShow = true;

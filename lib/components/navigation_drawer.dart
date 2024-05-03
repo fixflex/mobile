@@ -1,3 +1,6 @@
+import 'package:fix_flex/helper/secure_storage/secure_keys/secure_variable.dart';
+import 'package:fix_flex/helper/secure_storage/secure_storage.dart';
+import 'package:fix_flex/screens/become_a_tasker_screen.dart';
 import 'package:fix_flex/screens/personal_information_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -83,11 +86,14 @@ class NavigationDrawerWidget extends StatelessWidget {
                 ),
               ),
             ),
+            SecureVariables.role == 'user'?
             ListTile(
               leading: Icon(Icons.shopping_bag),
-              title: Text("register as a tasker"),
-              onTap: () {},
-            ),
+              title: Text("Become a tasker"),
+              onTap: () {
+                Navigator.of(context).pushNamed(BecomeATaskerScreen.id);
+              },
+            ):Container(),
             ListTile(
               leading: Icon(Icons.phone),
               title: Text("contact us"),

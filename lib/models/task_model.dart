@@ -195,7 +195,7 @@ class OfferDetails {
 
   });
   final String? offerId;
-  final String? taskerId;
+  final TaskerId? taskerId;
   final String? taskId;
   final int? price;
   final String? status;
@@ -206,7 +206,7 @@ class OfferDetails {
   factory OfferDetails.fromJson(jsonData) {
     return OfferDetails(
       offerId: jsonData['_id'],
-      taskerId: jsonData['taskerId'],
+      taskerId: TaskerId.fromJson(jsonData['taskerId']),
       taskId: jsonData['taskId'],
       price: jsonData['price'],
       status: jsonData['status'],
@@ -216,6 +216,31 @@ class OfferDetails {
     );
   }
 }
+
+class TaskerId{
+  TaskerId({
+    this.id,
+    this.userId,
+    this.ratingAverage,
+    this.ratingQuantity,
+  });
+  final String? id;
+  final UserId? userId;
+   var ratingAverage;
+   var ratingQuantity;
+
+
+  factory TaskerId.fromJson(jsonData) {
+    return TaskerId(
+      id: jsonData['_id'],
+      userId: UserId.fromJson(jsonData['userId'],),
+      ratingAverage: jsonData['ratingAverage'] ,
+      ratingQuantity: jsonData['ratingQuantity'] ,
+    );
+  }
+}
+
+
 
 
 class TaskImages{

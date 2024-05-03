@@ -22,6 +22,7 @@ void logout(BuildContext context) async {
     Navigator.pushNamedAndRemoveUntil(
         context, LoginScreen.id, (route) => false);
   });
+  SecureStorage.deleteData(key: SecureKey.role);
   emit(LogoutSuccessState());
 }
 }

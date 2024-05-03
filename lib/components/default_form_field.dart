@@ -12,18 +12,23 @@ Widget defaultFormField({
   AutovalidateMode autoValidateMode = AutovalidateMode.disabled,
   List<TextInputFormatter>? inputFormatters,
   void Function(String?)? onSaved,
+  double? width,
+  String? counterText,
+  TextStyle? hintStyle,
   int? maxLength,
+  int? maxLines = 1,
   String? label,
   IconData? suffix,
   String? hint,
-  Color? fillColor,
+  Color? fillColor = Colors.white,
   bool isPassword = false,
   void Function()? suffixPressed,
 }) =>
     SizedBox(
-      width: 330,
+      width: width,
       child: TextFormField(
         maxLength: maxLength,
+        maxLines: maxLines,
         inputFormatters: inputFormatters,
         autovalidateMode: autoValidateMode,
         controller: controller,
@@ -33,6 +38,7 @@ Widget defaultFormField({
         validator: validate,
         onSaved: onSaved,
         decoration: InputDecoration(
+          counterText: counterText,
           contentPadding: const EdgeInsets.symmetric(vertical: 10),
           filled: true,
           fillColor: fillColor,
@@ -48,6 +54,7 @@ Widget defaultFormField({
           labelText: label,
           labelStyle: TextStyle(color:  Color(0xff134161)),
           hintText: hint,
+          hintStyle: hintStyle,
           border: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.white),
             borderRadius: BorderRadius.circular(20),

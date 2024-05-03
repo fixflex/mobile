@@ -55,6 +55,8 @@ class RegisterScreen extends StatelessWidget {
                         await SecureStorage.getData(key: SecureKey.token);
                     SecureVariables.userId =
                         await SecureStorage.getData(key: SecureKey.userId);
+                    SecureVariables.role =
+                        await SecureStorage.getData(key: SecureKey.role);
                     Navigator.pushReplacementNamed(context, UpdateProfilePictureScreen.id);
                   }
                 },
@@ -74,6 +76,7 @@ class RegisterScreen extends StatelessWidget {
 
                             //first name TFF
                             defaultFormField(
+                              width: 330,
                               controller: cubit.signUpFirstName,
                               keyType: TextInputType.name,
                               inputFormatters: [
@@ -98,6 +101,7 @@ class RegisterScreen extends StatelessWidget {
 
                             //Last Name TFF
                             defaultFormField(
+                              width: 330,
                               controller: cubit.signUpLastName,
                               keyType: TextInputType.name,
                               inputFormatters: [
@@ -122,6 +126,7 @@ class RegisterScreen extends StatelessWidget {
 
                             //Email TFF
                             defaultFormField(
+                              width: 330,
                               controller: cubit.signUpEmail,
                               keyType: TextInputType.emailAddress,
                               validate: cubit.validateEmail,
@@ -134,6 +139,7 @@ class RegisterScreen extends StatelessWidget {
                             ),
                             // Phone Number TFF
                             defaultFormField(
+                              width: 330,
                               controller: cubit.signUpPhoneNumber,
                               keyType: TextInputType.phone,
                               maxLength: 11,
@@ -160,6 +166,7 @@ class RegisterScreen extends StatelessWidget {
                                 ObscurePasswordState>(
                               builder: (context, state) {
                                 return defaultFormField(
+                                  width: 330,
                                   autoValidateMode:
                                       AutovalidateMode.onUserInteraction,
                                   controller: cubit.signUpPassword,
@@ -187,6 +194,7 @@ class RegisterScreen extends StatelessWidget {
                               builder: (context, state) {
                                 //Confirm Password TFF
                                 return defaultFormField(
+                                  width: 330,
                                   autoValidateMode:
                                       AutovalidateMode.onUserInteraction,
                                   controller: cubit.signUpConfirmPassword,

@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
+import '../helper/secure_storage/secure_keys/secure_variable.dart';
+
 class PersonalInformationScreen extends StatelessWidget {
   const PersonalInformationScreen({super.key});
 
@@ -124,7 +126,9 @@ class PersonalInformationScreen extends StatelessWidget {
                                             ? state.myDataList[0].phoneNumber as String
                                             : 'Phone Number',
                                         role: state is GetMyDataSuccess
-                                            ? state.myDataList[0].role
+                                            ? state.myDataList[0].role == 'USER' ? SecureVariables.role == 'user'
+                                                ? 'User'
+                                                : 'Tasker': 'Admin'
                                             : 'Role',
                                         joinedDate: state is GetMyDataSuccess && state.myDataList[0].createdAt != null
                                             ? state.myDataList[0].createdAt as String

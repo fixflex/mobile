@@ -32,9 +32,8 @@ class UpdateProfilePictureCubit extends Cubit<UpdateProfilePictureState> {
             contentType: MediaType('image', 'png'))
       });
       final response = await DioApiHelper.patchData(
-        url: EndPoints.updateProfilePicture(id: id),
+        url: EndPoints.updateProfilePicture(),
         data: formData,
-        token: token,
       );
       if (response.statusCode == 200) {
         emit(UpdateProfilePictureSuccess());
