@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../constants/constants.dart';
 import '../cubits/users_cubits/get_my_data_cubit/get_my_data_cubit.dart';
+import '../helper/secure_storage/secure_keys/secure_variable.dart';
 import '../widgets/categories_gridview.dart';
 import '../widgets/sliver_appbar.dart';
 import 'offers.dart';
@@ -31,7 +32,7 @@ class HomePageComponents extends StatelessWidget {
                             : '');
                     Navigator.pushNamed(context, PersonalInformationScreen.id);
                   },
-                  title: state is GetMyDataSuccess ? state.myDataList[0].role : 'User',
+                  title: state is GetMyDataSuccess ? state.myDataList[0].role == 'USER'? SecureVariables.role == 'user'?'USER': 'TASKER':'ADMIN':'USER',
                   icon: Icons.menu,
                   iconSize: 40,
                   onPressed: () {

@@ -1,5 +1,6 @@
 import 'package:fix_flex/constants/constants.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_task_details_cubit/get_task_details_cubit.dart';
+import 'package:fix_flex/cubits/users_cubits/check_my_role_cubit/check_my_role_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/get_user_data_cubit/get_user_data_cubit.dart';
 import 'package:fix_flex/helper/secure_storage/secure_keys/secure_variable.dart';
 import 'package:fix_flex/screens/personal_information_screen.dart';
@@ -7,8 +8,14 @@ import 'package:fix_flex/widgets/sliver_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:readmore/readmore.dart';
 
 import '../cubits/users_cubits/check_personal_information_cubit/check_personal_information_cubit.dart';
+import '../helper/secure_storage/secure_keys/secure_key.dart';
+import '../helper/secure_storage/secure_storage.dart';
+import 'become_a_tasker_screen.dart';
+import 'make_an_offer_screen.dart';
 
 class TaskDetailsScreen extends StatelessWidget {
   const TaskDetailsScreen({Key? key});
@@ -26,15 +33,18 @@ class TaskDetailsScreen extends StatelessWidget {
               headerSliverBuilder: (context, innerBoxIsScrolled) {
                 return [
                   SliverAppBarWidget(
-                    onTap: () async{
-                      await GetUserDataCubit.get(context).getUserData(state is GetTaskDetailsSuccess
-                          ? state.taskDetailsList[0].userId.id
-                          : '');
-                      CheckPersonalInformationCubit.get(context)
-                          .checkPersonalInformation(state is GetTaskDetailsSuccess
+                    onTap: () async {
+                      await GetUserDataCubit.get(context).getUserData(
+                          state is GetTaskDetailsSuccess
                               ? state.taskDetailsList[0].userId.id
                               : '');
-                      Navigator.pushNamed(context, PersonalInformationScreen.id);
+                      CheckPersonalInformationCubit.get(context)
+                          .checkPersonalInformation(
+                              state is GetTaskDetailsSuccess
+                                  ? state.taskDetailsList[0].userId.id
+                                  : '');
+                      Navigator.pushNamed(
+                          context, PersonalInformationScreen.id);
                     },
                     title: 'Task Details',
                     icon: Icons.arrow_back,
@@ -82,6 +92,7 @@ class TaskDetailsScreen extends StatelessWidget {
       GetTaskDetailsSuccess state) {
     return SingleChildScrollView(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           state.taskDetailsList[0].status == 'CANCELLED'
@@ -163,7 +174,11 @@ class TaskDetailsScreen extends StatelessWidget {
                           fontSize: 15,
                           color: Colors.grey,
                         )),
-                    Text(state.taskDetailsList[0].city as String,
+                    Text(
+                        state.taskDetailsList[0].city != null &&
+                                state.taskDetailsList[0].city != ''
+                            ? state.taskDetailsList[0].city as String
+                            : 'No location',
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         softWrap: false,
@@ -249,15 +264,25 @@ class TaskDetailsScreen extends StatelessWidget {
                               color: const Color(0xff134161),
                               // color: Color(0xff222a32),
                             ),
-                            child: TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                'Make An Offer',
-                                style: TextStyle(
-                                  color: Colors.white,
+                            child: Builder(builder: (context) {
+                              return TextButton(
+                                onPressed: () async {
+                                  await SecureStorage.getData(
+                                              key: SecureKey.role) ==
+                                          'tasker'
+                                      ? Navigator.pushNamed(
+                                          context, MakeAnOfferScreen.id)
+                                      : Navigator.pushNamed(
+                                          context, BecomeATaskerScreen.id);
+                                },
+                                child: Text(
+                                  'Make An Offer',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
                                 ),
-                              ),
-                            ),
+                              );
+                            }),
                           ),
                     Spacer(),
                   ],
@@ -321,6 +346,7 @@ class TaskDetailsScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 15,
+              vertical: 10,
             ),
             child: Text(
               'Offers (${state.taskDetailsList[0].offerDetails?.length})',
@@ -331,14 +357,159 @@ class TaskDetailsScreen extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            child: Container(
-              width: double.infinity,
-              height: 50,
-              color: Colors.grey[200],
-            ),
-          ),
+          state.taskDetailsList[0].offerDetails!.isNotEmpty
+              ? ListView.builder(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Column(
+                        children: [
+                          //tasker name
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 10),
+                                child: CircleAvatar(
+                                  radius: 20,
+                                  backgroundImage: state
+                                              .taskDetailsList[0]
+                                              .offerDetails![index]
+                                              .taskerId
+                                              ?.userId
+                                              ?.profilePicture!
+                                              .url !=
+                                          null
+                                      ? NetworkImage(state
+                                          .taskDetailsList[0]
+                                          .offerDetails?[index]
+                                          .taskerId
+                                          ?.userId
+                                          ?.profilePicture
+                                          ?.url as String)
+                                      : NetworkImage(kDefaultUserImage)
+                                          as ImageProvider,
+                                ),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width: 200,
+                                    child: Text(
+                                      state.taskDetailsList[0].offerDetails !=
+                                              null
+                                          ? state
+                                                  .taskDetailsList[0]
+                                                  .offerDetails![index]
+                                                  .taskerId!
+                                                  .userId!
+                                                  .firstName +
+                                              ' ' +
+                                              state
+                                                  .taskDetailsList[0]
+                                                  .offerDetails![index]
+                                                  .taskerId!
+                                                  .userId!
+                                                  .lastName
+                                          : 'User',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      // state.taskDetailsList[0].offerDetails?[0].taskerId?.userId?.firstName as String,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                    ),
+                                  ),
+                                  //tasker rating
+                                  state.taskDetailsList[0].offerDetails?[index]
+                                                  .taskerId?.ratingQuantity !=
+                                              null &&
+                                          state
+                                                  .taskDetailsList[0]
+                                                  .offerDetails?[index]
+                                                  .taskerId
+                                                  ?.ratingQuantity !=
+                                              0
+                                      ? Row(
+                                          children: [
+                                            RatingBarIndicator(
+                                              itemBuilder: (context, index) {
+                                                return Icon(
+                                                  Icons.star,
+                                                  color: Colors.amber,
+                                                );
+                                              },
+                                              itemSize: 18,
+                                              rating: state
+                                                  .taskDetailsList[0]
+                                                  .offerDetails![index]
+                                                  .taskerId!
+                                                  .ratingAverage!
+                                                  .toDouble(),
+                                            ),
+                                            Text(
+                                              '(${state.taskDetailsList[0].offerDetails![index].taskerId!.ratingQuantity})',
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : Text('No rating'),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0),
+                                    child: Container(
+                                      width: 270,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.grey[200],
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(11),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Offered Price: \$${state.taskDetailsList[0].offerDetails![index].price}',
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                            ReadMoreText(
+                                              state
+                                                  .taskDetailsList[0]
+                                                  .offerDetails![index]
+                                                  .message as String,
+                                              trimLength: 100,
+                                              colorClickableText: Colors.blue,
+                                              trimCollapsedText: 'Show more',
+                                              trimExpandedText: 'Show less',
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  itemCount: state.taskDetailsList[0].offerDetails!.length,
+                )
+              : Container(),
         ],
       ),
     );

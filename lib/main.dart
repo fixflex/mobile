@@ -2,13 +2,16 @@ import 'package:fix_flex/cubits/obscure_password_cubit/obscure_password_cubit.da
 import 'package:fix_flex/cubits/register_cubit/register_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_task_details_cubit/get_task_details_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_tasks_by_category_id_cubit/get_tasks_by_category_id_cubit.dart';
+import 'package:fix_flex/cubits/users_cubits/check_my_role_cubit/check_my_role_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/check_personal_information_cubit/check_personal_information_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/get_user_data_cubit/get_user_data_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/update_profile_picture_cubit/update_profile_picture_cubit.dart';
+import 'package:fix_flex/screens/become_a_tasker_screen.dart';
 import 'package:fix_flex/screens/category_screen.dart';
 import 'package:fix_flex/screens/home%20page.dart';
 import 'package:fix_flex/screens/inbox_screen.dart';
 import 'package:fix_flex/screens/login_screen.dart';
+import 'package:fix_flex/screens/make_an_offer_screen.dart';
 import 'package:fix_flex/screens/make_task_request_screen.dart';
 import 'package:fix_flex/screens/orders_screen.dart';
 import 'package:fix_flex/screens/personal_information_screen.dart';
@@ -41,6 +44,7 @@ void main() async {
 
   SecureVariables.token = await SecureStorage.getData(key: SecureKey.token);
   SecureVariables.userId = await SecureStorage.getData(key: SecureKey.userId);
+  SecureVariables.role = await SecureStorage.getData(key: SecureKey.role);
 
   runApp(MyApp());
 }
@@ -56,6 +60,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => GetUserDataCubit(),),
           BlocProvider(create: (context) => UpdateProfilePictureCubit(),),
           BlocProvider(create: (context) => RegisterCubit(),),
+          BlocProvider(create: (context) => CheckMyRoleCubit(),),
           BlocProvider(create: (context) => ObscurePasswordCubit(),),
           BlocProvider(create: (context) => CheckPersonalInformationCubit(),),
           BlocProvider(create: (context) => GetCategoriesCubit()..getCategories()),
@@ -81,6 +86,8 @@ class MyApp extends StatelessWidget {
       UpdateProfilePictureScreen.id: (context) => UpdateProfilePictureScreen(),
       PersonalInformationScreen.id: (context) => PersonalInformationScreen(),
       MakeTaskRequestScreen.id: (context) => MakeTaskRequestScreen(),
+      BecomeATaskerScreen.id: (context) => BecomeATaskerScreen(),
+      MakeAnOfferScreen.id: (context) => MakeAnOfferScreen(),
       RegisterScreen.id: (context) => RegisterScreen(),
       OrdersScreen.id: (context) => OrdersScreen(),
       SearchScreen.id: (context) => SearchScreen(),

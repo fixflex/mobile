@@ -50,7 +50,9 @@ class CategoryScreen extends StatelessWidget {
                     title: state.tasksDataList[index].title,
                     budget: state.tasksDataList[index].budget,
                     offersId: state.tasksDataList[index].offersId,
-                    location: state.tasksDataList[index].city,
+                    location: state.tasksDataList[index].city != null && state.tasksDataList[index].city != ''
+                        ? state.tasksDataList[index].city as String
+                        : 'No location',
                     date: state.tasksDataList[index].dueDate,
                     status: state.tasksDataList[index].status,
                     taskId: state.tasksDataList[index].id,
