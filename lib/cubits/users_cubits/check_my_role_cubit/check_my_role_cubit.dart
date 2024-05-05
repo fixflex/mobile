@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import '../../../constants/end_points/end_points.dart';
 import '../../../helper/network/dio_api_helper.dart';
-import '../../../helper/secure_storage/secure_keys/secure_variable.dart';
 
 part 'check_my_role_state.dart';
 

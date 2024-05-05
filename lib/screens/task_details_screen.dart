@@ -1,6 +1,5 @@
 import 'package:fix_flex/constants/constants.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_task_details_cubit/get_task_details_cubit.dart';
-import 'package:fix_flex/cubits/users_cubits/check_my_role_cubit/check_my_role_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/get_user_data_cubit/get_user_data_cubit.dart';
 import 'package:fix_flex/helper/secure_storage/secure_keys/secure_variable.dart';
 import 'package:fix_flex/screens/personal_information_screen.dart';
@@ -262,7 +261,6 @@ class TaskDetailsScreen extends StatelessWidget {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
                               color: const Color(0xff134161),
-                              // color: Color(0xff222a32),
                             ),
                             child: Builder(builder: (context) {
                               return TextButton(

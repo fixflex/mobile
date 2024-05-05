@@ -246,6 +246,7 @@ class RegisterScreen extends StatelessWidget {
                                       phoneNumber: cubit.signUpPhoneNumber.text,
                                       password: cubit.signUpPassword.text,
                                     );
+                                    SecureStorage.saveData(key: SecureKey.role, value: 'user');
                                     ObscurePasswordCubit.get(context).isLoginPasswordShow = true;
                                     ObscurePasswordCubit.get(context).isRegisterPasswordShow = true ;
                                     ObscurePasswordCubit.get(context).isRegisterConfirmPasswordShow = true;

@@ -35,8 +35,6 @@ class DioApiHelper {
           data: data,
           options: Options(
             validateStatus: (_) => true,
-            // contentType: Headers.jsonContentType,
-            // responseType: ResponseType.json,
           ));
     } catch (error) {
       print(error.toString());
