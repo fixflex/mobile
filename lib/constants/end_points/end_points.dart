@@ -11,6 +11,7 @@ class EndPoints {
   static String deleteTask({required String id}) => "$tasks/$id";
   static String getTask({required String id}) => "$tasks/$id";
   static String getUserData({required String id}) => "$users/$id";
+  static String getMyData({required String id}) => "$users/me";
   static String updateProfilePicture() => "$users/me/profile-picture";
   static String checkMyRole() => "$taskers/me";
 }

@@ -8,9 +8,9 @@ class SliverAppBarWidget extends StatelessWidget {
     super.key,
     required this.title,
     required this.icon,
-    required this.onPressed,
-    required this.iconSize,
-    required this.image,
+    this.onPressed,
+    this.iconSize,
+    this.image,
     required this.onTap,
   });
 
@@ -18,7 +18,7 @@ class SliverAppBarWidget extends StatelessWidget {
   final IconData icon;
   final double? iconSize;
   final void Function()? onPressed;
-  final String image;
+  final String? image;
   final void Function()? onTap;
 
   @override
@@ -78,7 +78,7 @@ class SliverAppBarWidget extends StatelessWidget {
                 ),
                 CircleAvatar(
                   radius: 20,
-                  backgroundImage: NetworkImage(image),
+                  backgroundImage: NetworkImage(image!),
                   // backgroundImage: AssetImage('assets/images/person.png'),
                 ),
               ],

@@ -15,7 +15,7 @@ class GetMyDataCubit extends Cubit<GetMyDataState> {
   Future<void> getMyData() async {
     try {
       var response = await DioApiHelper.getData(
-        url: EndPoints.getUserData(
+        url: EndPoints.getMyData(
           id: SecureVariables.userId as String,
         ),
       );

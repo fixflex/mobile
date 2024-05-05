@@ -11,6 +11,7 @@ class GetCategoriesCubit extends Cubit<GetCategoriesState> {
 
   static GetCategoriesCubit get(context) => BlocProvider.of(context);
   List<CategoryModel> categoriesDataList = [];
+  List<CategoryModel> categoriesDataListWithoutMore = [];
   List<bool> buttonClickedStates = [];
   String clickedCategoryId = '';
   int clickedCategoryIndex = 0;
@@ -29,6 +30,9 @@ class GetCategoriesCubit extends Cubit<GetCategoriesState> {
             buttonClickedStates.add(false);
             CategoryModel categoryModel = CategoryModel.fromJson(category);
             categoriesDataList.add(categoryModel);
+            if (categoryModel.name != 'More') {
+              categoriesDataListWithoutMore.add(categoryModel);
+            }
             // await categoriesBox.add(categoryModel);
             // var accessCategoriesBox = Hive.box<CategoryModel>(kCategoriesBox);
             // categoriesDataList = accessCategoriesBox.values.toList();

@@ -1,7 +1,9 @@
+import 'package:fix_flex/cubits/map_cubit/map_cubit.dart';
 import 'package:fix_flex/cubits/obscure_password_cubit/obscure_password_cubit.dart';
 import 'package:fix_flex/cubits/register_cubit/register_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_task_details_cubit/get_task_details_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_tasks_by_category_id_cubit/get_tasks_by_category_id_cubit.dart';
+import 'package:fix_flex/cubits/users_cubits/become_a_tasker_cubit/become_a_tasker_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/check_my_role_cubit/check_my_role_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/check_personal_information_cubit/check_personal_information_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/get_user_data_cubit/get_user_data_cubit.dart';
@@ -13,6 +15,7 @@ import 'package:fix_flex/screens/inbox_screen.dart';
 import 'package:fix_flex/screens/login_screen.dart';
 import 'package:fix_flex/screens/make_an_offer_screen.dart';
 import 'package:fix_flex/screens/make_task_request_screen.dart';
+import 'package:fix_flex/screens/map_screen.dart';
 import 'package:fix_flex/screens/orders_screen.dart';
 import 'package:fix_flex/screens/personal_information_screen.dart';
 import 'package:fix_flex/screens/register_screen.dart';
@@ -61,11 +64,13 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => UpdateProfilePictureCubit(),),
           BlocProvider(create: (context) => RegisterCubit(),),
           BlocProvider(create: (context) => CheckMyRoleCubit(),),
+          BlocProvider(create: (context) => BecomeATaskerCubit(),),
           BlocProvider(create: (context) => ObscurePasswordCubit(),),
           BlocProvider(create: (context) => CheckPersonalInformationCubit(),),
           BlocProvider(create: (context) => GetCategoriesCubit()..getCategories()),
           BlocProvider(create: (context) => GetTasksByCategoryIdCubit(),),
-          BlocProvider(create: (context) => GetTaskDetailsCubit(),)
+          BlocProvider(create: (context) => GetTaskDetailsCubit(),),
+          BlocProvider(create: (context) => MapCubit(),),
         ],
         child: MaterialApp(
           routes: routes(),
@@ -92,6 +97,7 @@ class MyApp extends StatelessWidget {
       OrdersScreen.id: (context) => OrdersScreen(),
       SearchScreen.id: (context) => SearchScreen(),
       UserProfile.id: (context) => UserProfile(),
+      MapScreen.id: (context) => MapScreen(),
       TaskDetailsScreen.id: (context) => TaskDetailsScreen(),
     };
   }
