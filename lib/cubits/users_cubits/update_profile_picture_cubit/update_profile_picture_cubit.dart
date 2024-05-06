@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:fix_flex/cubits/users_cubits/get_my_data_cubit/get_my_data_cubit.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../constants/end_points/end_points.dart';
@@ -23,6 +25,7 @@ class UpdateProfilePictureCubit extends Cubit<UpdateProfilePictureState> {
     required String id,
     required String token,
     required File? imageFile,
+    required BuildContext context
   }) async {
     emit(UpdateProfilePictureLoading());
     try {
@@ -36,7 +39,9 @@ class UpdateProfilePictureCubit extends Cubit<UpdateProfilePictureState> {
         data: formData,
       );
       if (response.statusCode == 200) {
+        GetMyDataCubit.get(context).getMyData();
         emit(UpdateProfilePictureSuccess());
+        image= null;
       } else {
         emit(UpdateProfilePictureFailure());
       }
@@ -59,5 +64,9 @@ class UpdateProfilePictureCubit extends Cubit<UpdateProfilePictureState> {
     } catch (e) {
       emit(UpdateProfilePictureFailure());
     }
+  }
+  ResetUpdateProfilePictureState() {
+    image = null;
+    emit(UpdateProfilePictureInitial());
   }
 }

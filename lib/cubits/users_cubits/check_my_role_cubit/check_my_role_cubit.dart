@@ -24,11 +24,11 @@ class CheckMyRoleCubit extends Cubit<CheckMyRoleState> {
           List<TaskerModel> TaskerDataList= [];
           TaskerModel taskerModel = TaskerModel.fromJson(taskerData);
           TaskerDataList.add(taskerModel);
-          SecureStorage.saveData(key: SecureKey.role, value: 'tasker');
+          // SecureStorage.saveData(key: SecureKey.role, value: 'tasker');
           emit(IamATasker(TaskerDataList: TaskerDataList));
 
         } else if(response.statusCode == 404) {
-        SecureStorage.saveData(key: SecureKey.role, value: 'user');
+        // SecureStorage.saveData(key: SecureKey.role, value: 'user');
         emit(IamAUser());
         } else {
         emit(CheckMyRoleFailure());
@@ -37,4 +37,8 @@ class CheckMyRoleCubit extends Cubit<CheckMyRoleState> {
       emit(CheckMyRoleFailure());
     }
   }
+  ResetCheckMyRoleState(){
+   emit(CheckMyRoleInitial());
+  }
+
 }

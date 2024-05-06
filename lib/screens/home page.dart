@@ -13,33 +13,36 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => GetTasksByUserIdCubit()),
-        BlocProvider(create: (context) => BottomNavigationBarCubit()),
-        BlocProvider(create: (context) => LogoutCubit()),
-      ],
-      child: BlocBuilder<BottomNavigationBarCubit, BottomNavigationBarState>(
-        builder: (context, state) {
-          BottomNavigationBarCubit cubit =
-              BottomNavigationBarCubit.get(context);
-          return Scaffold(
-            drawer: NavigationDrawerWidget(),
-            body: cubit.screens[cubit.currentIndex],
+    return PopScope(
+      canPop: false,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) => GetTasksByUserIdCubit()),
+          BlocProvider(create: (context) => BottomNavigationBarCubit()),
+          BlocProvider(create: (context) => LogoutCubit()),
+        ],
+        child: BlocBuilder<BottomNavigationBarCubit, BottomNavigationBarState>(
+          builder: (context, state) {
+            BottomNavigationBarCubit cubit =
+                BottomNavigationBarCubit.get(context);
+            return Scaffold(
+              drawer: NavigationDrawerWidget(),
+              body: cubit.screens[cubit.currentIndex],
 
-            //Bottom Navigation Bar
-            bottomNavigationBar: CurvedNavigationBar(
-              items: cubit.navigationBarIcons,
-              color: Color(0xff134161),
-              index: cubit.currentIndex,
-              backgroundColor: Colors.transparent,
-              onTap: (index) {
-                cubit.changeBottomNavBar(index,context);
-              },
-            ),
-          );
+              //Bottom Navigation Bar
+              bottomNavigationBar: CurvedNavigationBar(
+                items: cubit.navigationBarIcons,
+                color: Color(0xff134161),
+                index: cubit.currentIndex,
+                backgroundColor: Colors.transparent,
+                onTap: (index) {
+                  cubit.changeBottomNavBar(index,context);
+                },
+              ),
+            );
 
-        },
+          },
+        ),
       ),
     );
   }

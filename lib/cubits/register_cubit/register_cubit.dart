@@ -38,7 +38,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         'lastName': lastName,
         'email': email,
         'password': password,
-        'phone': phoneNumber,
+        'phoneNumber': phoneNumber,
       });
       if (response.statusCode == 201) {
         SecureStorage.saveData(
@@ -47,7 +47,7 @@ class RegisterCubit extends Cubit<RegisterState> {
             key: SecureKey.userId, value: response.data["data"]["_id"]);
         emit(RegisterSuccessState());
       } else {
-        emit(RegisterErrorState(error: response.data['message']));
+        emit(RegisterErrorState(error: response.data['errors'][0]['msg'].toString()));
       }
     } on Exception catch (e) {
       emit(RegisterErrorState(error: e.toString()));
@@ -80,6 +80,16 @@ class RegisterCubit extends Cubit<RegisterState> {
     }
     return null;
   }
+  ResetRegisterCubit() {
+    signUpEmail.clear();
+    signUpPassword.clear();
+    signUpConfirmPassword.clear();
+    signUpFirstName.clear();
+    signUpLastName.clear();
+    signUpPhoneNumber.clear();
+    emit(RegisterInitial());
+  }
+
   String? ValidatePassword(String? value) {
     if (value!.isEmpty) {
       return '• Password can\'t be empty';

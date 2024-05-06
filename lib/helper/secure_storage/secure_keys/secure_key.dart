@@ -1,5 +1,5 @@
 class SecureKey {
   static const String token = "token";
   static const String userId = "userId";
-  static const String role = "role";
+  // static const String role = "role";
 }

@@ -5,5 +5,8 @@ sealed class BecomeATaskerState {}
 
 final class BecomeATaskerInitial extends BecomeATaskerState {}
 final class BecomeATaskerLoading extends BecomeATaskerState {}
-final class BecomeATaskerSuccess extends BecomeATaskerState {}
+final class BecomeATaskerSuccess extends BecomeATaskerState {
+  final List<TaskerModel> taskerDateList;
+  BecomeATaskerSuccess({required this.taskerDateList});
+}
 final class BecomeATaskerFailure extends BecomeATaskerState {}

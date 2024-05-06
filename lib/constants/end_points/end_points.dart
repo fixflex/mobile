@@ -14,4 +14,5 @@ class EndPoints {
   static String getMyData({required String id}) => "$users/me";
   static String updateProfilePicture() => "$users/me/profile-picture";
   static String checkMyRole() => "$taskers/me";
+  static String BecomeATasker() => "$taskers/become-tasker";
 }

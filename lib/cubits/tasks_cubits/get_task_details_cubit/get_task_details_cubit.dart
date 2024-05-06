@@ -38,4 +38,7 @@ class GetTaskDetailsCubit extends Cubit<GetTaskDetailsState> {
       emit(GetTaskDetailsFailure());
     }
   }
+  ResetGetTaskDetailsState() {
+    emit(GetTaskDetailsInitial());
+  }
 }

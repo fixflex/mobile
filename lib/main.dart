@@ -25,7 +25,7 @@ import 'package:fix_flex/screens/update_profile_picture_screen.dart';
 import 'package:fix_flex/screens/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'components/splash_screen.dart';
+import 'screens/splash_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'cubits/get_categories_cubit/get_categories_cubit.dart';
 import 'cubits/users_cubits/get_my_data_cubit/get_my_data_cubit.dart';
@@ -47,7 +47,7 @@ void main() async {
 
   SecureVariables.token = await SecureStorage.getData(key: SecureKey.token);
   SecureVariables.userId = await SecureStorage.getData(key: SecureKey.userId);
-  SecureVariables.role = await SecureStorage.getData(key: SecureKey.role);
+  // SecureVariables.role = await SecureStorage.getData(key: SecureKey.role);
 
   runApp(MyApp());
 }
@@ -63,7 +63,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => GetUserDataCubit(),),
           BlocProvider(create: (context) => UpdateProfilePictureCubit(),),
           BlocProvider(create: (context) => RegisterCubit(),),
-          BlocProvider(create: (context) => CheckMyRoleCubit(),),
+          BlocProvider(create: (context) => CheckMyRoleCubit()..checkMyRole(),),
           BlocProvider(create: (context) => BecomeATaskerCubit(),),
           BlocProvider(create: (context) => ObscurePasswordCubit(),),
           BlocProvider(create: (context) => CheckPersonalInformationCubit(),),
@@ -78,7 +78,9 @@ class MyApp extends StatelessWidget {
             scaffoldBackgroundColor: Colors.white,
           ),
           debugShowCheckedModeBanner: false,
-          home: SplashScreen(),
+          home: PopScope(
+              canPop: false,
+              child: SplashScreen()),
         ));
   }
 

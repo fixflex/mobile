@@ -1,5 +1,6 @@
 import 'package:fix_flex/constants/constants.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_task_details_cubit/get_task_details_cubit.dart';
+import 'package:fix_flex/cubits/users_cubits/check_my_role_cubit/check_my_role_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/get_user_data_cubit/get_user_data_cubit.dart';
 import 'package:fix_flex/helper/secure_storage/secure_keys/secure_variable.dart';
 import 'package:fix_flex/screens/personal_information_screen.dart';
@@ -24,65 +25,69 @@ class TaskDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<GetTaskDetailsCubit, GetTaskDetailsState>(
+      body: BlocBuilder<CheckMyRoleCubit,CheckMyRoleState>(
         builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: NestedScrollView(
-              headerSliverBuilder: (context, innerBoxIsScrolled) {
-                return [
-                  SliverAppBarWidget(
-                    onTap: () async {
-                      await GetUserDataCubit.get(context).getUserData(
-                          state is GetTaskDetailsSuccess
-                              ? state.taskDetailsList[0].userId.id
-                              : '');
-                      CheckPersonalInformationCubit.get(context)
-                          .checkPersonalInformation(
+          return BlocBuilder<GetTaskDetailsCubit, GetTaskDetailsState>(
+            builder: (context, state) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: NestedScrollView(
+                  headerSliverBuilder: (context, innerBoxIsScrolled) {
+                    return [
+                      SliverAppBarWidget(
+                        onTap: () async {
+                          await GetUserDataCubit.get(context).getUserData(
                               state is GetTaskDetailsSuccess
                                   ? state.taskDetailsList[0].userId.id
                                   : '');
-                      Navigator.pushNamed(
-                          context, PersonalInformationScreen.id);
-                    },
-                    title: 'Task Details',
-                    icon: Icons.arrow_back,
-                    iconSize: 35,
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    image: state is GetTaskDetailsSuccess
-                        ? state.taskDetailsList[0].userId.profilePicture?.url !=
-                                null
-                            ? state.taskDetailsList[0].userId.profilePicture
-                                ?.url as String
-                            : kDefaultUserImage
-                        : kDefaultUserImage,
-                  ),
-                ];
-              },
-              body: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 25),
-                child: state is GetTaskDetailsLoading
-                    ? Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : state is GetTaskDetailsEmpty
+                          CheckPersonalInformationCubit.get(context)
+                              .checkPersonalInformation(
+                                  state is GetTaskDetailsSuccess
+                                      ? state.taskDetailsList[0].userId.id
+                                      : '');
+                          Navigator.pushNamed(
+                              context, PersonalInformationScreen.id);
+                        },
+                        title: 'Task Details',
+                        icon: Icons.arrow_back,
+                        iconSize: 35,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        image: state is GetTaskDetailsSuccess
+                            ? state.taskDetailsList[0].userId.profilePicture?.url !=
+                                    null
+                                ? state.taskDetailsList[0].userId.profilePicture
+                                    ?.url as String
+                                : kDefaultUserImage
+                            : kDefaultUserImage,
+                      ),
+                    ];
+                  },
+                  body: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 25),
+                    child: state is GetTaskDetailsLoading
                         ? Center(
-                            child: Text('No data found'),
+                            child: CircularProgressIndicator(),
                           )
-                        : state is GetTaskDetailsFailure
+                        : state is GetTaskDetailsEmpty
                             ? Center(
-                                child: Text(
-                                    'There was an error, Please try again later'),
+                                child: Text('No data found'),
                               )
-                            : state is GetTaskDetailsSuccess
-                                ? TaskDetailsScreenComponents(state)
-                                : Container(),
-              ),
-            ),
+                            : state is GetTaskDetailsFailure
+                                ? Center(
+                                    child: Text(
+                                        'There was an error, Please try again later'),
+                                  )
+                                : state is GetTaskDetailsSuccess
+                                    ? TaskDetailsScreenComponents(state)
+                                    : Container(),
+                  ),
+                ),
+              );
+            },
           );
-        },
+        }
       ),
     );
   }
@@ -265,13 +270,14 @@ class TaskDetailsScreen extends StatelessWidget {
                             child: Builder(builder: (context) {
                               return TextButton(
                                 onPressed: () async {
-                                  await SecureStorage.getData(
-                                              key: SecureKey.role) ==
-                                          'tasker'
-                                      ? Navigator.pushNamed(
-                                          context, MakeAnOfferScreen.id)
-                                      : Navigator.pushNamed(
-                                          context, BecomeATaskerScreen.id);
+                                  await CheckMyRoleCubit.get(context).checkMyRole();
+                                  if(CheckMyRoleCubit.get(context).state is IamATasker){
+                                    Navigator.pushNamed(context, MakeAnOfferScreen.id);
+                                  }else if(CheckMyRoleCubit.get(context).state is IamAUser){
+                                    Navigator.pushNamed(
+                                        context, BecomeATaskerScreen.id);
+                                  }
+
                                 },
                                 child: Text(
                                   'Make An Offer',
