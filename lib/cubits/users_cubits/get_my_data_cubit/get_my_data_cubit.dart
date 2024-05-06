@@ -36,4 +36,7 @@ class GetMyDataCubit extends Cubit<GetMyDataState> {
       emit(GetMyDataFailure());
     }
   }
+  ResetGetMyDataState() {
+    emit(GetMyDataInitial());
+  }
 }

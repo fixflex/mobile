@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../constants/constants.dart';
+
 class ChatLabel extends StatelessWidget {
   const ChatLabel({
     super.key,
@@ -34,8 +36,7 @@ class ChatLabel extends StatelessWidget {
                   ),
                   CircleAvatar(
                     radius: 25,
-                    backgroundImage:
-                    AssetImage('assets/images/person.png'),
+                    backgroundImage:NetworkImage(kDefaultUserImage)
                   ),
                 ],
               ),

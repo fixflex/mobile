@@ -36,4 +36,7 @@ class GetUserDataCubit extends Cubit<GetUserDataState> {
       emit(GetUserDataFailure());
     }
   }
+  ResetGetUserDataState() {
+    emit(GetUserDataInitial());
+  }
 }

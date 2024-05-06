@@ -68,4 +68,15 @@ class PostTaskCubit extends Cubit<PostTaskState> {
           // return 'Maximum 100 characters';
         }
   }
+  ResetPostTaskState() {
+    titleController.clear();
+    detailsController.clear();
+    budgetController.clear();
+    dueDateController.clear();
+    categoryIdController.clear();
+    cityController.clear();
+    latitudeController.clear();
+    longitudeController.clear();
+    emit(PostTaskInitial());
+  }
 }

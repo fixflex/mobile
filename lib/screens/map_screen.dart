@@ -16,7 +16,12 @@ class MapScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Map'),
+        leading: Container(),
+        centerTitle: true,
+        title: Text('Map',style: TextStyle(color: Colors.black,fontSize: 20),),
+        actions: [
+          TextButton(onPressed:() => Navigator.pop(context), child: Text('Next >',style: TextStyle(color: Colors.blue ,fontSize: 20),),)
+        ],
       ),
       body: BlocBuilder<MapCubit, MapState>(builder: (context, state) {
         if (state is GetLocationSuccess) {

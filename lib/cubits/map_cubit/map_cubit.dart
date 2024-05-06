@@ -37,8 +37,6 @@ class MapCubit extends Cubit<MapState> {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
       emit(GetLocationSuccess(position: position));
-      print(position.latitude);
-      print(position.longitude);
     }
   }
 }

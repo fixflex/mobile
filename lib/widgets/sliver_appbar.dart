@@ -11,7 +11,7 @@ class SliverAppBarWidget extends StatelessWidget {
     this.onPressed,
     this.iconSize,
     this.image,
-    required this.onTap,
+    this.onTap,
   });
 
   final String title;

@@ -16,4 +16,7 @@ class CheckPersonalInformationCubit extends Cubit<CheckPersonalInformationState>
       emit(OtherUserPersonalInformation());
     }
   }
+  ResetCheckPersonalInformationState() {
+    emit(CheckPersonalInformationInitial());
+  }
 }

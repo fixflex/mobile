@@ -1,9 +1,10 @@
 import 'dart:async';
+import 'package:fix_flex/cubits/users_cubits/get_my_data_cubit/get_my_data_cubit.dart';
 import 'package:fix_flex/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import '../helper/secure_storage/secure_keys/secure_variable.dart';
-import '../screens/home page.dart';
+import 'home page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

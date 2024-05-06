@@ -1,5 +1,6 @@
 import 'package:fix_flex/components/back_ground.dart';
 import 'package:fix_flex/constants/constants.dart';
+import 'package:fix_flex/cubits/users_cubits/check_my_role_cubit/check_my_role_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/check_personal_information_cubit/check_personal_information_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/get_my_data_cubit/get_my_data_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/get_user_data_cubit/get_user_data_cubit.dart';
@@ -126,9 +127,8 @@ class PersonalInformationScreen extends StatelessWidget {
                                             ? state.myDataList[0].phoneNumber as String
                                             : 'Phone Number',
                                         role: state is GetMyDataSuccess
-                                            ? state.myDataList[0].role == 'USER' ? SecureVariables.role == 'user'
-                                                ? 'User'
-                                                : 'Tasker': 'Admin'
+                                            ? CheckMyRoleCubit.get(context).state is IamATasker ? 'Tasker'
+                                                : 'User'
                                             : 'Role',
                                         joinedDate: state is GetMyDataSuccess && state.myDataList[0].createdAt != null
                                             ? state.myDataList[0].createdAt as String
@@ -167,7 +167,8 @@ class PersonalInformationScreen extends StatelessWidget {
                                             ? state.userDataList[0].phoneNumber as String
                                             : 'Phone Number',
                                         role: state is GetUserDataSuccess
-                                            ? state.userDataList[0].role
+                                            ? state.userDataList[0].role == 'USER' ? 'User'
+                                                : 'Tasker'
                                             : 'Role',
                                         joinedDate: state is GetUserDataSuccess && state.userDataList[0].createdAt != null
                                             ? state.userDataList[0].createdAt as String

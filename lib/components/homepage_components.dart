@@ -1,3 +1,4 @@
+import 'package:fix_flex/cubits/users_cubits/check_my_role_cubit/check_my_role_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/check_personal_information_cubit/check_personal_information_cubit.dart';
 import 'package:fix_flex/screens/personal_information_screen.dart';
 import 'package:fix_flex/screens/search_screen.dart';
@@ -22,29 +23,34 @@ class HomePageComponents extends StatelessWidget {
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
             //Sliver App Bar Widget
-            BlocBuilder<GetMyDataCubit, GetMyDataState>(
+            BlocBuilder<CheckMyRoleCubit,CheckMyRoleState>(
               builder: (context, state) {
-                return SliverAppBarWidget(
-                  onTap: () {
-                    CheckPersonalInformationCubit.get(context)
-                        .checkPersonalInformation(state is GetMyDataSuccess
-                            ? state.myDataList[0].uId
-                            : '');
-                    Navigator.pushNamed(context, PersonalInformationScreen.id);
+                return BlocBuilder<GetMyDataCubit, GetMyDataState>(
+                  builder: (context, state) {
+                    return SliverAppBarWidget(
+                      onTap: () {
+                        CheckPersonalInformationCubit.get(context)
+                            .checkPersonalInformation(state is GetMyDataSuccess
+                                ? state.myDataList[0].uId
+                                : '');
+                        Navigator.pushNamed(context, PersonalInformationScreen.id);
+                      },
+                      title: CheckMyRoleCubit.get(context).state is IamATasker ? 'TASKER'
+                          : 'USER',
+                      icon: Icons.menu,
+                      iconSize: 40,
+                      onPressed: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                      image: state is GetMyDataSuccess
+                          ? state.myDataList[0].profilePicture?.url != null
+                              ? state.myDataList[0].profilePicture!.url as String
+                              : kDefaultUserImage
+                          : kDefaultUserImage,
+                    );
                   },
-                  title: state is GetMyDataSuccess ? state.myDataList[0].role == 'USER'? SecureVariables.role == 'user'?'USER': 'TASKER':'ADMIN':'USER',
-                  icon: Icons.menu,
-                  iconSize: 40,
-                  onPressed: () {
-                    Scaffold.of(context).openDrawer();
-                  },
-                  image: state is GetMyDataSuccess
-                      ? state.myDataList[0].profilePicture?.url != null
-                          ? state.myDataList[0].profilePicture!.url as String
-                          : kDefaultUserImage
-                      : kDefaultUserImage,
                 );
-              },
+              }
             ),
           ];
         },

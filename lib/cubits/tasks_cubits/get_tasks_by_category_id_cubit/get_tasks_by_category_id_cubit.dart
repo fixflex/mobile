@@ -42,5 +42,8 @@ class GetTasksByCategoryIdCubit extends Cubit<GetTasksByCategoryIdState> {
       emit(GetTasksByCategoryIdFailure());
     }
   }
+  ResetGetTasksByCategoryIdState() {
+    emit(GetTasksByCategoryIdInitial());
+  }
 }
 

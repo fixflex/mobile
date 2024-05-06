@@ -1,14 +1,17 @@
 import 'package:fix_flex/components/back_ground.dart';
 import 'package:fix_flex/cubits/register_cubit/register_cubit.dart';
+import 'package:fix_flex/cubits/users_cubits/get_my_data_cubit/get_my_data_cubit.dart';
 import 'package:fix_flex/screens/update_profile_picture_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../components/default_form_field.dart';
 import '../cubits/obscure_password_cubit/obscure_password_cubit.dart';
+import '../cubits/users_cubits/check_my_role_cubit/check_my_role_cubit.dart';
 import '../helper/secure_storage/secure_keys/secure_key.dart';
 import '../helper/secure_storage/secure_keys/secure_variable.dart';
 import '../helper/secure_storage/secure_storage.dart';
+import 'login_screen.dart';
 
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({
@@ -55,9 +58,10 @@ class RegisterScreen extends StatelessWidget {
                         await SecureStorage.getData(key: SecureKey.token);
                     SecureVariables.userId =
                         await SecureStorage.getData(key: SecureKey.userId);
-                    SecureVariables.role =
-                        await SecureStorage.getData(key: SecureKey.role);
+                    GetMyDataCubit.get(context).getMyData();
                     Navigator.pushReplacementNamed(context, UpdateProfilePictureScreen.id);
+                    RegisterCubit.get(context).ResetRegisterCubit();
+                    CheckMyRoleCubit.get(context).checkMyRole();
                   }
                 },
                 builder: (context, state) {
@@ -236,27 +240,28 @@ class RegisterScreen extends StatelessWidget {
                               ),
                               child: TextButton(
                                 onPressed: () {
-                                  if (cubit.signUpFormKey.currentState!
-                                      .validate()) {
-                                    cubit.register(
-                                      firstName: cubit.signUpFirstName.text,
-                                      lastName: cubit.signUpLastName.text,
-                                      email:
-                                          cubit.signUpEmail.text.toLowerCase(),
-                                      phoneNumber: cubit.signUpPhoneNumber.text,
-                                      password: cubit.signUpPassword.text,
-                                    );
-                                    SecureStorage.saveData(key: SecureKey.role, value: 'user');
-                                    ObscurePasswordCubit.get(context).isLoginPasswordShow = true;
-                                    ObscurePasswordCubit.get(context).isRegisterPasswordShow = true ;
-                                    ObscurePasswordCubit.get(context).isRegisterConfirmPasswordShow = true;
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        backgroundColor: Colors.red,
-                                        content: Text('Please fill all fields'),
-                                      ),
-                                    );
+                                  if (state is! RegisterLoadingState && state is! RegisterSuccessState) {
+                                    if (cubit.signUpFormKey.currentState!
+                                        .validate()) {
+                                      cubit.register(
+                                        firstName: cubit.signUpFirstName.text,
+                                        lastName: cubit.signUpLastName.text,
+                                        email:
+                                            cubit.signUpEmail.text.toLowerCase(),
+                                        phoneNumber: cubit.signUpPhoneNumber.text,
+                                        password: cubit.signUpPassword.text,
+                                      );
+                                      ObscurePasswordCubit.get(context).isLoginPasswordShow = true;
+                                      ObscurePasswordCubit.get(context).isRegisterPasswordShow = true ;
+                                      ObscurePasswordCubit.get(context).isRegisterConfirmPasswordShow = true;
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          backgroundColor: Colors.red,
+                                          content: Text('Please fill all fields'),
+                                        ),
+                                      );
+                                    }
                                   }
                                 },
                                 child: RegisterCubit.get(context).isLoading
@@ -287,7 +292,9 @@ class RegisterScreen extends StatelessWidget {
                                 ),
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.pop(context);
+                                    if (state is! RegisterLoadingState && state is! RegisterSuccessState) {
+                                      Navigator.pop(context);
+                                    }
                                   },
                                   child: const Text(
                                     'Login Now',
