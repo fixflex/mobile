@@ -1,10 +1,12 @@
 import 'package:fix_flex/cubits/get_categories_cubit/get_categories_cubit.dart';
+import 'package:fix_flex/cubits/tasks_cubits/get_address_cubit/get_address_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_tasks_by_category_id_cubit/get_tasks_by_category_id_cubit.dart';
-import 'package:fix_flex/screens/make_task_request_screen.dart';
+import 'package:fix_flex/screens/post_a_task_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../components/task_container.dart';
 import '../constants/constants.dart';
+import '../cubits/tasks_cubits/get_task_details_cubit/get_task_details_cubit.dart';
 
 class CategoryScreen extends StatelessWidget {
   const CategoryScreen({super.key});
@@ -46,19 +48,21 @@ class CategoryScreen extends StatelessWidget {
           } else if (state is GetTasksByCategoryIdSuccess) {
             return ListView.builder(
               itemBuilder: (context, index) {
+                // GetAddressCubit.get(context).getAddress(state.tasksDataList[index].location?.coordinates);
                 return TaskContainer(
                     title: state.tasksDataList[index].title,
                     budget: state.tasksDataList[index].budget,
                     offersId: state.tasksDataList[index].offersId,
+                    // location: state.tasksDataList[index].location != null ? GetAddressCubit.get(context).state is GetAddressSuccess ? GetAddressCubit.get(context).placemarks[0].subAdministrativeArea : 'Online' : 'No location',
                     location: state.tasksDataList[index].city != null && state.tasksDataList[index].city != ''
                         ? state.tasksDataList[index].city as String
                         : 'No location',
                     date: state.tasksDataList[index].dueDate,
-                    status: state.tasksDataList[index].status,
-                    taskId: state.tasksDataList[index].id,
+                    status: state.tasksDataList[index].status as String,
+                    taskId: state.tasksDataList[index].id as String,
                     backgroundImage: NetworkImage(
-                      state.tasksDataList[index].userId.profilePicture?.url != null
-                          ? state.tasksDataList[index].userId.profilePicture?.url as String
+                      state.tasksDataList[index].userId?.profilePicture?.url != null
+                          ? state.tasksDataList[index].userId?.profilePicture?.url as String
                           : kDefaultUserImage,
                     ));
               },
@@ -75,7 +79,7 @@ class CategoryScreen extends StatelessWidget {
         child: FittedBox(
           child: FloatingActionButton(
             onPressed: (){
-              Navigator.pushNamed(context, MakeTaskRequestScreen.id );
+              Navigator.pushNamed(context, PostATaskScreen.id );
             },
             backgroundColor: kPrimaryColor,
 

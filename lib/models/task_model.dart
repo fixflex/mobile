@@ -1,21 +1,23 @@
+import 'dart:convert';
+
 class TaskModel {
   TaskModel({
     this.dueDate,
     this.location,
-    required this.id,
-    required this.userId,
+    this.id,
+    this.userId,
     this.taskerId,
     this.time,
     required this.title,
     this.details,
     this.categoryId,
-    required this.status,
+    this.status,
     this.city,
     required this.budget,
     this.offersId,
     this.offerDetails,
-    required this.paymentMethod,
-    required this.paid,
+    this.paymentMethod,
+    this.paid,
     this.images,
     this.createdAt,
     this.updatedAt,
@@ -23,20 +25,20 @@ class TaskModel {
 
   final DueDate? dueDate;
   final Location? location;
-  final String id;
-  final UserId userId;
+  final String? id;
+  final UserId? userId;
   final String? taskerId;
   final String? time;
   final String title;
   final String? details;
   final String? categoryId;
-  final String status;
+  final String? status;
   final String? city;
   final int budget;
   final List<dynamic>? offersId;
   final List<OfferDetails>? offerDetails;
-  final String paymentMethod;
-  final bool paid;
+  final String? paymentMethod;
+  final bool? paid;
   final List<TaskImages>? images;
   final String? createdAt;
   final String? updatedAt;
@@ -83,7 +85,15 @@ class DueDate {
   final String? before;
   final bool? flexible;
 
-  factory DueDate.fromJson(jsonData) {
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    if (on != null) data['on'] = on;
+    if (before != null) data['before'] = before;
+    if (flexible != false) data['flexible'] = flexible;
+    return data;
+  }
+
+  factory DueDate.fromJson(Map<String, dynamic> jsonData) {
     return DueDate(
       on: jsonData['on'],
       before: jsonData['before'],
@@ -95,22 +105,33 @@ class DueDate {
 class Location {
   Location({
      this.coordinates,
+     this.online,
   });
 
   final List<dynamic>? coordinates;
+  final bool? online;
 
-  factory Location.fromJson(jsonData) {
+
+  Map<String,dynamic> toJson(){
+    final Map<String, dynamic> data = {};
+    if (coordinates != null) data['coordinates'] = coordinates;
+    if (online != false) data['online'] = online;
+    return data;
+  }
+
+  factory Location.fromJson(Map<String, dynamic> jsonData) {
     return Location(
       coordinates: List<dynamic>.from(jsonData['coordinates']),
+      online: jsonData['online'],
     );
   }
 }
 
 class UserId {
   UserId({
-    required this.id,
-    required this.firstName,
-    required this.lastName,
+    this.id,
+    this.firstName,
+    this.lastName,
     this.email,
     this.emailVerified,
     this.profilePicture,
@@ -122,9 +143,9 @@ class UserId {
     this.phoneNumVerificationCodeExpiration,
   });
 
-  final String id;
-  final String firstName;
-  final String lastName;
+  final String? id;
+  final String? firstName;
+  final String? lastName;
   final String? email;
   final bool? emailVerified;
   final ProfilePicture? profilePicture;
@@ -136,6 +157,9 @@ class UserId {
   final String? phoneNumVerificationCodeExpiration;
 
   factory UserId.fromJson(jsonData) {
+    if (jsonData is String) {
+      return UserId(id: jsonData,);
+    }else if(jsonData is Map<String, dynamic>){
     return UserId(
       id: jsonData['_id'],
       firstName: jsonData['firstName'],
@@ -149,7 +173,9 @@ class UserId {
       phoneNumber: jsonData['phoneNumber'],
       phoneNumVerificationCode: jsonData['phoneNumVerificationCode'],
       phoneNumVerificationCodeExpiration: jsonData['phoneNumVerificationCodeExpiration'],
-    );
+    );}else{
+      throw ArgumentError('Invalid JSON data');
+    }
   }
 }
 

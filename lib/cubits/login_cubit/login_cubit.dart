@@ -40,7 +40,7 @@ class LoginCubit extends Cubit<LoginState> {
       emit(LoginErrorState(error: 'Login Failed Please Try Again Later'));
         }
   }
-  ResetLoginState() {
+  void resetLoginCubit() {
     emailController.clear();
     passwordController.clear();
     emit(LoginInitial());

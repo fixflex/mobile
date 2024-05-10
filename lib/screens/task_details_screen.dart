@@ -1,4 +1,5 @@
 import 'package:fix_flex/constants/constants.dart';
+import 'package:fix_flex/cubits/tasks_cubits/get_address_cubit/get_address_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_task_details_cubit/get_task_details_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/check_my_role_cubit/check_my_role_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/get_user_data_cubit/get_user_data_cubit.dart';
@@ -10,10 +11,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:readmore/readmore.dart';
-
 import '../cubits/users_cubits/check_personal_information_cubit/check_personal_information_cubit.dart';
-import '../helper/secure_storage/secure_keys/secure_key.dart';
-import '../helper/secure_storage/secure_storage.dart';
+import '../widgets/image_box.dart';
 import 'become_a_tasker_screen.dart';
 import 'make_an_offer_screen.dart';
 
@@ -26,74 +25,75 @@ class TaskDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocBuilder<CheckMyRoleCubit,CheckMyRoleState>(
-        builder: (context, state) {
-          return BlocBuilder<GetTaskDetailsCubit, GetTaskDetailsState>(
-            builder: (context, state) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: NestedScrollView(
-                  headerSliverBuilder: (context, innerBoxIsScrolled) {
-                    return [
-                      SliverAppBarWidget(
-                        onTap: () async {
-                          await GetUserDataCubit.get(context).getUserData(
-                              state is GetTaskDetailsSuccess
-                                  ? state.taskDetailsList[0].userId.id
-                                  : '');
-                          CheckPersonalInformationCubit.get(context)
-                              .checkPersonalInformation(
+          builder: (context, state) {
+            return BlocBuilder<GetTaskDetailsCubit, GetTaskDetailsState>(
+              builder: (context, state) {
+                GetAddressCubit.get(context).getAddress(GetTaskDetailsCubit.get(context).state is GetTaskDetailsSuccess ? GetTaskDetailsCubit.get(context).state.taskDetailsList[0].location?.coordinates as List<dynamic> : [],);
+                return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: NestedScrollView(
+                      headerSliverBuilder: (context, innerBoxIsScrolled) {
+                        return [
+                          SliverAppBarWidget(
+                            onTap: () async {
+                              await GetUserDataCubit.get(context).getUserData(
                                   state is GetTaskDetailsSuccess
-                                      ? state.taskDetailsList[0].userId.id
+                                      ? state.taskDetailsList[0].userId?.id as String
                                       : '');
-                          Navigator.pushNamed(
-                              context, PersonalInformationScreen.id);
-                        },
-                        title: 'Task Details',
-                        icon: Icons.arrow_back,
-                        iconSize: 35,
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        image: state is GetTaskDetailsSuccess
-                            ? state.taskDetailsList[0].userId.profilePicture?.url !=
-                                    null
-                                ? state.taskDetailsList[0].userId.profilePicture
-                                    ?.url as String
-                                : kDefaultUserImage
-                            : kDefaultUserImage,
-                      ),
-                    ];
-                  },
-                  body: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 25),
-                    child: state is GetTaskDetailsLoading
-                        ? Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        : state is GetTaskDetailsEmpty
+                              CheckPersonalInformationCubit.get(context)
+                                  .checkPersonalInformation(
+                                      state is GetTaskDetailsSuccess
+                                          ? state.taskDetailsList[0].userId?.id as String
+                                          : '');
+                              Navigator.pushNamed(
+                                  context, PersonalInformationScreen.id);
+                            },
+                            title: 'Task Details',
+                            icon: Icons.arrow_back,
+                            iconSize: 35,
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            image: state is GetTaskDetailsSuccess
+                                ? state.taskDetailsList[0].userId?.profilePicture?.url !=
+                                        null
+                                    ? state.taskDetailsList[0].userId?.profilePicture
+                                        ?.url as String
+                                    : kDefaultUserImage
+                                : kDefaultUserImage,
+                          ),
+                        ];
+                      },
+                      body: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 25),
+                        child: state is GetTaskDetailsLoading
                             ? Center(
-                                child: Text('No data found'),
+                                child: CircularProgressIndicator(),
                               )
-                            : state is GetTaskDetailsFailure
+                            : state is GetTaskDetailsEmpty
                                 ? Center(
-                                    child: Text(
-                                        'There was an error, Please try again later'),
+                                    child: Text('No data found'),
                                   )
-                                : state is GetTaskDetailsSuccess
-                                    ? TaskDetailsScreenComponents(state)
-                                    : Container(),
-                  ),
-                ),
-              );
-            },
-          );
-        }
-      ),
+                                : state is GetTaskDetailsFailure
+                                    ? Center(
+                                        child: Text(
+                                            'There was an error, Please try again later'),
+                                      )
+                                    : state is GetTaskDetailsSuccess
+                                        ? TaskDetailsScreenComponents(state,context)
+                                        : Container(),
+                      ),
+                    ),
+                  );
+              },
+            );
+          }
+        ),
     );
   }
 
   SingleChildScrollView TaskDetailsScreenComponents(
-      GetTaskDetailsSuccess state) {
+      GetTaskDetailsSuccess state ,context) {
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -138,92 +138,122 @@ class TaskDetailsScreen extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Posted by',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.grey,
-                        )),
-                    Container(
-                      width: 120,
-                      child: Text(
-                          state.taskDetailsList[0].userId.firstName +
-                              ' ' +
-                              state.taskDetailsList[0].userId.lastName,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          softWrap: false,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Posted by : ',
                           style: TextStyle(
                             fontSize: 15,
                             color: Colors.grey,
                           )),
-                    ),
-                  ],
+                      Container(
+                        width: 120,
+                        child: Text(
+                            state.taskDetailsList[0].userId!.firstName! +
+                                ' ' +
+                                state.taskDetailsList[0].userId!.lastName!,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            softWrap: false,
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.grey,
+                            )),
+                      ),
+                    ],
+                  ),
                 ),
-                Container(
-                  width: 2,
-                  height: 30,
-                  color: Colors.grey,
+                SizedBox(height: 15,),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Container(
+                    width: double.infinity,
+                    height: 1,
+                    color: Colors.grey,
+                  ),
                 ),
-                Spacer(),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Location',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.grey,
-                        )),
-                    Text(
-                        state.taskDetailsList[0].city != null &&
-                                state.taskDetailsList[0].city != ''
-                            ? state.taskDetailsList[0].city as String
-                            : 'No location',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        softWrap: false,
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.grey,
-                        )),
-                  ],
-                ),
-                Spacer(),
-                Container(
-                  width: 2,
-                  height: 30,
-                  color: Colors.grey,
-                ),
-                Spacer(),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('To be Done',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.grey,
-                        )),
-                    Container(
-                      width: 120,
-                      child: Text(
-                          state.taskDetailsList[0].dueDate?.flexible == true
-                              ? 'Flexible'
-                              : state.taskDetailsList[0].dueDate?.on != null
-                                  ? ' On ${DateFormat.yMMMMd().format(DateTime.parse(state.taskDetailsList[0].dueDate?.on as String))}'
-                                  : ' Before: ${DateFormat.yMMMMd().format(DateTime.parse(state.taskDetailsList[0].dueDate?.before as String))}',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          softWrap: false,
+                SizedBox(height: 15,),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Location : ',
                           style: TextStyle(
                             fontSize: 15,
                             color: Colors.grey,
                           )),
-                    ),
-                  ],
+
+                        BlocBuilder<GetAddressCubit,GetAddressState>(
+                          builder: (context, state) {
+                            return SizedBox(
+                              width: 250,
+                              child: Text(
+                                  GetAddressCubit.get(context).state is GetAddressSuccess ?
+                                  '${GetAddressCubit.get(context).placemarks[0].subAdministrativeArea as String} In ${GetAddressCubit.get(context).placemarks[0].country as String}' :
+                                      GetTaskDetailsCubit.get(context).state.taskDetailsList[0].location?.online == true ?'Online': 'No location',
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    softWrap: false,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.grey,
+                                    )),
+                            );
+                          }
+                        ),
+
+                    ],
+                  ),
+                ),
+                SizedBox(height: 15,),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Container(
+                    width: double.infinity,
+                    height: 1,
+                    color: Colors.grey,
+                  ),
+                ),
+                SizedBox(height: 15,),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('To be Done : ',
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.grey,
+                          )),
+                      Text(state.taskDetailsList[0].dueDate?.before != null?'Before ':'On',textAlign: TextAlign.center,
+                          style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.grey,
+                      )),
+                      Container(
+                        width: 120,
+                        child: Text(
+                            state.taskDetailsList[0].dueDate?.flexible == true
+                                ? 'Flexible'
+                                : state.taskDetailsList[0].dueDate?.on != null
+                                    ? ' ${DateFormat.yMMMMd().format(DateTime.parse(state.taskDetailsList[0].dueDate?.on as String))}'
+                                    : ' ${DateFormat.yMMMMd().format(DateTime.parse(state.taskDetailsList[0].dueDate?.before as String))}',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            softWrap: false,
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.grey,
+                            )),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -259,7 +289,7 @@ class TaskDetailsScreen extends StatelessWidget {
                       ),
                     ),
                     Spacer(),
-                    state.taskDetailsList[0].userId.id == SecureVariables.userId
+                    state.taskDetailsList[0].userId?.id == SecureVariables.userId
                         ? Container()
                         : Container(
                             width: 300,
@@ -321,28 +351,19 @@ class TaskDetailsScreen extends StatelessWidget {
           SizedBox(
             height: state.taskDetailsList[0].images?.isEmpty == true
                 ? 0
-                : state.taskDetailsList[0].images!.length <= 4
-                    ? 100
-                    : state.taskDetailsList[0].images!.length <= 8
-                        ? 200
-                        : 300,
+                : state.taskDetailsList[0].images!.length <= 3
+                    ? 135
+                    : 270,
             child: GridView.builder(
+              physics: NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4,
+                crossAxisCount: 3,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
               ),
               padding: EdgeInsets.all(8.0), // padding around the grid
               itemBuilder: (context, index) {
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(10), // Image border
-                  child: SizedBox.fromSize(
-                    size: Size.fromRadius(48), // Image radius
-                    child: Image.network(
-                        state.taskDetailsList[0].images?[index].url as String,
-                        fit: BoxFit.cover),
-                  ),
-                );
+                return ImageBox(imageLink: state.taskDetailsList[0].images?[index].url as String,);
               },
               itemCount: state.taskDetailsList[0].images?.length,
             ),
@@ -411,14 +432,14 @@ class TaskDetailsScreen extends StatelessWidget {
                                                   .offerDetails![index]
                                                   .taskerId!
                                                   .userId!
-                                                  .firstName +
+                                                  .firstName! +
                                               ' ' +
                                               state
                                                   .taskDetailsList[0]
                                                   .offerDetails![index]
                                                   .taskerId!
                                                   .userId!
-                                                  .lastName
+                                                  .lastName!
                                           : 'User',
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -543,3 +564,5 @@ class TaskDetailsScreen extends StatelessWidget {
     );
   }
 }
+
+

@@ -39,7 +39,7 @@ class BecomeATaskerCubit extends Cubit<BecomeATaskerState> {
     }
   }
 
-  void ReseatBecomeATaskerState() {
+  void resetBecomeATaskerCubit() {
     CategoryController.clear();
     emit(BecomeATaskerInitial());
   }

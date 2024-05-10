@@ -37,7 +37,8 @@ class CheckMyRoleCubit extends Cubit<CheckMyRoleState> {
       emit(CheckMyRoleFailure());
     }
   }
-  ResetCheckMyRoleState(){
+
+  void resetCheckMyRoleCubit(){
    emit(CheckMyRoleInitial());
   }
 
