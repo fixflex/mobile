@@ -80,7 +80,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     }
     return null;
   }
-  ResetRegisterCubit() {
+  void resetRegisterCubit() {
     signUpEmail.clear();
     signUpPassword.clear();
     signUpConfirmPassword.clear();

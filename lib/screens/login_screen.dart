@@ -66,7 +66,7 @@ class LoginScreen extends StatelessWidget {
                               await SecureStorage.getData(key: SecureKey.userId);
                           await GetMyDataCubit.get(context).getMyData();
                           Navigator.pushReplacementNamed(context, HomeScreen.id);
-                          LoginCubit.get(context).ResetLoginState();
+                          LoginCubit.get(context).resetLoginCubit();
                         }
                       },
                       builder: (context, state) {

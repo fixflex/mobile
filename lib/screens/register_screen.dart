@@ -60,7 +60,7 @@ class RegisterScreen extends StatelessWidget {
                         await SecureStorage.getData(key: SecureKey.userId);
                     GetMyDataCubit.get(context).getMyData();
                     Navigator.pushReplacementNamed(context, UpdateProfilePictureScreen.id);
-                    RegisterCubit.get(context).ResetRegisterCubit();
+                    RegisterCubit.get(context).resetRegisterCubit();
                     CheckMyRoleCubit.get(context).checkMyRole();
                   }
                 },

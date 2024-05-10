@@ -9,8 +9,7 @@ class DioInterceptors extends Interceptor {
   static Dio dio = Dio();
 
   @override
-  void onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
        await SecureStorage.getData(key: SecureKey.token);
 
     if (SecureVariables.token != null) {

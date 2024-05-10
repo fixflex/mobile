@@ -4,9 +4,9 @@ import 'package:fix_flex/cubits/users_cubits/get_my_data_cubit/get_my_data_cubit
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 import '../../../constants/end_points/end_points.dart';
 import '../../../helper/network/dio_api_helper.dart';
-import 'package:meta/meta.dart';
 import 'package:http_parser/http_parser.dart';
 
 
@@ -16,6 +16,7 @@ class UpdateProfilePictureCubit extends Cubit<UpdateProfilePictureState> {
   UpdateProfilePictureCubit() : super(UpdateProfilePictureInitial());
 
   static UpdateProfilePictureCubit get(context) => BlocProvider.of(context);
+
   File? image;
   final ImagePicker imagePicker = ImagePicker();
   final String galleryOption = 'Gallery';
@@ -31,8 +32,9 @@ class UpdateProfilePictureCubit extends Cubit<UpdateProfilePictureState> {
     try {
       FormData formData = FormData.fromMap({
         'image': await MultipartFile.fromFile(
-            imageFile!.path, filename: 'upload.jpg',
-            contentType: MediaType('image', 'png'))
+            imageFile!.path,
+            filename: basename(imageFile.path),
+            contentType: MediaType('image', 'jpeg'))
       });
       final response = await DioApiHelper.patchData(
         url: EndPoints.updateProfilePicture(),
@@ -65,7 +67,7 @@ class UpdateProfilePictureCubit extends Cubit<UpdateProfilePictureState> {
       emit(UpdateProfilePictureFailure());
     }
   }
-  ResetUpdateProfilePictureState() {
+  void resetUpdateProfilePictureCubit() {
     image = null;
     emit(UpdateProfilePictureInitial());
   }

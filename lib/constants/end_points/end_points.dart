@@ -15,4 +15,5 @@ class EndPoints {
   static String updateProfilePicture() => "$users/me/profile-picture";
   static String checkMyRole() => "$taskers/me";
   static String BecomeATasker() => "$taskers/become-tasker";
+  static String uploadTaskPhotos({required String id}) => "$tasks/$id/images";
 }

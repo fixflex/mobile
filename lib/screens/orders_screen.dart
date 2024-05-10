@@ -35,10 +35,10 @@ if (state is GetTasksByUserIdLoading) {
                       ? state.MyTasksList[index].city as String
                       : 'No location',
                   date: state.MyTasksList[index].dueDate,
-                  status: state.MyTasksList[index].status,
-                  taskId: state.MyTasksList[index].id,
-                  backgroundImage: NetworkImage( state.MyTasksList[index].userId.profilePicture?.url != null
-                      ? state.MyTasksList[index].userId.profilePicture?.url as String : kDefaultUserImage,
+                  status: state.MyTasksList[index].status as String,
+                  taskId: state.MyTasksList[index].id as String,
+                  backgroundImage: NetworkImage( state.MyTasksList[index].userId?.profilePicture?.url != null
+                      ? state.MyTasksList[index].userId?.profilePicture?.url as String : kDefaultUserImage,
                   ),
                 );
               },

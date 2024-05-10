@@ -17,8 +17,6 @@ class HomeScreen extends StatelessWidget {
       canPop: false,
       child: MultiBlocProvider(
         providers: [
-          BlocProvider(create: (context) => GetTasksByUserIdCubit()),
-          BlocProvider(create: (context) => BottomNavigationBarCubit()),
           BlocProvider(create: (context) => LogoutCubit()),
         ],
         child: BlocBuilder<BottomNavigationBarCubit, BottomNavigationBarState>(

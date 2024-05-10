@@ -16,6 +16,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../../helper/secure_storage/secure_keys/secure_key.dart';
 import '../../helper/secure_storage/secure_storage.dart';
 import '../../screens/login_screen.dart';
+import '../map_cubit/map_cubit.dart';
 import 'logout_state.dart';
 
 class LogoutCubit extends Cubit<LogoutState> {
@@ -34,18 +35,20 @@ void logout(BuildContext context) async {
     Navigator.pushNamedAndRemoveUntil(
         context, LoginScreen.id, (route) => false);
   });
-  CheckMyRoleCubit.get(context).ResetCheckMyRoleState();
-  GetTaskDetailsCubit.get(context).ResetGetTaskDetailsState();
-  GetTasksByCategoryIdCubit.get(context).ResetGetTasksByCategoryIdState();
-  GetTasksByUserIdCubit.get(context).ResetGetTasksByUserIdState();
-  PostTaskCubit.get(context).ResetPostTaskState();
-  BecomeATaskerCubit.get(context).ReseatBecomeATaskerState();
-  CheckPersonalInformationCubit.get(context).ResetCheckPersonalInformationState();
-  GetMyDataCubit.get(context).ResetGetMyDataState();
-  GetUserDataCubit.get(context).ResetGetUserDataState();
-  UpdateProfilePictureCubit.get(context).ResetUpdateProfilePictureState();
-  LoginCubit.get(context).ResetLoginState();
-  RegisterCubit.get(context).ResetRegisterCubit();
+  CheckMyRoleCubit.get(context).resetCheckMyRoleCubit();
+  GetTaskDetailsCubit.get(context).resetGetTaskDetailsCubit();
+  GetTasksByCategoryIdCubit.get(context).resetGetTasksByCategoryIdCubit();
+  GetTasksByUserIdCubit.get(context).resetGetTasksByUserIdCubit();
+  PostTaskCubit.get(context).resetPostTaskCubit();
+  BecomeATaskerCubit.get(context).resetBecomeATaskerCubit();
+  CheckPersonalInformationCubit.get(context).resetCheckPersonalInformationCubit();
+  GetMyDataCubit.get(context).resetGetMyDataCubit();
+  GetUserDataCubit.get(context).resetGetUserDataCubit();
+  UpdateProfilePictureCubit.get(context).resetUpdateProfilePictureCubit();
+  LoginCubit.get(context).resetLoginCubit();
+  RegisterCubit.get(context).resetRegisterCubit();
+  MapCubit.get(context).resetLocationCubit(context);
+
   emit(LogoutSuccessState());
 }
 }

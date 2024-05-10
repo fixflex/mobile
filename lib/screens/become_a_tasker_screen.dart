@@ -19,13 +19,42 @@ class BecomeATaskerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Become a Tasker'),
+    Future<bool> _popScope() async {
+      return await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          backgroundColor: Colors.white,
+          title: Text('Discard Data?'),
+          content: Text('Are you sure you want to discard this data?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+              child: Text('No'),
+            ),
+            TextButton(
+              onPressed: () {
+                MapCubit.get(context).resetLocationCubit(context);
+                BecomeATaskerCubit.get(context).resetBecomeATaskerCubit();
+                Navigator.pop(context, true);
+              },
+              child: Text('Yes'),
+            ),
+          ],
+        ),
+      );
+    }
+    return WillPopScope(
+      onWillPop: _popScope,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Become a Tasker'),
+        ),
+        body: BecomeATaskerBody(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: FloatingButton(),
       ),
-      body: BecomeATaskerBody(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingButton(),
     );
   }
 }
@@ -48,7 +77,7 @@ class BecomeATaskerBody extends StatelessWidget {
                 builder: (context) {
                   Future.delayed(Duration(seconds: 2), () async {
                     Navigator.pushReplacementNamed(context, HomeScreen.id);
-                    BecomeATaskerCubit.get(context).ReseatBecomeATaskerState();
+                    BecomeATaskerCubit.get(context).resetBecomeATaskerCubit();
                   });
                   return PopScope(
                     canPop: false,
@@ -61,6 +90,7 @@ class BecomeATaskerBody extends StatelessWidget {
             );
           }
           );
+          MapCubit.get(context).resetLocationCubit(context);
         }else if(state is BecomeATaskerFailure) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             showDialog(
@@ -69,7 +99,7 @@ class BecomeATaskerBody extends StatelessWidget {
               builder: (context) {
                 Future.delayed(Duration(seconds: 2), () {
                   Navigator.pop(context);
-                  BecomeATaskerCubit.get(context).ReseatBecomeATaskerState();
+                  BecomeATaskerCubit.get(context).resetBecomeATaskerCubit();
                 });
                 return PopScope(
                 canPop: false,
@@ -94,8 +124,14 @@ class BecomeATaskerBody extends StatelessWidget {
           } else if (state is CategoriesLoadedState) {}
         }, builder: (context, state) {
           return BlocConsumer<MapCubit, MapState>(listener: (context, state) {
-            if (state is GetLocationSuccess) {
-              // Navigator.pushNamed(context, MapScreen.id);
+            if (state is GetLocationFromBecomeATaskerSuccess) {
+              showDialog(context: context, builder: (context) {
+                return AlertDialog(
+                  backgroundColor: Colors.white,
+                  title: Icon(Icons.check_circle,color: Colors.green,size: 50,),
+                  content: Text('Location captured successfully.'),
+                );
+              },);
             } else if (state is LocationServiceIsDisabled) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 showDialog(
@@ -160,7 +196,7 @@ class BecomeATaskerBody extends StatelessWidget {
               child: Column(
                 children: [
                   SelectCategoryDropDownMenu(),
-                  Capture_location(state: state,),
+                  CaptureLocationFromBecomeATasker(state: state, width: 300, height: 50,),
                 ],
               ),
             );
@@ -217,48 +253,59 @@ class SelectCategoryDropDownMenu extends StatelessWidget {
   }
 }
 
-class Capture_location extends StatelessWidget {
-  const Capture_location({
+class CaptureLocationFromBecomeATasker extends StatelessWidget {
+  const CaptureLocationFromBecomeATasker({
     super.key,
     required this.state,
+    required this.width,
+    required this.height,
+    this.shape,
   });
    final state;
+   final double width;
+    final double height;
+    final MaterialStateProperty<OutlinedBorder?>? shape ;
   @override
   Widget build(BuildContext context) {
-      return Container(
-        width: 300,
-        height: 50,
-        child: ElevatedButton(
-          style: ButtonStyle(
-              backgroundColor: state is GetLocationSuccess
-                  ? MaterialStateProperty.all(Color(0xff134161))
-                  : MaterialStateProperty.all(Colors.grey)),
-          onPressed: () {
-            MapCubit.get(context).state is MapLoading
-                ? null
-                :
-            MapCubit.get(context).getCurrentLocation(context);
-          },
-          child: state is MapLoading
-              ? CircularProgressIndicator(
-                  color: Colors.white,
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.location_on,
-                      color: Colors.white,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5.0),
-                      child: Text(
-                        'Capture your location',
-                        style: TextStyle(color: Colors.white),
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          width: width,
+          height: height,
+          child: OutlinedButton(
+            style: ButtonStyle(
+                backgroundColor: state is GetLocationFromBecomeATaskerSuccess
+                    ? MaterialStateProperty.all(Color(0xff134161))
+                    : MaterialStateProperty.all(Colors.grey),
+              shape: shape,
+            ),
+            onPressed: () {
+              MapCubit.get(context).state is MapLoading
+                  ? null
+                  :
+              MapCubit.get(context).getCurrentLocationFromBecomeATasker(context);
+            },
+            child: state is MapLoading
+                ? CircularProgressIndicator(
+                    color: Colors.white,
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.location_on,
+                        color: Colors.white,
                       ),
-                    ),
-                  ],
-                ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5.0),
+                        child: Text(
+                          'Capture your location',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+          ),
         ),
       );
     }
@@ -293,7 +340,7 @@ class FloatingButton extends StatelessWidget {
                 );
               }
             ),
-            backgroundColor: state is GetLocationSuccess &&
+            backgroundColor: state is GetLocationFromBecomeATaskerSuccess &&
                     BecomeATaskerCubit.get(context)
                         .CategoryController
                         .text
@@ -307,14 +354,14 @@ class FloatingButton extends StatelessWidget {
   }
 
   void SubmitErrorMessageCheck(MapState state, BuildContext context) {
-    if (state is GetLocationSuccess &&
+    if (state is GetLocationFromBecomeATaskerSuccess &&
         BecomeATaskerCubit.get(context).CategoryController.text.isNotEmpty) {
       BecomeATaskerCubit.get(context).becomeATasker(state.position);
     } else if (BecomeATaskerCubit.get(context)
             .CategoryController
             .text
             .isEmpty &&
-        state is! GetLocationSuccess) {
+        state is! GetLocationFromBecomeATaskerSuccess) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Please select a category and location'),
         backgroundColor: Colors.red,
@@ -323,7 +370,7 @@ class FloatingButton extends StatelessWidget {
             .CategoryController
             .text
             .isEmpty &&
-        state is GetLocationSuccess) {
+        state is GetLocationFromBecomeATaskerSuccess) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Please select a category'),
         backgroundColor: Colors.red,
@@ -332,7 +379,7 @@ class FloatingButton extends StatelessWidget {
             .CategoryController
             .text
             .isNotEmpty &&
-        state is! GetLocationSuccess) {
+        state is! GetLocationFromBecomeATaskerSuccess) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Please select a location'),
         backgroundColor: Colors.red,

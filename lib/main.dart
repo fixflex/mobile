@@ -1,8 +1,17 @@
+import 'package:fix_flex/components/add_task_photos.dart';
+import 'package:fix_flex/components/choose_time_of_task.dart';
+import 'package:fix_flex/components/select_a_budget.dart';
+import 'package:fix_flex/components/task_place.dart';
+import 'package:fix_flex/cubits/bottom_navigation_bar_cubit/bottom_navigation_bar_cubit.dart';
 import 'package:fix_flex/cubits/map_cubit/map_cubit.dart';
 import 'package:fix_flex/cubits/obscure_password_cubit/obscure_password_cubit.dart';
+import 'package:fix_flex/cubits/radio_buttons_cubit/date_radio_button_cubit/date_radio_button_cubit.dart';
 import 'package:fix_flex/cubits/register_cubit/register_cubit.dart';
+import 'package:fix_flex/cubits/tasks_cubits/budget_cubit/budget_cubit.dart';
+import 'package:fix_flex/cubits/tasks_cubits/get_address_cubit/get_address_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_task_details_cubit/get_task_details_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_tasks_by_category_id_cubit/get_tasks_by_category_id_cubit.dart';
+import 'package:fix_flex/cubits/tasks_cubits/post_task_cubit/post_task_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/become_a_tasker_cubit/become_a_tasker_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/check_my_role_cubit/check_my_role_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/check_personal_information_cubit/check_personal_information_cubit.dart';
@@ -14,8 +23,7 @@ import 'package:fix_flex/screens/home%20page.dart';
 import 'package:fix_flex/screens/inbox_screen.dart';
 import 'package:fix_flex/screens/login_screen.dart';
 import 'package:fix_flex/screens/make_an_offer_screen.dart';
-import 'package:fix_flex/screens/make_task_request_screen.dart';
-import 'package:fix_flex/screens/map_screen.dart';
+import 'package:fix_flex/screens/post_a_task_screen.dart';
 import 'package:fix_flex/screens/orders_screen.dart';
 import 'package:fix_flex/screens/personal_information_screen.dart';
 import 'package:fix_flex/screens/register_screen.dart';
@@ -24,7 +32,11 @@ import 'package:fix_flex/screens/task_details_screen.dart';
 import 'package:fix_flex/screens/update_profile_picture_screen.dart';
 import 'package:fix_flex/screens/user_profile.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/adapters.dart';
+import 'cubits/radio_buttons_cubit/place_radio_button_cubit/place_radio_button_cubit.dart';
+import 'cubits/tasks_cubits/details_cubit/details_cubit.dart';
+import 'cubits/tasks_cubits/get_tasks_by_user_id/get_tasks_by_user_id_cubit.dart';
+import 'cubits/tasks_cubits/title_cubit/title_cubit.dart';
+import 'cubits/tasks_cubits/upload_task_photos_cubit/upload_task_photos_cubit.dart';
 import 'screens/splash_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'cubits/get_categories_cubit/get_categories_cubit.dart';
@@ -34,20 +46,22 @@ import 'helper/block_observer.dart';
 import 'helper/secure_storage/secure_keys/secure_key.dart';
 import 'helper/secure_storage/secure_keys/secure_variable.dart';
 import 'helper/secure_storage/secure_storage.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Hive.initFlutter();
-  // Hive.registerAdapter(ImageModelAdapter());
-  // Hive.registerAdapter(CategoryModelAdapter());
-  // await Hive.openBox<CategoryModel>(kCategoriesBox);
   SecureStorage.init();
   await DioApiHelper.init();
   Bloc.observer = MyBlocObserver();
 
+
   SecureVariables.token = await SecureStorage.getData(key: SecureKey.token);
   SecureVariables.userId = await SecureStorage.getData(key: SecureKey.userId);
-  // SecureVariables.role = await SecureStorage.getData(key: SecureKey.role);
+
+  OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+  OneSignal.initialize("6a3a9ea1-b670-44bb-83e9-599aa8ce1a58");
+  OneSignal.Notifications.requestPermission(true);
+  OneSignal.login(SecureStorage.getData(key: SecureKey.userId).toString());
 
   runApp(MyApp());
 }
@@ -61,16 +75,26 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider(create: (context) => GetMyDataCubit()..getMyData(),),
           BlocProvider(create: (context) => GetUserDataCubit(),),
+          BlocProvider(create: (context) => BottomNavigationBarCubit()),
           BlocProvider(create: (context) => UpdateProfilePictureCubit(),),
           BlocProvider(create: (context) => RegisterCubit(),),
           BlocProvider(create: (context) => CheckMyRoleCubit()..checkMyRole(),),
           BlocProvider(create: (context) => BecomeATaskerCubit(),),
+          BlocProvider(create: (context) => GetTasksByUserIdCubit()),
           BlocProvider(create: (context) => ObscurePasswordCubit(),),
           BlocProvider(create: (context) => CheckPersonalInformationCubit(),),
           BlocProvider(create: (context) => GetCategoriesCubit()..getCategories()),
           BlocProvider(create: (context) => GetTasksByCategoryIdCubit(),),
           BlocProvider(create: (context) => GetTaskDetailsCubit(),),
           BlocProvider(create: (context) => MapCubit(),),
+          BlocProvider(create: (context) => PostTaskCubit(),),
+          BlocProvider(create: (context) => DateRadioButtonCubit(),),
+          BlocProvider(create: (context) => PlaceRadioButtonCubit(),),
+          BlocProvider(create: (context) => UploadTaskPhotosCubit(),),
+          BlocProvider(create: (context) => BudgetCubit(),),
+          BlocProvider(create: (context) => GetAddressCubit(),),
+          BlocProvider(create: (context) => TitleCubit(),),
+          BlocProvider(create: (context) => DetailsCubit(),),
         ],
         child: MaterialApp(
           routes: routes(),
@@ -92,15 +116,20 @@ class MyApp extends StatelessWidget {
       LoginScreen.id: (context) => LoginScreen(),
       UpdateProfilePictureScreen.id: (context) => UpdateProfilePictureScreen(),
       PersonalInformationScreen.id: (context) => PersonalInformationScreen(),
-      MakeTaskRequestScreen.id: (context) => MakeTaskRequestScreen(),
+      PostATaskScreen.id: (context) => PostATaskScreen(),
       BecomeATaskerScreen.id: (context) => BecomeATaskerScreen(),
       MakeAnOfferScreen.id: (context) => MakeAnOfferScreen(),
       RegisterScreen.id: (context) => RegisterScreen(),
       OrdersScreen.id: (context) => OrdersScreen(),
       SearchScreen.id: (context) => SearchScreen(),
       UserProfile.id: (context) => UserProfile(),
-      MapScreen.id: (context) => MapScreen(),
+      // MapScreen.id: (context) => MapScreen(),
       TaskDetailsScreen.id: (context) => TaskDetailsScreen(),
+      ChooseTimeOfTask.id:(context) => ChooseTimeOfTask(),
+      TaskPlace.id:(context) => TaskPlace(),
+      AddTaskPhotos.id:(context) => AddTaskPhotos(),
+      SelectABudget.id:(context) => SelectABudget(),
+      // LastReview.id:(context) => LastReview(),
     };
   }
 }

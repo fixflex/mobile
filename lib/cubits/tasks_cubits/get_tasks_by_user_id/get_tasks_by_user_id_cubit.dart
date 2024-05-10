@@ -41,7 +41,7 @@ class GetTasksByUserIdCubit extends Cubit<GetTasksByUserIdState> {
       emit(GetTasksByUserIdFailure());
     }
   }
-  ResetGetTasksByUserIdState() {
+  void resetGetTasksByUserIdCubit() {
     emit(GetTasksByUserIdInitial());
   }
 }

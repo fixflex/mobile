@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:fix_flex/components/back_ground.dart';
 import 'package:fix_flex/constants/constants.dart';
-import 'package:fix_flex/cubits/register_cubit/register_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/get_my_data_cubit/get_my_data_cubit.dart';
 import 'package:fix_flex/helper/secure_storage/secure_keys/secure_variable.dart';
 import 'package:fix_flex/screens/home%20page.dart';

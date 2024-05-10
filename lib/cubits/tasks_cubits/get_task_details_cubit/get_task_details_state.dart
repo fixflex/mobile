@@ -1,7 +1,9 @@
 part of 'get_task_details_cubit.dart';
 
 @immutable
-sealed class GetTaskDetailsState {}
+sealed class GetTaskDetailsState {
+  get taskDetailsList => null;
+}
 
 final class GetTaskDetailsInitial extends GetTaskDetailsState {}
 final class GetTaskDetailsLoading extends GetTaskDetailsState {}

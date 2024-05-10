@@ -8,9 +8,9 @@ class MapCubit extends Cubit<MapState> {
   MapCubit() : super(MapInitial());
 
   static MapCubit get(context) => BlocProvider.of(context);
+  static Position? taskPosition;
 
-
-  getCurrentLocation(context) async {
+  getCurrentLocationFromBecomeATasker(context) async {
     emit(MapLoading());
     bool serviceEnabled;
     LocationPermission permission;
@@ -18,7 +18,7 @@ class MapCubit extends Cubit<MapState> {
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       emit(LocationServiceIsDisabled());
-    }else{
+    } else {
       emit(LocationServiceIsEnabled());
       emit(MapLoading());
       permission = await Geolocator.checkPermission();
@@ -29,20 +29,50 @@ class MapCubit extends Cubit<MapState> {
           return Future.error('Location permissions are denied');
         }
       }
-    if (permission == LocationPermission.deniedForever) {
-      emit(PermissionDeniedRestartTheApp());
-    }
-    if (permission == LocationPermission.whileInUse ||
-        permission == LocationPermission.always) {
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-      emit(GetLocationSuccess(position: position));
+      if (permission == LocationPermission.deniedForever) {
+        emit(PermissionDeniedRestartTheApp());
+      }
+      if (permission == LocationPermission.whileInUse ||
+          permission == LocationPermission.always) {
+        Position position = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+        emit(GetLocationFromBecomeATaskerSuccess(position: position));
+      }
     }
   }
-}
 
-onTapLocation(context) async {
+  getCurrentLocationFromPostATask(context) async {
+    emit(MapLoading());
+    bool serviceEnabled;
+    LocationPermission permission;
 
-}
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      emit(LocationServiceIsDisabled());
+    } else {
+      emit(LocationServiceIsEnabled());
+      emit(MapLoading());
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          emit(PermissionDenied());
+          return Future.error('Location permissions are denied');
+        }
+      }
+      if (permission == LocationPermission.deniedForever) {
+        emit(PermissionDeniedRestartTheApp());
+      }
+      if (permission == LocationPermission.whileInUse ||
+          permission == LocationPermission.always) {
+        taskPosition = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+        emit(GetLocationFromPostATaskSuccess(position: taskPosition));
+      }
+    }
+  }
 
+  void resetLocationCubit(context) async {
+    emit(MapInitial());
+  }
 }
