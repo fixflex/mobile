@@ -109,49 +109,10 @@ class PostATaskScreen extends StatelessWidget {
                   );
                 }),
                 SizedBox(height: 30),
-                Text('Describe the task',
-                    style: GoogleFonts.abel(
-                        textStyle: TextStyle(
-                      color: Color(0xff134161),
-                      fontSize: 35,
-                      fontWeight: FontWeight.bold,
-                    ))),
-                Padding(
-                    padding: const EdgeInsets.only(left: 10, bottom: 15),
-                    child: Text('Summarize the task in more detail',
-                        style: TextStyle(
-                          color: Colors.grey[500],
-                          fontSize: 15,
-                        ))),
-                //details TFF
-                BlocBuilder<DetailsCubit, DetailsState>(
-                    builder: (context, state) {
-                  var cubit = DetailsCubit.get(context);
-                  return defaultFormField(
-                    onChanged: (value) {
-                      cubit.changeDetailsText();
-                    },
-                    autoValidateMode: AutovalidateMode.onUserInteraction,
-                    maxLength: 8000,
-                    maxLines: 10,
-                    counterText: cubit.state is DetailsMaxTextChange
-                        ? 'Maximum 8000 characters'
-                        : '',
-                    width: double.infinity,
-                    hint: 'Details',
-                    hintStyle: TextStyle(color: Colors.grey),
-                    fillColor: Colors.grey[300],
-                    controller: cubit.detailsController,
-                    keyType: TextInputType.text,
-                    validate: (String? value) {
-                      if (value!.isEmpty || value.length < 25) {
-                        return 'Minimum 25 characters';
-                      }
-                      return null;
-                    },
-                    prefix: Icons.padding,
-                  );
-                }),
+                DetailsBoxWidget(
+                  title: 'Describe the task',
+                  description: 'Summarize the task in more detail',
+                ),
               ],
             ),
           ),
@@ -188,6 +149,68 @@ class PostATaskScreen extends StatelessWidget {
     UploadTaskPhotosCubit.get(context).resetUploadTaskPhotosCubit();
     BudgetCubit.get(context).resetBudgetCubit();
     PostTaskCubit.get(context).resetPostTaskCubit();
+  }
+}
+
+class DetailsBoxWidget extends StatelessWidget {
+  const DetailsBoxWidget({
+    super.key,
+    required this.title,
+    required this.description,
+  });
+  final String title;
+  final String description;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title,
+            style: GoogleFonts.abel(
+                textStyle: TextStyle(
+              color: Color(0xff134161),
+              fontSize: 35,
+              fontWeight: FontWeight.bold,
+            ))),
+        Padding(
+            padding: const EdgeInsets.only(left: 10, bottom: 15),
+            child: Text(description,
+                style: TextStyle(
+                  color: Colors.grey[500],
+                  fontSize: 15,
+                ))),
+        //details TFF
+        BlocBuilder<DetailsCubit, DetailsState>(
+            builder: (context, state) {
+          var cubit = DetailsCubit.get(context);
+          return defaultFormField(
+            onChanged: (value) {
+              cubit.changeDetailsText();
+            },
+            autoValidateMode: AutovalidateMode.onUserInteraction,
+            maxLength: 8000,
+            maxLines: 10,
+            counterText: cubit.state is DetailsMaxTextChange
+                ? 'Maximum 8000 characters'
+                : '',
+            width: double.infinity,
+            hint: 'Details',
+            hintStyle: TextStyle(color: Colors.grey),
+            fillColor: Colors.grey[300],
+            controller: cubit.detailsController,
+            keyType: TextInputType.text,
+            validate: (String? value) {
+              if (value!.isEmpty || value.length < 25) {
+                return 'Minimum 25 characters';
+              }
+              return null;
+            },
+            prefix: Icons.padding,
+          );
+        }),
+      ],
+    );
   }
 }
 

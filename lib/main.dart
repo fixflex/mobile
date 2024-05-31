@@ -1,5 +1,7 @@
 import 'package:fix_flex/components/add_task_photos.dart';
 import 'package:fix_flex/components/choose_time_of_task.dart';
+import 'package:fix_flex/components/offer_message.dart';
+import 'package:fix_flex/components/phone_number_verification.dart';
 import 'package:fix_flex/components/select_a_budget.dart';
 import 'package:fix_flex/components/task_place.dart';
 import 'package:fix_flex/cubits/bottom_navigation_bar_cubit/bottom_navigation_bar_cubit.dart';
@@ -11,12 +13,15 @@ import 'package:fix_flex/cubits/tasks_cubits/budget_cubit/budget_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_address_cubit/get_address_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_task_details_cubit/get_task_details_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_tasks_by_category_id_cubit/get_tasks_by_category_id_cubit.dart';
+import 'package:fix_flex/cubits/tasks_cubits/make_offer_cubit/make_offer_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/post_task_cubit/post_task_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/become_a_tasker_cubit/become_a_tasker_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/check_my_role_cubit/check_my_role_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/check_personal_information_cubit/check_personal_information_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/get_user_data_cubit/get_user_data_cubit.dart';
+import 'package:fix_flex/cubits/users_cubits/update_phone_number_cubit/update_phone_number_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/update_profile_picture_cubit/update_profile_picture_cubit.dart';
+import 'package:fix_flex/cubits/users_cubits/verification/verify_phone_number_cubit/verify_phone_number_cubit.dart';
 import 'package:fix_flex/screens/become_a_tasker_screen.dart';
 import 'package:fix_flex/screens/category_screen.dart';
 import 'package:fix_flex/screens/home%20page.dart';
@@ -37,6 +42,7 @@ import 'cubits/tasks_cubits/details_cubit/details_cubit.dart';
 import 'cubits/tasks_cubits/get_tasks_by_user_id/get_tasks_by_user_id_cubit.dart';
 import 'cubits/tasks_cubits/title_cubit/title_cubit.dart';
 import 'cubits/tasks_cubits/upload_task_photos_cubit/upload_task_photos_cubit.dart';
+import 'cubits/users_cubits/verification/send_verification_code_cubit/send_verification_code_cubit.dart';
 import 'screens/splash_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'cubits/get_categories_cubit/get_categories_cubit.dart';
@@ -95,6 +101,10 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => GetAddressCubit(),),
           BlocProvider(create: (context) => TitleCubit(),),
           BlocProvider(create: (context) => DetailsCubit(),),
+          BlocProvider(create: (context) => SendVerificationCodeCubit(),),
+          BlocProvider(create: (context) => VerifyPhoneNumberCubit(),),
+          BlocProvider(create: (context) => UpdatePhoneNumberCubit(),),
+          BlocProvider(create: (context) => MakeOfferCubit(),),
         ],
         child: MaterialApp(
           routes: routes(),
@@ -129,6 +139,8 @@ class MyApp extends StatelessWidget {
       TaskPlace.id:(context) => TaskPlace(),
       AddTaskPhotos.id:(context) => AddTaskPhotos(),
       SelectABudget.id:(context) => SelectABudget(),
+      OfferMessage.id:(context) => OfferMessage(),
+      PhoneNumberVerification.id:(context) => PhoneNumberVerification(),
       // LastReview.id:(context) => LastReview(),
     };
   }

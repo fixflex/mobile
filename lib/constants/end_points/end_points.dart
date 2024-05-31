@@ -5,9 +5,13 @@ class EndPoints {
   static const String logout = "auth/logout";
   static const String refreshToken = "auth/refresh-token";
   static const String users = "users";
+  static const String updateMyData = "users/me";
+  static const String sendVerificationCode = "users/send-verification-code";
+  static const String verifyPhoneNumber = "users/verify";
   static const String taskers = "taskers";
   static const String categories = "categories";
   static const String tasks = "tasks";
+  static const String offers = "offers";
   static String deleteTask({required String id}) => "$tasks/$id";
   static String getTask({required String id}) => "$tasks/$id";
   static String getUserData({required String id}) => "$users/$id";

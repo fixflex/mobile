@@ -5,6 +5,7 @@ import 'package:fix_flex/cubits/users_cubits/check_my_role_cubit/check_my_role_c
 import 'package:fix_flex/cubits/users_cubits/get_my_data_cubit/get_my_data_cubit.dart';
 import 'package:fix_flex/models/category_model.dart';
 import 'package:fix_flex/screens/home%20page.dart';
+import 'package:fix_flex/screens/make_an_offer_screen.dart';
 import 'package:fix_flex/screens/task_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -69,15 +70,19 @@ class BecomeATaskerBody extends StatelessWidget {
     return BlocBuilder<BecomeATaskerCubit,BecomeATaskerState>(
       builder: (context,state) {
         if(state is BecomeATaskerSuccess) {
-          // GetMyDataCubit.get(context).getMyData();
           CheckMyRoleCubit.get(context).checkMyRole();
           WidgetsBinding.instance.addPostFrameCallback((_) {
             showDialog(
               context: context,
                 builder: (context) {
                   Future.delayed(Duration(seconds: 2), () async {
-                    Navigator.pushReplacementNamed(context, HomeScreen.id);
+                    Navigator.pop(context);
+                    if(BecomeATaskerCubit.get(context).isTaskDetailsScreenOpen){
+                      Navigator.pushReplacementNamed(context, MakeAnOfferScreen.id);
                     BecomeATaskerCubit.get(context).resetBecomeATaskerCubit();
+                    }else{
+                      Navigator.pushReplacementNamed(context, HomeScreen.id);
+                    }
                   });
                   return PopScope(
                     canPop: false,
