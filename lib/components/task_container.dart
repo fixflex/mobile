@@ -1,4 +1,5 @@
 import 'package:fix_flex/cubits/tasks_cubits/get_task_details_cubit/get_task_details_cubit.dart';
+import 'package:fix_flex/cubits/users_cubits/become_a_tasker_cubit/become_a_tasker_cubit.dart';
 import 'package:fix_flex/screens/task_details_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,8 +33,9 @@ class TaskContainer extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: GestureDetector(
-        onTap: () {
-          GetTaskDetailsCubit.get(context).getTaskDetails(taskId: taskId);
+        onTap: () async {
+          await GetTaskDetailsCubit.get(context).getTaskDetails(taskId: taskId);
+          BecomeATaskerCubit.get(context).isTaskDetailsScreenOpen = true;
           Navigator.pushNamed(context, TaskDetailsScreen.id);
         },
         child: Container(

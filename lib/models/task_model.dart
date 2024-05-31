@@ -49,7 +49,7 @@ class TaskModel {
       location: Location.fromJson(jsonData['location']),
       id: jsonData['_id'],
       userId: UserId.fromJson(jsonData['userId']),
-      taskerId: jsonData['taskerId'],
+      taskerId: (jsonData['taskerId'] != null) ? jsonData['taskerId'] : null,
       time: jsonData[0],
       title: jsonData['title'],
       details: jsonData['details'],
@@ -232,7 +232,7 @@ class OfferDetails {
   factory OfferDetails.fromJson(jsonData) {
     return OfferDetails(
       offerId: jsonData['_id'],
-      taskerId: TaskerId.fromJson(jsonData['taskerId']),
+      taskerId: TaskerId.fromJson(jsonData['taskerId']!= null ? jsonData['taskerId'] : null),
       taskId: jsonData['taskId'],
       price: jsonData['price'],
       status: jsonData['status'],

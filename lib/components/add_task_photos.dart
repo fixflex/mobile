@@ -34,7 +34,7 @@ class AddTaskPhotos extends StatelessWidget {
                   ))),
           Padding(
               padding: const EdgeInsets.only(left: 10,bottom: 15),
-              child: Text('Help Taskers understand what needs doing. Add up to 5 photos.',
+              child: Text('Help Taskers understand what needs doing. Add up to 6 photos.',
                   style: TextStyle(
                     color: Colors.grey[500],
                     fontSize: 15,

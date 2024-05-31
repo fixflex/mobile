@@ -11,7 +11,6 @@ import '../cubits/users_cubits/check_my_role_cubit/check_my_role_cubit.dart';
 import '../helper/secure_storage/secure_keys/secure_key.dart';
 import '../helper/secure_storage/secure_keys/secure_variable.dart';
 import '../helper/secure_storage/secure_storage.dart';
-import 'login_screen.dart';
 
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({
@@ -240,9 +239,8 @@ class RegisterScreen extends StatelessWidget {
                               ),
                               child: TextButton(
                                 onPressed: () {
-                                  if (state is! RegisterLoadingState && state is! RegisterSuccessState) {
-                                    if (cubit.signUpFormKey.currentState!
-                                        .validate()) {
+                                  if (state is ! RegisterLoadingState && state is ! RegisterSuccessState) {
+                                    if (cubit.signUpFormKey.currentState!.validate()) {
                                       cubit.register(
                                         firstName: cubit.signUpFirstName.text,
                                         lastName: cubit.signUpLastName.text,

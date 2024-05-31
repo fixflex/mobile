@@ -1,6 +1,7 @@
 import 'package:fix_flex/constants/constants.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_address_cubit/get_address_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_task_details_cubit/get_task_details_cubit.dart';
+import 'package:fix_flex/cubits/users_cubits/become_a_tasker_cubit/become_a_tasker_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/check_my_role_cubit/check_my_role_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/get_user_data_cubit/get_user_data_cubit.dart';
 import 'package:fix_flex/helper/secure_storage/secure_keys/secure_variable.dart';
@@ -23,72 +24,79 @@ class TaskDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocBuilder<CheckMyRoleCubit,CheckMyRoleState>(
-          builder: (context, state) {
-            return BlocBuilder<GetTaskDetailsCubit, GetTaskDetailsState>(
-              builder: (context, state) {
-                GetAddressCubit.get(context).getAddress(GetTaskDetailsCubit.get(context).state is GetTaskDetailsSuccess ? GetTaskDetailsCubit.get(context).state.taskDetailsList[0].location?.coordinates as List<dynamic> : [],);
-                return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: NestedScrollView(
-                      headerSliverBuilder: (context, innerBoxIsScrolled) {
-                        return [
-                          SliverAppBarWidget(
-                            onTap: () async {
-                              await GetUserDataCubit.get(context).getUserData(
-                                  state is GetTaskDetailsSuccess
-                                      ? state.taskDetailsList[0].userId?.id as String
-                                      : '');
-                              CheckPersonalInformationCubit.get(context)
-                                  .checkPersonalInformation(
-                                      state is GetTaskDetailsSuccess
-                                          ? state.taskDetailsList[0].userId?.id as String
-                                          : '');
-                              Navigator.pushNamed(
-                                  context, PersonalInformationScreen.id);
-                            },
-                            title: 'Task Details',
-                            icon: Icons.arrow_back,
-                            iconSize: 35,
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            image: state is GetTaskDetailsSuccess
-                                ? state.taskDetailsList[0].userId?.profilePicture?.url !=
-                                        null
-                                    ? state.taskDetailsList[0].userId?.profilePicture
-                                        ?.url as String
-                                    : kDefaultUserImage
-                                : kDefaultUserImage,
-                          ),
-                        ];
-                      },
-                      body: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 25),
-                        child: state is GetTaskDetailsLoading
-                            ? Center(
-                                child: CircularProgressIndicator(),
-                              )
-                            : state is GetTaskDetailsEmpty
-                                ? Center(
-                                    child: Text('No data found'),
-                                  )
-                                : state is GetTaskDetailsFailure
-                                    ? Center(
-                                        child: Text(
-                                            'There was an error, Please try again later'),
-                                      )
-                                    : state is GetTaskDetailsSuccess
-                                        ? TaskDetailsScreenComponents(state,context)
-                                        : Container(),
+    return WillPopScope(
+      onWillPop: () async {
+        BecomeATaskerCubit.get(context).resetBecomeATaskerCubit();
+        return true;
+      },
+      child: Scaffold(
+        body: BlocBuilder<CheckMyRoleCubit,CheckMyRoleState>(
+            builder: (context, state) {
+              return BlocBuilder<GetTaskDetailsCubit, GetTaskDetailsState>(
+                builder: (context, state) {
+                  GetAddressCubit.get(context).getAddress(GetTaskDetailsCubit.get(context).state is GetTaskDetailsSuccess ? GetTaskDetailsCubit.get(context).state.taskDetailsList[0].location?.coordinates as List<dynamic> : [],);
+                  return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: NestedScrollView(
+                        headerSliverBuilder: (context, innerBoxIsScrolled) {
+                          return [
+                            SliverAppBarWidget(
+                              onTap: () async {
+                                await GetUserDataCubit.get(context).getUserData(
+                                    state is GetTaskDetailsSuccess
+                                        ? state.taskDetailsList[0].userId?.id as String
+                                        : '');
+                                CheckPersonalInformationCubit.get(context)
+                                    .checkPersonalInformation(
+                                        state is GetTaskDetailsSuccess
+                                            ? state.taskDetailsList[0].userId?.id as String
+                                            : '');
+                                Navigator.pushNamed(
+                                    context, PersonalInformationScreen.id);
+                              },
+                              title: 'Task Details',
+                              icon: Icons.arrow_back,
+                              iconSize: 35,
+                              onPressed: () {
+                                BecomeATaskerCubit.get(context).resetBecomeATaskerCubit();
+                                Navigator.pop(context);
+                              },
+                              image: state is GetTaskDetailsSuccess
+                                  ? state.taskDetailsList[0].userId?.profilePicture?.url !=
+                                          null
+                                      ? state.taskDetailsList[0].userId?.profilePicture
+                                          ?.url as String
+                                      : kDefaultUserImage
+                                  : kDefaultUserImage,
+                            ),
+                          ];
+                        },
+                        body: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 25),
+                          child: state is GetTaskDetailsLoading
+                              ? Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : state is GetTaskDetailsEmpty
+                                  ? Center(
+                                      child: Text('No data found'),
+                                    )
+                                  : state is GetTaskDetailsFailure
+                                      ? Center(
+                                          child: Text(
+                                              'There was an error, Please try again later'),
+                                        )
+                                      : state is GetTaskDetailsSuccess
+                                          ? TaskDetailsScreenComponents(state,context)
+                                          : Container(),
+                        ),
                       ),
-                    ),
-                  );
-              },
-            );
-          }
-        ),
+                    );
+                },
+              );
+            }
+          ),
+      ),
     );
   }
 
@@ -192,7 +200,7 @@ class TaskDetailsScreen extends StatelessWidget {
                         BlocBuilder<GetAddressCubit,GetAddressState>(
                           builder: (context, state) {
                             return SizedBox(
-                              width: 250,
+                              width: 220,
                               child: Text(
                                   GetAddressCubit.get(context).state is GetAddressSuccess ?
                                   '${GetAddressCubit.get(context).placemarks[0].subAdministrativeArea as String} In ${GetAddressCubit.get(context).placemarks[0].country as String}' :

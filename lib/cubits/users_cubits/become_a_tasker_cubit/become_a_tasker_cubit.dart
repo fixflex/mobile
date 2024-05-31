@@ -12,6 +12,7 @@ class BecomeATaskerCubit extends Cubit<BecomeATaskerState> {
 
   static BecomeATaskerCubit get(context) => BlocProvider.of(context);
   var CategoryController = TextEditingController();
+  bool isTaskDetailsScreenOpen = false;
 
   Future<void> becomeATasker(Position position) async {
     emit(BecomeATaskerLoading());
@@ -41,6 +42,7 @@ class BecomeATaskerCubit extends Cubit<BecomeATaskerState> {
 
   void resetBecomeATaskerCubit() {
     CategoryController.clear();
+    isTaskDetailsScreenOpen = false;
     emit(BecomeATaskerInitial());
   }
 }
