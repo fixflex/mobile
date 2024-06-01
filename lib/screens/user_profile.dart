@@ -1,8 +1,11 @@
 import 'package:fix_flex/cubits/logout_cubit/logout_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/check_personal_information_cubit/check_personal_information_cubit.dart';
+import 'package:fix_flex/screens/contact_us_screen.dart';
 import 'package:fix_flex/screens/personal_information_screen.dart';
+import 'package:fix_flex/screens/privacy_policies_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../components/list_tile_button.dart';
 import '../constants/constants.dart';
 import '../cubits/logout_cubit/logout_state.dart';
@@ -39,7 +42,7 @@ class UserProfile extends StatelessWidget {
       trailing: Icons.arrow_forward_ios,
       onTap: (BuildContext context) {
         CheckPersonalInformationCubit.get(context)
-            .checkPersonalInformation(userId: SecureVariables.userId  as String);
+            .checkPersonalInformation(userId: SecureVariables.userId as String);
         Navigator.pushNamed(context, PersonalInformationScreen.id);
       },
     ),
@@ -56,7 +59,8 @@ class UserProfile extends StatelessWidget {
       title: 'Contact Us',
       trailing: Icons.arrow_forward_ios,
       onTap: (BuildContext context) {
-        print('Contact Us');
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => ContactUsScreen()));
       },
     ),
     ListTileModel(
@@ -64,7 +68,8 @@ class UserProfile extends StatelessWidget {
       title: 'Policy',
       trailing: Icons.arrow_forward_ios,
       onTap: (BuildContext context) {
-        print('Policy');
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => PrivacyPoliciesScreen()));
       },
     ),
     ListTileModel(
