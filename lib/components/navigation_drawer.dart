@@ -38,7 +38,8 @@ class NavigationDrawerWidget extends StatelessWidget {
                             GestureDetector(
                               onTap: () {
                                 CheckPersonalInformationCubit.get(context)
-                                    .checkPersonalInformation(state is GetMyDataSuccess
+                                    .checkPersonalInformation(userId:
+                                    state is GetMyDataSuccess
                                         ? state.myDataList[0].uId
                                         : '');
                                 Navigator.pushNamed(context, PersonalInformationScreen.id);

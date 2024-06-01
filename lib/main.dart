@@ -5,6 +5,8 @@ import 'package:fix_flex/components/phone_number_verification.dart';
 import 'package:fix_flex/components/select_a_budget.dart';
 import 'package:fix_flex/components/task_place.dart';
 import 'package:fix_flex/cubits/bottom_navigation_bar_cubit/bottom_navigation_bar_cubit.dart';
+import 'package:fix_flex/cubits/chating_cubit/get_chat_by_id_cubit.dart';
+import 'package:fix_flex/cubits/chating_cubits/get_my_chats_cubit/get_my_chats_cubit.dart';
 import 'package:fix_flex/cubits/map_cubit/map_cubit.dart';
 import 'package:fix_flex/cubits/obscure_password_cubit/obscure_password_cubit.dart';
 import 'package:fix_flex/cubits/radio_buttons_cubit/date_radio_button_cubit/date_radio_button_cubit.dart';
@@ -24,6 +26,7 @@ import 'package:fix_flex/cubits/users_cubits/update_profile_picture_cubit/update
 import 'package:fix_flex/cubits/users_cubits/verification/verify_phone_number_cubit/verify_phone_number_cubit.dart';
 import 'package:fix_flex/screens/become_a_tasker_screen.dart';
 import 'package:fix_flex/screens/category_screen.dart';
+import 'package:fix_flex/screens/chating_screen.dart';
 import 'package:fix_flex/screens/home%20page.dart';
 import 'package:fix_flex/screens/inbox_screen.dart';
 import 'package:fix_flex/screens/login_screen.dart';
@@ -105,6 +108,8 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => VerifyPhoneNumberCubit(),),
           BlocProvider(create: (context) => UpdatePhoneNumberCubit(),),
           BlocProvider(create: (context) => MakeOfferCubit(),),
+          BlocProvider(create: (context) => GetMyChatsCubit(),),
+          BlocProvider(create: (context) => GetChatByIdCubit(),),
         ],
         child: MaterialApp(
           routes: routes(),
@@ -141,6 +146,7 @@ class MyApp extends StatelessWidget {
       SelectABudget.id:(context) => SelectABudget(),
       OfferMessage.id:(context) => OfferMessage(),
       PhoneNumberVerification.id:(context) => PhoneNumberVerification(),
+      ChatingScreen.id: (context) => ChatingScreen(),
       // LastReview.id:(context) => LastReview(),
     };
   }

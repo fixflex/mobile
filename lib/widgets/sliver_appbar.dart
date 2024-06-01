@@ -8,9 +8,11 @@ class SliverAppBarWidget extends StatelessWidget {
     super.key,
     required this.title,
     required this.icon,
+    required this.backgroundColor,
     this.onPressed,
     this.iconSize,
     this.image,
+    this.chatImage,
     this.onTap,
   });
 
@@ -19,7 +21,9 @@ class SliverAppBarWidget extends StatelessWidget {
   final double? iconSize;
   final void Function()? onPressed;
   final String? image;
+  final String? chatImage;
   final void Function()? onTap;
+  final Color backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +38,7 @@ class SliverAppBarWidget extends StatelessWidget {
           bottom: Radius.circular(50),
         ),
       ),
-      backgroundColor: Color(0xff134161),
+      backgroundColor: backgroundColor,
       // expandedHeight: 140,
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(20),
@@ -54,6 +58,26 @@ class SliverAppBarWidget extends StatelessWidget {
       title: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
+          chatImage != null ? Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: GestureDetector(
+              onTap: onTap,
+              child: Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  CircleAvatar(
+                    radius: 22,
+                    backgroundColor: Colors.white,
+                  ),
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundImage: NetworkImage(chatImage!),
+                    // backgroundImage: AssetImage('assets/images/person.png'),
+                  ),
+                ],
+              ),
+            ),
+          ): const SizedBox(),
           Text(
             title,
             style: TextStyle(
@@ -65,7 +89,7 @@ class SliverAppBarWidget extends StatelessWidget {
       ),
       centerTitle: true,
       actions: [
-        Padding(
+        image != null ? Padding(
           padding: const EdgeInsets.only(right: 20),
           child: GestureDetector(
             onTap: onTap,
@@ -84,7 +108,7 @@ class SliverAppBarWidget extends StatelessWidget {
               ],
             ),
           ),
-        ),
+        ): const SizedBox(),
       ],
     );
   }

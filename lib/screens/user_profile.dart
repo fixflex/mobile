@@ -39,7 +39,7 @@ class UserProfile extends StatelessWidget {
       trailing: Icons.arrow_forward_ios,
       onTap: (BuildContext context) {
         CheckPersonalInformationCubit.get(context)
-            .checkPersonalInformation(SecureVariables.userId  as String);
+            .checkPersonalInformation(userId: SecureVariables.userId  as String);
         Navigator.pushNamed(context, PersonalInformationScreen.id);
       },
     ),

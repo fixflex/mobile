@@ -12,6 +12,7 @@ class EndPoints {
   static const String categories = "categories";
   static const String tasks = "tasks";
   static const String offers = "offers";
+  static const String myChats = "chats";
   static String deleteTask({required String id}) => "$tasks/$id";
   static String getTask({required String id}) => "$tasks/$id";
   static String getUserData({required String id}) => "$users/$id";
@@ -20,4 +21,5 @@ class EndPoints {
   static String checkMyRole() => "$taskers/me";
   static String BecomeATasker() => "$taskers/become-tasker";
   static String uploadTaskPhotos({required String id}) => "$tasks/$id/images";
+  static String GetChatById({required String id}) => "$myChats/$id";
 }
