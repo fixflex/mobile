@@ -1,5 +1,8 @@
+import 'package:fix_flex/cubits/chating_cubits/get_my_chats_cubit/get_my_chats_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_tasks_by_user_id/get_tasks_by_user_id_cubit.dart';
+import 'package:fix_flex/cubits/users_cubits/get_user_data_cubit/get_user_data_cubit.dart';
 import 'package:fix_flex/helper/secure_storage/secure_keys/secure_variable.dart';
+import 'package:fix_flex/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../components/homepage_components.dart';
@@ -13,6 +16,7 @@ class BottomNavigationBarCubit extends Cubit<BottomNavigationBarState> {
   BottomNavigationBarCubit() : super(BottomNavigationBarInitial());
 
   static BottomNavigationBarCubit get(context) => BlocProvider.of(context);
+  // List<UserDataModel> usersDataList = [];
 
   int currentIndex = 0;
   final navigationBarIcons = <Widget>[
@@ -50,11 +54,26 @@ class BottomNavigationBarCubit extends Cubit<BottomNavigationBarState> {
     UserProfile(),
   ];
 
-  void changeBottomNavBar(int index, context) {
+  Future<void> changeBottomNavBar(int index, context) async {
     currentIndex = index;
     if(index == 3){
-      GetTasksByUserIdCubit.get(context).getTasksByUserId(userId: SecureVariables.userId);
-    }
+       GetTasksByUserIdCubit.get(context).getTasksByUserId(userId: SecureVariables.userId);
+    }else if(index == 1){
+       GetMyChatsCubit.get(context).getMyChats(context);
+      // if(GetMyChatsCubit.get(context).state is GetMyChatsSuccess){
+      //   for (var chat in GetMyChatsCubit.get(context).myChats) {
+      //     await GetUserDataCubit.get(context).getUserData(chat.tasker);
+      //     // BlocBuilder<GetUserDataCubit,GetUserDataState>(builder: (context, state) {
+      //     //   if(state is GetUserDataSuccess){
+      //     //     usersDataList = state.userDataList;
+      //     //   }else if(state is GetUserDataFailure){
+      //     //     return Container();
+      //     //   }return Container();
+      //     // }
+      //     // );
+      //   }
+      // }
+      }
     emit(AppChangeBottomNavBar());
   }
 }

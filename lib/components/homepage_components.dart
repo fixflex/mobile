@@ -28,9 +28,11 @@ class HomePageComponents extends StatelessWidget {
                 return BlocBuilder<GetMyDataCubit, GetMyDataState>(
                   builder: (context, state) {
                     return SliverAppBarWidget(
+                      backgroundColor: kPrimaryColor,
                       onTap: () {
                         CheckPersonalInformationCubit.get(context)
-                            .checkPersonalInformation(state is GetMyDataSuccess
+                            .checkPersonalInformation(userId:
+                            state is GetMyDataSuccess
                                 ? state.myDataList[0].uId
                                 : '');
                         Navigator.pushNamed(context, PersonalInformationScreen.id);

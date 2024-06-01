@@ -9,7 +9,7 @@ class CheckPersonalInformationCubit extends Cubit<CheckPersonalInformationState>
 
   static CheckPersonalInformationCubit get(context) => BlocProvider.of(context);
 
-  void checkPersonalInformation(String userId) {
+  Future<void> checkPersonalInformation({required String userId}) async{
     if(userId == SecureVariables.userId) {
       emit(MyPersonalInformation());
     } else {

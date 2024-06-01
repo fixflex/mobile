@@ -41,13 +41,14 @@ class TaskDetailsScreen extends StatelessWidget {
                         headerSliverBuilder: (context, innerBoxIsScrolled) {
                           return [
                             SliverAppBarWidget(
+                              backgroundColor: kPrimaryColor,
                               onTap: () async {
                                 await GetUserDataCubit.get(context).getUserData(
                                     state is GetTaskDetailsSuccess
                                         ? state.taskDetailsList[0].userId?.id as String
                                         : '');
                                 CheckPersonalInformationCubit.get(context)
-                                    .checkPersonalInformation(
+                                    .checkPersonalInformation(userId:
                                         state is GetTaskDetailsSuccess
                                             ? state.taskDetailsList[0].userId?.id as String
                                             : '');

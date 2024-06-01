@@ -5,6 +5,8 @@ import 'package:fix_flex/cubits/radio_buttons_cubit/date_radio_button_cubit/date
 import 'package:fix_flex/cubits/tasks_cubits/budget_cubit/budget_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/details_cubit/details_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/upload_task_photos_cubit/upload_task_photos_cubit.dart';
+import 'package:fix_flex/screens/category_screen.dart';
+import 'package:fix_flex/widgets/sliver_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../constants/constants.dart';
@@ -12,9 +14,8 @@ import '../cubits/get_categories_cubit/get_categories_cubit.dart';
 import '../cubits/radio_buttons_cubit/place_radio_button_cubit/place_radio_button_cubit.dart';
 import '../cubits/tasks_cubits/post_task_cubit/post_task_cubit.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../cubits/tasks_cubits/title_cubit/title_cubit.dart';
-import '../models/task_model.dart';
+
 
 class PostATaskScreen extends StatelessWidget {
   const PostATaskScreen({super.key});
@@ -41,6 +42,7 @@ class PostATaskScreen extends StatelessWidget {
               onPressed: () {
                 resetPostTaskFetcher(context);
                 Navigator.pop(context, true);
+                Navigator.pop(context);
               },
               child: Text('Yes'),
             ),
@@ -51,92 +53,105 @@ class PostATaskScreen extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: _popScope,
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            'Post ${GetCategoriesCubit.get(context).categoriesDataList[GetCategoriesCubit.get(context).clickedCategoryIndex].name} Task',
-            style: TextStyle(),
-          ),
-        ),
-        body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 50),
-                Text('Start With a Title',
-                    style: GoogleFonts.abel(
-                        textStyle: TextStyle(
-                      color: Color(0xff134161),
-                      fontSize: 35,
-                      fontWeight: FontWeight.bold,
-                    ))),
-                Padding(
-                    padding: const EdgeInsets.only(left: 10, bottom: 15),
-                    child: Text('In a few words, what do you need done?',
-                        style: TextStyle(
-                          color: Colors.grey[500],
-                          fontSize: 15,
-                        ))),
-                //title TFF
-                BlocBuilder<TitleCubit, TitleState>(builder: (context, state) {
-                  var cubit = TitleCubit.get(context);
-                  return defaultFormField(
-                    autoValidateMode: AutovalidateMode.onUserInteraction,
-                    onChanged: (value) {
-                      cubit.changeTitleText();
+      child: BlocBuilder<TitleCubit,TitleState>(
+          builder: (context,state) {
+            return BlocBuilder<DetailsCubit,DetailsState>(
+                builder: (context,state) {
+                  return  Scaffold(
+                body: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: NestedScrollView(
+                    headerSliverBuilder: (context, innerBoxIsScrolled) {
+                      return [
+                       SliverAppBarWidget(
+                                  backgroundColor: TitleCubit.get(context).titleController.text.length < 10 || DetailsCubit.get(context).detailsController.text.length < 25
+                                      ? Colors.grey
+                                      : kPrimaryColor,
+                                    title: 'Post ${GetCategoriesCubit.get(context).categoriesDataList[GetCategoriesCubit.get(context).clickedCategoryIndex].name} Task',
+                                    icon: Icons.arrow_back,
+                                    iconSize: 30,
+                                    onPressed: () {
+                                      _popScope();
+                                    }
+                        ),
+                      ];
                     },
-                    maxLength: 50,
-                    maxLines: 1,
-                    counterText: cubit.state is TitleMaxTextChange
-                        ? 'Maximum 50 characters'
-                        : '',
-                    width: double.infinity,
-                    hint: 'Title',
-                    hintStyle: TextStyle(color: Colors.grey),
-                    fillColor: Colors.grey[300],
-                    controller: cubit.titleController,
-                    keyType: TextInputType.text,
-                    validate: (String? value) {
-                      if (value!.isEmpty || value.length < 10) {
-                        return 'Minimum 10 characters';
+                    body: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 20),
+                            Text('Start With a Title',
+                                style: GoogleFonts.abel(
+                                    textStyle: TextStyle(
+                                      color: Color(0xff134161),
+                                      fontSize: 35,
+                                      fontWeight: FontWeight.bold,
+                                    ))),
+                            Padding(
+                                padding: const EdgeInsets.only(left: 10, bottom: 15),
+                                child: Text('In a few words, what do you need done?',
+                                    style: TextStyle(
+                                      color: Colors.grey[500],
+                                      fontSize: 15,
+                                    ))),
+                            //title TFF
+                            BlocBuilder<TitleCubit, TitleState>(builder: (context, state) {
+                              var cubit = TitleCubit.get(context);
+                              return defaultFormField(
+                                autoValidateMode: AutovalidateMode.onUserInteraction,
+                                onChanged: (value) {
+                                  cubit.changeTitleText();
+                                },
+                                maxLength: 50,
+                                maxLines: 1,
+                                counterText: cubit.state is TitleMaxTextChange
+                                    ? 'Maximum 50 characters'
+                                    : '',
+                                width: double.infinity,
+                                hint: 'Title',
+                                hintStyle: TextStyle(color: Colors.grey),
+                                fillColor: Colors.grey[300],
+                                controller: cubit.titleController,
+                                keyType: TextInputType.text,
+                                validate: (String? value) {
+                                  if (value!.isEmpty || value.length < 10) {
+                                    return 'Minimum 10 characters';
+                                  }
+                                  return null;
+                                },
+                                prefix: Icons.title,
+                              );
+                            }),
+                            SizedBox(height: 30),
+                            DetailsBoxWidget(
+                              title: 'Describe the task',
+                              description: 'Summarize the task in more detail',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+                floatingActionButton: FloatingActionButtonInPostATask(
+                          backgroundColor: TitleCubit.get(context).titleController.text.length < 10 || DetailsCubit.get(context).detailsController.text.length < 25
+                              ? Colors.grey
+                              : kPrimaryColor,
+                          text: 'Continue',
+                          onPressed: () {
+                            TitleCubit.get(context).titleController.text.length < 10 || DetailsCubit.get(context).detailsController.text.length < 25
+                                ? null:Navigator.pushNamed(context, ChooseTimeOfTask.id);
+                          },
+                        ));
                       }
-                      return null;
-                    },
-                    prefix: Icons.title,
                   );
                 }),
-                SizedBox(height: 30),
-                DetailsBoxWidget(
-                  title: 'Describe the task',
-                  description: 'Summarize the task in more detail',
-                ),
-              ],
-            ),
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton:
-            BlocBuilder<TitleCubit, TitleState>(builder: (context, state) {
-          return BlocBuilder<DetailsCubit,DetailsState>(
-            builder: (context, state) {
-              return FloatingActionButtonInPostATask(
-                backgroundColor: TitleCubit.get(context).titleController.text.length < 10 || DetailsCubit.get(context).detailsController.text.length < 25
-                    ? Colors.grey
-                    : kPrimaryColor,
-                text: 'Continue',
-                onPressed: () {
-                  TitleCubit.get(context).titleController.text.length < 10 || DetailsCubit.get(context).detailsController.text.length < 25
-                    ? null:Navigator.pushNamed(context, ChooseTimeOfTask.id);
-                },
-              );
+                );
             }
-          );
-        }),
-      ),
-    );
     // Display selected image
   }
 
@@ -150,7 +165,7 @@ class PostATaskScreen extends StatelessWidget {
     BudgetCubit.get(context).resetBudgetCubit();
     PostTaskCubit.get(context).resetPostTaskCubit();
   }
-}
+
 
 class DetailsBoxWidget extends StatelessWidget {
   const DetailsBoxWidget({
