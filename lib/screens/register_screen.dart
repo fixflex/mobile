@@ -5,6 +5,7 @@ import 'package:fix_flex/screens/update_profile_picture_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import '../components/default_form_field.dart';
 import '../cubits/obscure_password_cubit/obscure_password_cubit.dart';
 import '../cubits/users_cubits/check_my_role_cubit/check_my_role_cubit.dart';
@@ -61,6 +62,11 @@ class RegisterScreen extends StatelessWidget {
                     Navigator.pushReplacementNamed(context, UpdateProfilePictureScreen.id);
                     RegisterCubit.get(context).resetRegisterCubit();
                     CheckMyRoleCubit.get(context).checkMyRole();
+                    OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+                    OneSignal.initialize("6a3a9ea1-b670-44bb-83e9-599aa8ce1a58");
+                    OneSignal.Notifications.requestPermission(true);
+                    var userId = await SecureStorage.getData(key: SecureKey.userId);
+                    OneSignal.login(userId.toString());
                   }
                 },
                 builder: (context, state) {

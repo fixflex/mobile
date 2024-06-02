@@ -1,9 +1,9 @@
-import 'package:fix_flex/cubits/chating_cubit/get_chat_by_id_cubit.dart';
 import 'package:fix_flex/cubits/chating_cubits/get_my_chats_cubit/get_my_chats_cubit.dart';
 import 'package:fix_flex/screens/chating_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/constants.dart';
+import '../../cubits/chating_cubits/get_chat_by_id_cubit/get_chat_by_id_cubit.dart';
 
 class ChatLabel extends StatelessWidget {
   const ChatLabel({

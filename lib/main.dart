@@ -5,7 +5,6 @@ import 'package:fix_flex/components/phone_number_verification.dart';
 import 'package:fix_flex/components/select_a_budget.dart';
 import 'package:fix_flex/components/task_place.dart';
 import 'package:fix_flex/cubits/bottom_navigation_bar_cubit/bottom_navigation_bar_cubit.dart';
-import 'package:fix_flex/cubits/chating_cubit/get_chat_by_id_cubit.dart';
 import 'package:fix_flex/cubits/chating_cubits/get_my_chats_cubit/get_my_chats_cubit.dart';
 import 'package:fix_flex/cubits/map_cubit/map_cubit.dart';
 import 'package:fix_flex/cubits/obscure_password_cubit/obscure_password_cubit.dart';
@@ -41,8 +40,7 @@ import 'package:fix_flex/screens/update_profile_picture_screen.dart';
 import 'package:fix_flex/screens/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
-
+import 'cubits/chating_cubits/get_chat_by_id_cubit/get_chat_by_id_cubit.dart';
 import 'cubits/get_categories_cubit/get_categories_cubit.dart';
 import 'cubits/radio_buttons_cubit/place_radio_button_cubit/place_radio_button_cubit.dart';
 import 'cubits/tasks_cubits/details_cubit/details_cubit.dart';
@@ -68,10 +66,6 @@ void main() async {
   SecureVariables.token = await SecureStorage.getData(key: SecureKey.token);
   SecureVariables.userId = await SecureStorage.getData(key: SecureKey.userId);
 
-  OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
-  OneSignal.initialize("6a3a9ea1-b670-44bb-83e9-599aa8ce1a58");
-  OneSignal.Notifications.requestPermission(true);
-  OneSignal.login(SecureStorage.getData(key: SecureKey.userId).toString());
 
   runApp(MyApp());
 }

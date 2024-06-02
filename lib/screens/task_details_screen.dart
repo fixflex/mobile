@@ -240,7 +240,7 @@ class TaskDetailsScreen extends StatelessWidget {
                             fontSize: 15,
                             color: Colors.grey,
                           )),
-                      Text(state.taskDetailsList[0].dueDate?.before != null?'Before ':'On',textAlign: TextAlign.center,
+                      Text(state.taskDetailsList[0].dueDate?.before != null?'Before ':state.taskDetailsList[0].dueDate?.on != null?'On':'',textAlign: TextAlign.center,
                           style: TextStyle(
                         fontSize: 15,
                         color: Colors.grey,
