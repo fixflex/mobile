@@ -1,7 +1,6 @@
 import 'package:fix_flex/models/my_chats_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
-
 import '../../../constants/end_points/end_points.dart';
 import '../../../helper/network/dio_api_helper.dart';
 
@@ -34,5 +33,9 @@ class CreateNewChatCubit extends Cubit<CreateNewChatState> {
     } catch (e) {
       emit(CreateNewChatFailure());
     }
+  }
+
+  void resetCreateNewChatCubit() {
+    emit(CreateNewChatInitial());
   }
 }

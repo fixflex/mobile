@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
-
 import '../../../constants/end_points/end_points.dart';
 import '../../../helper/network/dio_api_helper.dart';
 
@@ -22,7 +21,6 @@ String chatName ='Chat Name';
           url:EndPoints.getChatById(id: id)
       );
       if (response.statusCode == 200) {
-        // final MyChatsModel myChatsModel = MyChatsModel.fromJson(response.data);
         emit(GetChatByIdSuccess());
       } else {
         emit(GetChatByIdFailure());
@@ -31,5 +29,9 @@ String chatName ='Chat Name';
     } catch (e) {
       emit(GetChatByIdFailure());
     }
+  }
+
+  void resetGetChatByIdCubit() {
+    emit(GetChatByIdInitial());
   }
 }

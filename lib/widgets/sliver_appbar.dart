@@ -1,7 +1,4 @@
-import 'package:fix_flex/screens/personal_information_screen.dart';
 import 'package:flutter/material.dart';
-
-import '../screens/user_profile.dart';
 
 class SliverAppBarWidget extends StatelessWidget {
   const SliverAppBarWidget({

@@ -7,11 +7,8 @@ import 'package:fix_flex/cubits/tasks_cubits/get_address_cubit/get_address_cubit
 import 'package:fix_flex/cubits/tasks_cubits/get_task_details_cubit/get_task_details_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/become_a_tasker_cubit/become_a_tasker_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/check_my_role_cubit/check_my_role_cubit.dart';
-import 'package:fix_flex/cubits/users_cubits/get_tasker_by_id_cubit/get_tasker_by_id_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/get_user_data_cubit/get_user_data_cubit.dart';
 import 'package:fix_flex/helper/secure_storage/secure_keys/secure_variable.dart';
-import 'package:fix_flex/helper/web_socket/socket_service.dart';
-import 'package:fix_flex/models/task_model.dart';
 import 'package:fix_flex/screens/chating_screen.dart';
 import 'package:fix_flex/screens/personal_information_screen.dart';
 import 'package:fix_flex/screens/rating_screen.dart';

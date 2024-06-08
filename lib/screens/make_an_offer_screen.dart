@@ -4,7 +4,6 @@ import 'package:fix_flex/cubits/users_cubits/verification/verify_phone_number_cu
 import 'package:fix_flex/screens/post_a_task_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../components/offer_message.dart';
 import '../constants/constants.dart';
 import '../cubits/tasks_cubits/budget_cubit/budget_cubit.dart';

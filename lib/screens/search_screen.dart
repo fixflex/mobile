@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../components/task_container.dart';
 import '../cubits/tasks_cubits/search_task_cubit/search_task_cubit.dart';
 import '../cubits/tasks_cubits/search_task_cubit/search_task_state.dart';

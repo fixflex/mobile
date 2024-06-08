@@ -43,6 +43,7 @@ class LoginCubit extends Cubit<LoginState> {
   void resetLoginCubit() {
     emailController.clear();
     passwordController.clear();
+    isLoading = false;
     emit(LoginInitial());
   }
   String? validateEmail(String? value) {

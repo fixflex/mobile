@@ -84,4 +84,12 @@ class GetMyChatsCubit extends Cubit<GetMyChatsState> {
     await subscription.cancel();
     _subscriptions.remove(subscription);
   }
+
+  void resetGetMyChatsCubit() {
+    emit(GetMyChatsInitial());
+    chatsHolders.clear();
+    myChats.clear();
+    _subscriptions.clear();
+    index = 0;
+  }
 }

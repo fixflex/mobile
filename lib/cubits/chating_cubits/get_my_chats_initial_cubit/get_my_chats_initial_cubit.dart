@@ -1,8 +1,6 @@
 import 'dart:async';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
-
 import '../../../constants/end_points/end_points.dart';
 import '../../../helper/network/dio_api_helper.dart';
 import '../../../models/my_chats_model.dart';
@@ -44,5 +42,10 @@ class GetMyChatsInitialCubit extends Cubit<GetMyChatsInitialState> {
     }
   }
 
-
+  void resetGetMyChatsInitialCubit() {
+    emit(GetMyChatsInitialInitial());
+    results = 0;
+    myChats.clear();
+    index = 0;
+  }
 }

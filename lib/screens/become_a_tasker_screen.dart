@@ -2,16 +2,11 @@ import 'package:fix_flex/cubits/get_categories_cubit/get_categories_cubit.dart';
 import 'package:fix_flex/cubits/map_cubit/map_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/become_a_tasker_cubit/become_a_tasker_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/check_my_role_cubit/check_my_role_cubit.dart';
-import 'package:fix_flex/cubits/users_cubits/get_my_data_cubit/get_my_data_cubit.dart';
 import 'package:fix_flex/models/category_model.dart';
 import 'package:fix_flex/screens/home%20page.dart';
 import 'package:fix_flex/screens/make_an_offer_screen.dart';
-import 'package:fix_flex/screens/task_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../helper/secure_storage/secure_keys/secure_key.dart';
-import '../helper/secure_storage/secure_storage.dart';
-import 'map_screen.dart';
 
 class BecomeATaskerScreen extends StatelessWidget {
   const BecomeATaskerScreen({super.key});

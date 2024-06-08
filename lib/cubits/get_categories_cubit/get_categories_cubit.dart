@@ -18,7 +18,6 @@ class GetCategoriesCubit extends Cubit<GetCategoriesState> {
   Future<void> getCategories() async {
     try {
       emit(LoadingIndicatorInitial());
-      // var categoriesBox = Hive.box<CategoryModel>(kCategoriesBox);
       var response = (await DioApiHelper.getData(url: EndPoints.categories));
       if(response.statusCode == 200){
         List<dynamic> categories = response.data['data'];
@@ -32,9 +31,6 @@ class GetCategoriesCubit extends Cubit<GetCategoriesState> {
             if (categoryModel.name != 'More') {
               categoriesDataListWithoutMore.add(categoryModel);
             }
-            // await categoriesBox.add(categoryModel);
-            // var accessCategoriesBox = Hive.box<CategoryModel>(kCategoriesBox);
-            // categoriesDataList = accessCategoriesBox.values.toList();
           }
           emit(CategoriesLoadedState(categoriesDataList));
         }
@@ -64,5 +60,13 @@ class GetCategoriesCubit extends Cubit<GetCategoriesState> {
       buttonClickedStates[i] = false;
     }
     emit(ResetButtonStates(categories: categoriesDataList));
+  }
+  void resetGetCategoriesCubit() {
+    categoriesDataList = [];
+    categoriesDataListWithoutMore = [];
+    buttonClickedStates = [];
+    clickedCategoryId = '';
+    clickedCategoryIndex = 0;
+    emit(LoadingIndicatorInitial());
   }
 }

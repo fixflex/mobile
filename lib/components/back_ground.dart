@@ -1,7 +1,7 @@
 import 'package:fix_flex/constants/constants.dart';
 import 'package:flutter/material.dart';
-
 import '../models/custom_clippers.dart';
+
 class BackGround extends StatelessWidget {
   const BackGround({super.key});
 

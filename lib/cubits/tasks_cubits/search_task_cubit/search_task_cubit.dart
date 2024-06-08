@@ -1,25 +1,18 @@
 import 'package:fix_flex/cubits/tasks_cubits/search_task_cubit/search_task_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../helper/network/dio_api_helper.dart';
 import '../../../models/task_model.dart';
 
 class TaskCubit extends Cubit<SearchTaskState> {
   TaskCubit() : super(TaskInitial()) {}
 
+  static TaskCubit get(context) => BlocProvider.of(context);
   final TextEditingController searchController = TextEditingController();
 
   Future<void> fetchData({required String query}) async {
     List<TaskModel> result = [];
 
-    // if (query.isEmpty) {
-    //   result = [];
-    //   emit(TaskInitial());
-    // }
-    // else if (query.isNotEmpty) {
-    //   emit(TaskLoadingState());
-    // }
     if (searchController.text.isEmpty) {
       return emit(TaskEmptyState());
     } else if (searchController.text.isNotEmpty) {
@@ -44,10 +37,8 @@ class TaskCubit extends Cubit<SearchTaskState> {
     }
   }
 
-// @override
-// Future<void> close() {
-//   searchController.removeListener(_onSearchChanged);
-//   searchController.dispose();
-//   return super.close();
-// }
+  void resetSearchTaskCubit() {
+    searchController.clear();
+    emit(TaskInitial());
+  }
 }

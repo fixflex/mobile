@@ -14,7 +14,6 @@ import '../cubits/login_cubit/login_state.dart';
 import '../helper/secure_storage/secure_keys/secure_key.dart';
 import '../helper/secure_storage/secure_keys/secure_variable.dart';
 import '../helper/secure_storage/secure_storage.dart';
-import '../helper/web_socket/socket_service.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({

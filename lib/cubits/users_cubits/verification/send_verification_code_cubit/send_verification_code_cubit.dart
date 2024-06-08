@@ -25,4 +25,8 @@ class SendVerificationCodeCubit extends Cubit<SendVerificationCodeState> {
       emit(SendVerificationCodeFailure());
     }
   }
+
+  void resetSendVerificationCode() {
+    emit(SendVerificationCodeInitial());
+  }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../components/back_ground.dart';
 
 class WhoAreWeScreen extends StatelessWidget {

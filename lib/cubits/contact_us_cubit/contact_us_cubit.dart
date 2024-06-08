@@ -18,4 +18,11 @@ class ContactUsCubit extends Cubit<ContactUsState> {
     }
     return null;
   }
+
+  void resetContactUsCubit() {
+    emailController.clear();
+    MessageController.clear();
+    isLoading = false;
+    emit(ContactUsInitial());
+  }
 }

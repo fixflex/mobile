@@ -28,4 +28,7 @@ class PostMessageCubit extends Cubit<PostMessageState> {
     }
   }
 
+  void resetPostMessageCubit() {
+    emit(PostMessageInitial());
+  }
 }

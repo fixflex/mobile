@@ -3,6 +3,7 @@ import 'package:fix_flex/components/phone_number_verification.dart';
 import 'package:fix_flex/cubits/register_cubit/register_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/budget_cubit/budget_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_task_details_cubit/get_task_details_cubit.dart';
+import 'package:fix_flex/cubits/tasks_cubits/get_tasks_by_category_id_cubit/get_tasks_by_category_id_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/make_offer_cubit/make_offer_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/update_phone_number_cubit/update_phone_number_cubit.dart';
 import 'package:fix_flex/models/task_model.dart';
@@ -11,7 +12,6 @@ import 'package:fix_flex/widgets/sliver_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../constants/constants.dart';
 import '../cubits/tasks_cubits/details_cubit/details_cubit.dart';
 import '../cubits/users_cubits/verification/send_verification_code_cubit/send_verification_code_cubit.dart';
@@ -71,6 +71,11 @@ class OfferMessage extends StatelessWidget {
                   barrierDismissible: false,
                   builder: (context) {
                     Future.delayed(Duration(seconds: 1), () {
+                      GetTasksByCategoryIdCubit.get(context).getTasksByCategoryId(
+                          categoryId: GetTaskDetailsCubit.get(context)
+                              .state
+                              .taskDetailsList[0]
+                              .categoryId);
                       Navigator.popUntil(
                           context, ModalRoute.withName(TaskDetailsScreen.id));
                     },

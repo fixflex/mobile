@@ -28,6 +28,7 @@ class GetAddressCubit extends Cubit<GetAddressState> {
     }
   }
 void resetGetAddressCubit() {
+    placemarks = [];
     emit(GetAddressInitial());
   }
 

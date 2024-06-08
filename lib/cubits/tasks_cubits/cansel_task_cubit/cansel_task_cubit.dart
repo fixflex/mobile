@@ -26,4 +26,7 @@ class CanselTaskCubit extends Cubit<CanselTaskState> {
     }
   }
 
+  void resetCanselTaskCubit() {
+    emit(CanselTaskInitial());
+  }
 }

@@ -47,4 +47,14 @@ class ObscurePasswordCubit extends Cubit<ObscurePasswordState> {
       emit(RegisterObscureConfirmPasswordVisibilityOff());
     }
   }
+
+  void resetObscurePasswordCubit() {
+    isLoginPasswordShow = true;
+    LoginPasswordIcon = Icons.visibility;
+    isRegisterPasswordShow = true;
+    RegisterPasswordIcon = Icons.visibility;
+    isRegisterConfirmPasswordShow = true;
+    RegisterConfirmPasswordIcon = Icons.visibility;
+    emit(ObscurePasswordInitial());
+  }
 }

@@ -25,4 +25,8 @@ class CompletedTaskCubit extends Cubit<CompletedTaskState> {
       emit(CompletedTaskFailure());
     }
   }
+
+  void resetCompletedTaskCubit() {
+    emit(CompletedTaskInitial());
+  }
 }

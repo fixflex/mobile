@@ -1,6 +1,8 @@
 class EndPoints {
   static const String baseUrl = "https://server.fixflex.tech/api/v1/";
   static const String chatWebSocket = "wss://server.fixflex.tech";
+  // static const String baseUrl = "https://dev1-fixflex.onrender.com/api/v1/";
+  // static const String chatWebSocket = "wss://dev1-fixflex.onrender.com";
   static const String login = "auth/login";
   static const String register = "auth/signup";
   static const String logout = "auth/logout";

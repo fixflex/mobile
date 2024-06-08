@@ -31,9 +31,6 @@ class TermsAndConditionsScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // SizedBox(
-              //   height: 100,
-              // ),
               _buildSectionTitle('Introduction'),
               _buildSectionContent(
                   'Welcome to Fix Flex! These terms govern your use of our app. By using our services, you agree to these terms.'),

@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:meta/meta.dart';
 import '../../../constants/end_points/end_points.dart';
 import '../../../helper/network/dio_api_helper.dart';

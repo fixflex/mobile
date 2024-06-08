@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-
 import '../cubits/bottom_navigation_bar_cubit/bottom_navigation_bar_cubit.dart';
 import '../cubits/get_categories_cubit/get_categories_cubit.dart';
 import '../cubits/tasks_cubits/budget_cubit/budget_cubit.dart';
@@ -44,70 +43,115 @@ class SelectABudget extends StatelessWidget {
                 builder: (context, state) {
                   return FloatingActionButtonInPostATask(
                     backgroundColor: state is LastBudget ? kPrimaryColor : Colors.grey,
-                    text: 'Post The Task',
+                    text: PostTaskCubit.get(context).state is PostTaskLoading || UploadTaskPhotosCubit.get(context).state is UploadTaskPhotosLoading ? '':'Post The Task',
+                    isLoading: PostTaskCubit.get(context).state is PostTaskLoading || UploadTaskPhotosCubit.get(context).state is UploadTaskPhotosLoading,
                     onPressed: () async {
-                      if(state is LastBudget){
-                        final TaskModel taskModel = TaskModel(
-                          title:TitleCubit.get(context).titleController.text,
-                          details: DetailsCubit.get(context).detailsController.text,
-                          categoryId: GetCategoriesCubit.get(context).categoriesDataList[GetCategoriesCubit.get(context).clickedCategoryIndex].id,
-                          dueDate: DueDate(
-                            on :  DateRadioButtonCubit.get(context).state is OnDateRadioButtonsSelected ? DateFormat('yyyy-MM-dd').format(DateRadioButtonCubit.get(context).onDateSelected as DateTime): null,
-                            before: DateRadioButtonCubit.get(context).state is BeforeDateRadioButtonsSelected ? DateFormat('yyyy-MM-dd').format(DateRadioButtonCubit.get(context).beforeDateSelected as DateTime) : null,
-                            flexible: DateRadioButtonCubit.get(context).state is FlexibleDateRadioButtonsSelected ? true : false,
-                          ),
-                          location:Location(
-                              online: PlaceRadioButtonCubit.get(context).state is OnlineSelected ? true : false,
-                              coordinates: PlaceRadioButtonCubit.get(context).state is InPersonSelected ?[
-                                MapCubit.taskPosition?.longitude,
-                                MapCubit.taskPosition?.latitude
-                              ]: null
-                          ) ,
-                          budget: int.parse(BudgetCubit.get(context).budgetController.text) ,
-                        );
-                        await PostTaskCubit.get(context).postTask(taskModel: taskModel,context: context);
-                        if (state is PostTaskLoading || UploadTaskPhotosCubit.get(context).state is UploadTaskPhotosLoading){
-                          showDialog(context: context,
-                            builder: (context) {
-                            return AlertDialog(
-                              backgroundColor: Colors.white,
-                              content: Center(child: CircularProgressIndicator()),
-                            );
-                          },);
-
-                        }else if(PostTaskCubit.get(context).state is PostTaskSuccess){
+                      if(PostTaskCubit.get(context).state is !PostTaskLoading) {
+                        if(PostTaskCubit.get(context).state is !PostTaskSuccess){
+                        if (state is LastBudget) {
+                          final TaskModel taskModel = TaskModel(
+                            title: TitleCubit
+                                .get(context)
+                                .titleController
+                                .text,
+                            details: DetailsCubit
+                                .get(context)
+                                .detailsController
+                                .text,
+                            categoryId: GetCategoriesCubit
+                                .get(context)
+                                .categoriesDataList[GetCategoriesCubit
+                                .get(context)
+                                .clickedCategoryIndex].id,
+                            dueDate: DueDate(
+                              on: DateRadioButtonCubit
+                                  .get(context)
+                                  .state is OnDateRadioButtonsSelected
+                                  ? DateFormat('yyyy-MM-dd').format(
+                                  DateRadioButtonCubit
+                                      .get(context)
+                                      .onDateSelected as DateTime)
+                                  : null,
+                              before: DateRadioButtonCubit
+                                  .get(context)
+                                  .state is BeforeDateRadioButtonsSelected
+                                  ? DateFormat('yyyy-MM-dd').format(
+                                  DateRadioButtonCubit
+                                      .get(context)
+                                      .beforeDateSelected as DateTime)
+                                  : null,
+                              flexible: DateRadioButtonCubit
+                                  .get(context)
+                                  .state is FlexibleDateRadioButtonsSelected
+                                  ? true
+                                  : false,
+                            ),
+                            location: Location(
+                                online: PlaceRadioButtonCubit
+                                    .get(context)
+                                    .state is OnlineSelected ? true : false,
+                                coordinates: PlaceRadioButtonCubit
+                                    .get(context)
+                                    .state is InPersonSelected ? [
+                                  MapCubit.taskPosition?.longitude,
+                                  MapCubit.taskPosition?.latitude
+                                ] : null
+                            ),
+                            budget: int.parse(BudgetCubit
+                                .get(context)
+                                .budgetController
+                                .text),
+                          );
+                          await PostTaskCubit.get(context).postTask(
+                              taskModel: taskModel, context: context);
+                          if (PostTaskCubit
+                              .get(context)
+                              .state is PostTaskSuccess) {
                             showDialog(context: context,
                               barrierDismissible: false,
                               builder: (context) {
                                 Future.delayed(Duration(seconds: 1), () async {
                                   resetPostTaskFetcher(context);
-                                    BottomNavigationBarCubit.get(context).changeBottomNavBar(3, context);
-                                    Navigator.pushNamedAndRemoveUntil(context, HomeScreen.id, (route) => false);
+                                  BottomNavigationBarCubit.get(context)
+                                      .changeBottomNavBar(3, context);
+                                  Navigator.pushNamedAndRemoveUntil(
+                                      context, HomeScreen.id, (route) => false);
                                 });
-                                  return AlertDialog(
-                                backgroundColor: Colors.white,
-                                title: Icon(Icons.check_circle,color: Colors.green,size: 70,),
-                                content: Text('Task created successfully',textAlign: TextAlign.center,),
-                                contentTextStyle: TextStyle(fontSize: 18,color: Colors.black,),
-                              );
-                            },);
-
-                        }else{
-                          showDialog(context: context,
-                            barrierDismissible: false,
-                            builder: (context) {
-                            Future.delayed(Duration(seconds: 1),()async{
-                              Navigator.pop(context);
-                            });
-                            return AlertDialog(
-                              backgroundColor: Colors.white,
-                              title: Icon(Icons.error,color: Colors.red,size: 70,),
-                              content: Text('Failed to create task',textAlign: TextAlign.center,),
-                              contentTextStyle: TextStyle(fontSize: 18,color: Colors.black,),
-                            );
-                          },);
+                                return AlertDialog(
+                                  backgroundColor: Colors.white,
+                                  title: Icon(
+                                    Icons.check_circle, color: Colors.green,
+                                    size: 70,),
+                                  content: Text('Task created successfully',
+                                    textAlign: TextAlign.center,),
+                                  contentTextStyle: TextStyle(
+                                    fontSize: 18, color: Colors.black,),
+                                );
+                              },);
+                          } else {
+                            showDialog(context: context,
+                              barrierDismissible: false,
+                              builder: (context) {
+                                Future.delayed(Duration(seconds: 1), () async {
+                                  Navigator.pop(context);
+                                });
+                                return AlertDialog(
+                                  backgroundColor: Colors.white,
+                                  title: Icon(
+                                    Icons.error, color: Colors.red, size: 70,),
+                                  content: Text('Failed to create task',
+                                    textAlign: TextAlign.center,),
+                                  contentTextStyle: TextStyle(
+                                    fontSize: 18, color: Colors.black,),
+                                );
+                              },);
+                          }
+                        } else
+                          return null;
                         }
-                      }else return null;
+                      }else{
+                        return null;
+                      }
                     },
                   );
                 }

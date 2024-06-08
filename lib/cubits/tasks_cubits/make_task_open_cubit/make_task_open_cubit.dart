@@ -25,4 +25,7 @@ class MakeTaskOpenCubit extends Cubit<MakeTaskOpenState> {
       emit(MakeTaskOpenFailure());
     }
   }
+  void resetMakeTaskOpenCubit() {
+    emit(MakeTaskOpenInitial());
+  }
 }

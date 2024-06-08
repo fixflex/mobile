@@ -39,5 +39,7 @@ class RateTaskerCubit extends Cubit<RateTaskerState> {
   }
   void resetRate(){
     rate = 0.0;
+    emit(RateTaskerInitial());
   }
+
 }

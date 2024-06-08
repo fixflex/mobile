@@ -109,7 +109,6 @@ class RegisterCubit extends Cubit<RegisterState> {
     }else if (!value.contains(RegExp(r'[!@#%&*(),.?":{}|<>]'))) {
       return '• Special character is missing.\n';
     }
-    // If there are no error messages, the password is valid
     return null;
   }
 }

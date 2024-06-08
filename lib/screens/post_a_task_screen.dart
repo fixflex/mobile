@@ -5,7 +5,6 @@ import 'package:fix_flex/cubits/radio_buttons_cubit/date_radio_button_cubit/date
 import 'package:fix_flex/cubits/tasks_cubits/budget_cubit/budget_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/details_cubit/details_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/upload_task_photos_cubit/upload_task_photos_cubit.dart';
-import 'package:fix_flex/screens/category_screen.dart';
 import 'package:fix_flex/widgets/sliver_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

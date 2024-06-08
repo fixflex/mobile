@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class TaskModel {
   TaskModel({
     this.dueDate,
@@ -196,18 +194,6 @@ class ProfilePicture {
   }
 }
 
-// class OffersId{
-//   OffersId({
-//     this.count,
-//   });
-//   final String? count;
-//
-//   factory OffersId.fromJson(jsonData) {
-//     return OffersId(
-//       count: jsonData['offers'],
-//     );
-//   }
-// }
 class OfferDetails {
   OfferDetails({
     this.offerId,

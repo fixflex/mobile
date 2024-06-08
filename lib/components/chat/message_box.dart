@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../constants/constants.dart';
 
 class MessageBox extends StatelessWidget {

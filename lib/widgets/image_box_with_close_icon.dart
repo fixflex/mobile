@@ -1,8 +1,5 @@
 import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../cubits/tasks_cubits/upload_task_photos_cubit/upload_task_photos_cubit.dart';
 import 'image_box.dart';
 

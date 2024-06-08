@@ -3,7 +3,6 @@ import 'package:fix_flex/cubits/chating_cubits/get_my_chats_cubit/get_my_chats_c
 import 'package:fix_flex/cubits/users_cubits/get_user_data_cubit/get_user_data_cubit.dart';
 import 'package:fix_flex/screens/chating_screen.dart';
 import 'package:flutter/material.dart';
-
 import '../../constants/constants.dart';
 
 class ChatLabel extends StatelessWidget {

@@ -3,7 +3,6 @@ import 'package:fix_flex/constants/constants.dart';
 import 'package:fix_flex/cubits/chating_cubits/get_messages_by_chat_id_cubit/get_messages_by_chat_id_cubit.dart';
 import 'package:fix_flex/cubits/chating_cubits/post_message_cubit/post_message_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/check_personal_information_cubit/check_personal_information_cubit.dart';
-import 'package:fix_flex/cubits/users_cubits/get_tasker_by_id_cubit/get_tasker_by_id_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/get_user_data_cubit/get_user_data_cubit.dart';
 import 'package:fix_flex/models/message_model.dart';
 import 'package:fix_flex/screens/personal_information_screen.dart';

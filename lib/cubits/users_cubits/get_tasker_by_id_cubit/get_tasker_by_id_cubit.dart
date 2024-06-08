@@ -4,7 +4,6 @@ import 'package:meta/meta.dart';
 
 import '../../../constants/end_points/end_points.dart';
 import '../../../helper/network/dio_api_helper.dart';
-import '../../../models/tasker_model.dart';
 
 part 'get_tasker_by_id_state.dart';
 
@@ -22,7 +21,6 @@ class GetTaskerByIdCubit extends Cubit<GetTaskerByIdState> {
         url: EndPoints.getTaskerById(taskerId: taskerId),
       );
       if (response.statusCode == 200) {
-        // Map<String, dynamic> taskerData = response.data['data'];
         TaskerByIdModel taskerModel = TaskerByIdModel.fromJson(response.data['data']);
         emit(GetTaskerByIdSuccess(tasker: taskerModel));
       } else {
@@ -31,5 +29,9 @@ class GetTaskerByIdCubit extends Cubit<GetTaskerByIdState> {
     } catch (e) {
       emit(GetTaskerByIdFailure());
     }
+  }
+
+  void resetGetTaskerByIdCubit() {
+    emit(GetTaskerByIdInitial());
   }
 }

@@ -1,8 +1,5 @@
-import 'dart:ffi';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
-
 import '../../../constants/end_points/end_points.dart';
 import '../../../helper/network/dio_api_helper.dart';
 
@@ -30,6 +27,7 @@ class AcceptOfferCashCubit extends Cubit<AcceptOfferCashState> {
     }
   }
   void resetAcceptOfferCashCubit() {
+    isLoading = false;
     emit(AcceptOfferCashInitial());
   }
 }

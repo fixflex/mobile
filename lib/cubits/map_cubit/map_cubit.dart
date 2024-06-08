@@ -73,6 +73,7 @@ class MapCubit extends Cubit<MapState> {
   }
 
   void resetLocationCubit(context) async {
+    taskPosition = null;
     emit(MapInitial());
   }
 }

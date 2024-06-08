@@ -1,8 +1,5 @@
 import 'package:fix_flex/cubits/tasks_cubits/upload_task_photos_cubit/upload_task_photos_cubit.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../components/add_task_photos.dart';
 
 class AddPhotosButton extends StatelessWidget {
   const AddPhotosButton({

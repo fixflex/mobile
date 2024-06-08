@@ -44,27 +44,27 @@ Future<void> connectAndListen({chatsId}) async {
     socket.emit('joinMyRoom');
     for (int i = 0; i < chatsId.length; i++) {
       socket.emit('joinChatRoom', chatsId[i]);
-      print('joinChatRoom ${chatsId[i]}');
+      // print('joinChatRoom ${chatsId[i]}');
     }
   });
 
   socket.on('message', (data) {
     var decodedData = json.decode(data);
-    print('New message received: $decodedData');
+    // print('New message received: $decodedData');
     streamSocket.addResponse(decodedData);
   });
 
   socket.on('newChatRoom', (data) {
-    print('newChatRoom $data');
+    // print('newChatRoom $data');
     var decodedData = json.decode(data);
     socket.emit('joinChatRoom', decodedData['_id']);
     streamSocket.addChatRoom(decodedData);
-    print('joinChatRoom ${decodedData['_id']}');
+    // print('joinChatRoom ${decodedData['_id']}');
   });
 
   socket.on('newOffer', (data) {
     streamSocket.addNewOffer(data);
-    print('newOffer $data');
+    // print('newOffer $data');
   });
 
   socket.onDisconnect((_) => print('disconnect'));

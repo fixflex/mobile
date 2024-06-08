@@ -200,7 +200,8 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => GetMessagesByChatIdCubit(),
-          ), BlocProvider(
+          ),
+          BlocProvider(
             create: (context) => PostMessageCubit(),
           ),
           BlocProvider(
@@ -247,7 +248,6 @@ class MyApp extends StatelessWidget {
       OrdersScreen.id: (context) => OrdersScreen(),
       SearchScreen.id: (context) => SearchScreen(),
       UserProfile.id: (context) => UserProfile(),
-      // MapScreen.id: (context) => MapScreen(),
       TaskDetailsScreen.id: (context) => TaskDetailsScreen(),
       ChooseTimeOfTask.id: (context) => ChooseTimeOfTask(),
       TaskPlace.id: (context) => TaskPlace(),
@@ -257,7 +257,6 @@ class MyApp extends StatelessWidget {
       PhoneNumberVerification.id: (context) => PhoneNumberVerification(),
       ChatingScreen.id: (context) => ChatingScreen(),
       RatingScreen.id: (context) => RatingScreen(),
-      // LastReview.id:(context) => LastReview(),
     };
   }
 }

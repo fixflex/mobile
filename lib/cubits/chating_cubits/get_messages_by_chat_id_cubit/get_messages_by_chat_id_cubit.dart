@@ -3,7 +3,6 @@ import 'package:fix_flex/helper/network/dio_api_helper.dart';
 import 'package:fix_flex/models/message_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
-
 import '../../../helper/secure_storage/secure_keys/secure_key.dart';
 import '../../../helper/secure_storage/secure_storage.dart';
 
@@ -44,5 +43,9 @@ class GetMessagesByChatIdCubit extends Cubit<GetMessagesByChatIdState> {
     } catch (e) {
       emit(GetMessagesByChatIdFailure());
     }
+  }
+
+  void resetGetMessagesByChatIdCubit() {
+    emit(GetMessagesByChatIdInitial());
   }
 }

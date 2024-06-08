@@ -1,7 +1,6 @@
 import 'package:fix_flex/cubits/users_cubits/check_my_role_cubit/check_my_role_cubit.dart';
 import 'package:fix_flex/screens/become_a_tasker_screen.dart';
 import 'package:fix_flex/screens/contact_us_screen.dart';
-import 'package:fix_flex/screens/privacy_policies_screen.dart';
 import 'package:fix_flex/screens/terms_and_conditions_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -2,7 +2,6 @@ import 'package:fix_flex/components/chat/chat_label.dart';
 import 'package:fix_flex/cubits/chating_cubits/get_my_chats_cubit/get_my_chats_cubit.dart';
 import 'package:fix_flex/helper/secure_storage/secure_keys/secure_variable.dart';
 import 'package:fix_flex/helper/web_socket/socket_service.dart';
-import 'package:fix_flex/models/my_chats_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
