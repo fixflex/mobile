@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import '../components/default_form_field.dart';
+import '../constants/constants.dart';
 import '../cubits/obscure_password_cubit/obscure_password_cubit.dart';
 import '../cubits/users_cubits/check_my_role_cubit/check_my_role_cubit.dart';
 import '../helper/secure_storage/secure_keys/secure_key.dart';
@@ -36,13 +37,14 @@ class RegisterScreen extends StatelessWidget {
                     ScaffoldMessenger.of(context).hideCurrentSnackBar();
                     RegisterCubit.get(context).isLoading = true;
 
-                  } else if (state is RegisterErrorState) {
+                  }
+                  else if (state is RegisterErrorState) {
                     RegisterCubit.get(context).isLoading = false;
                     ScaffoldMessenger.of(context).hideCurrentSnackBar();
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         backgroundColor: Colors.red,
-                        duration: Duration(seconds: 4),
+                        duration: Duration(seconds: 1),
                         content: Text(
                           state.error,
                           style: const TextStyle(
@@ -51,7 +53,40 @@ class RegisterScreen extends StatelessWidget {
                         ),
                       ),
                     );
-                  } else if (state is RegisterSuccessState) {
+                  }
+                  else if(state is PhoneNumberIsAlreadyExist){
+                    RegisterCubit.get(context).isLoading = false;
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Colors.red,
+                        duration: Duration(seconds: 1),
+                        content: Text(
+                          '• Phone number is already exist',
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  else if(state is EmailIsAlreadyExist){
+                    RegisterCubit.get(context).isLoading = false;
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Colors.red,
+                        duration: Duration(seconds: 1),
+                        content: Text(
+                          '• Email is already exist',
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  else if (state is RegisterSuccessState) {
                     RegisterCubit.get(context).isLoading = false;
                     ScaffoldMessenger.of(context).hideCurrentSnackBar();
                     SecureVariables.token =
@@ -62,7 +97,6 @@ class RegisterScreen extends StatelessWidget {
                     Navigator.pushReplacementNamed(context, UpdateProfilePictureScreen.id);
                     RegisterCubit.get(context).resetRegisterCubit();
                     CheckMyRoleCubit.get(context).checkMyRole();
-                    OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
                     OneSignal.initialize("6a3a9ea1-b670-44bb-83e9-599aa8ce1a58");
                     OneSignal.Notifications.requestPermission(true);
                     var userId = await SecureStorage.getData(key: SecureKey.userId);
@@ -151,6 +185,7 @@ class RegisterScreen extends StatelessWidget {
                               width: 330,
                               controller: cubit.signUpPhoneNumber,
                               keyType: TextInputType.phone,
+                              counterText: '',
                               maxLength: 11,
                               onChanged: (value) {
                                 if (value.length == 11) {
@@ -232,7 +267,7 @@ class RegisterScreen extends StatelessWidget {
                               },
                             ),
                             const SizedBox(
-                              height: 150,
+                              height: 100,
                             ),
 
                             //Register Button
@@ -241,7 +276,7 @@ class RegisterScreen extends StatelessWidget {
                               width: 330,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(30),
-                                color: const Color(0xff134161),
+                                color: kPrimaryColor,
                               ),
                               child: TextButton(
                                 onPressed: () {

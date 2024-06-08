@@ -1,3 +1,4 @@
+import 'package:fix_flex/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -52,7 +53,7 @@ Widget defaultFormField({
             color: const Color(0xff134161),
           ),
           labelText: label,
-          labelStyle: TextStyle(color:  Color(0xff134161)),
+          labelStyle: TextStyle(color: kThirdColor),
           hintText: hint,
           hintStyle: hintStyle,
           border: OutlineInputBorder(

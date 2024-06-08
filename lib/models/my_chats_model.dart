@@ -1,18 +1,3 @@
-// class MyChatsModel {
-//   MyChatsModel({
-//     required this.results,
-//     required this.data,
-//   });
-//   final int results;
-//   final MyChatsDataModel data;
-//
-//   factory MyChatsModel.fromJson(jsonData) {
-//     return MyChatsModel(
-//       results: jsonData['results'],
-//       data: MyChatsDataModel.fromJson(jsonData['data']),
-//     );
-//   }
-// }
 class MyChatsDataModel {
   MyChatsDataModel({
     required this.id,

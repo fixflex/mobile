@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../constants/constants.dart';
 import '../cubits/users_cubits/get_my_data_cubit/get_my_data_cubit.dart';
-import '../helper/secure_storage/secure_keys/secure_variable.dart';
+import '../cubits/users_cubits/get_tasker_by_id_cubit/get_tasker_by_id_cubit.dart';
 import '../widgets/categories_gridview.dart';
 import '../widgets/sliver_appbar.dart';
 import 'offers.dart';
@@ -15,44 +15,50 @@ class HomePageComponents extends StatelessWidget {
   HomePageComponents({
     super.key,
   });
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: NestedScrollView(
+        physics: NeverScrollableScrollPhysics(),
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
             //Sliver App Bar Widget
-            BlocBuilder<CheckMyRoleCubit,CheckMyRoleState>(
-              builder: (context, state) {
+            BlocBuilder<CheckMyRoleCubit, CheckMyRoleState>(
+              builder: (context, roleState) {
                 return BlocBuilder<GetMyDataCubit, GetMyDataState>(
-                  builder: (context, state) {
+                  builder: (context, dataState) {
                     return SliverAppBarWidget(
                       backgroundColor: kPrimaryColor,
-                      onTap: () {
-                        CheckPersonalInformationCubit.get(context)
-                            .checkPersonalInformation(userId:
-                            state is GetMyDataSuccess
-                                ? state.myDataList[0].uId
-                                : '');
+                      onTap: () async {
+                        // Handle Personal Information Check
+                        final userId = dataState is GetMyDataSuccess
+                            ? dataState.myDataList[0].uId
+                            : '';
+                        CheckPersonalInformationCubit.get(context).checkPersonalInformation(userId: userId);
+
+                        // Handle Role Check
+                        if (roleState is IamATasker) {
+                          final taskerId = roleState.TaskerDataList[0].taskerId;
+                          await GetTaskerByIdCubit.get(context).getTaskerById(taskerId: taskerId);
+                        }
+
                         Navigator.pushNamed(context, PersonalInformationScreen.id);
                       },
-                      title: CheckMyRoleCubit.get(context).state is IamATasker ? 'TASKER'
-                          : 'USER',
+                      title: roleState is IamATasker ? 'TASKER' : 'USER',
                       icon: Icons.menu,
                       iconSize: 40,
                       onPressed: () {
                         Scaffold.of(context).openDrawer();
                       },
-                      image: state is GetMyDataSuccess
-                          ? state.myDataList[0].profilePicture?.url != null
-                              ? state.myDataList[0].profilePicture!.url as String
-                              : kDefaultUserImage
+                      image: dataState is GetMyDataSuccess
+                          ? dataState.myDataList[0].profilePicture?.url ?? kDefaultUserImage
                           : kDefaultUserImage,
                     );
                   },
                 );
-              }
+              },
             ),
           ];
         },
@@ -61,7 +67,7 @@ class HomePageComponents extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                //Search Box
+                // Search Box
                 Padding(
                   padding: const EdgeInsets.only(top: 25),
                   child: GestureDetector(
@@ -69,9 +75,7 @@ class HomePageComponents extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) {
-                            return SearchScreen();
-                          },
+                          builder: (context) => SearchScreen(),
                         ),
                       );
                     },
@@ -86,8 +90,7 @@ class HomePageComponents extends StatelessWidget {
                         child: Row(
                           children: [
                             Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10, right: 10),
+                              padding: const EdgeInsets.only(left: 10, right: 10),
                               child: Icon(
                                 Icons.search,
                                 size: 25.0,
@@ -108,7 +111,7 @@ class HomePageComponents extends StatelessWidget {
                   ),
                 ),
 
-                //Services Categories Text
+                // Services Categories Text
                 Padding(
                   padding: const EdgeInsets.only(top: 25, bottom: 20),
                   child: Container(
@@ -123,10 +126,10 @@ class HomePageComponents extends StatelessWidget {
                   ),
                 ),
 
-                //Categories Grid view
+                // Categories Grid view
                 CategoriesGridview(),
 
-                //Offers Text
+                // Offers Text
                 Padding(
                   padding: const EdgeInsets.only(top: 20, bottom: 20),
                   child: Container(
@@ -141,7 +144,7 @@ class HomePageComponents extends StatelessWidget {
                   ),
                 ),
 
-                //Offers Container
+                // Offers Container
                 Offers(),
               ],
             ),

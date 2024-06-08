@@ -63,10 +63,29 @@ class OfferMessage extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: BlocBuilder<DetailsCubit, DetailsState>(builder: (context, state) {
         return BlocConsumer<MakeOfferCubit, MakeOfferState>(
-            listener: (context, state) {
+            listener: (context, state) async {
               if (state is MakeOfferSuccess) {
-                Navigator.popUntil(
-                    context, ModalRoute.withName(TaskDetailsScreen.id));
+                await GetTaskDetailsCubit.get(context).getTaskDetails(taskId: GetTaskDetailsCubit.get(context).state.taskDetailsList[0].id);
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) {
+                    Future.delayed(Duration(seconds: 1), () {
+                      Navigator.popUntil(
+                          context, ModalRoute.withName(TaskDetailsScreen.id));
+                    },
+                    );
+                    MakeOfferCubit.get(context).resetMakeOfferCubit();
+                    return AlertDialog(
+                      icon: Icon(
+                          Icons.check_circle, color: Colors.green, size: 80),
+                      alignment: Alignment.center,
+                      content: Text('Offer Sent Successfully'),
+                    );
+                  },
+                );
+                BudgetCubit.get(context).resetBudgetCubit();
+                DetailsCubit.get(context).resetDetailsCubit();
               } else if (state is VerifyPhoneNumber) {
                 showDialog(
                   context: context,
@@ -187,12 +206,14 @@ class OfferMessage extends StatelessWidget {
             DetailsCubit.get(context).detailsController.text.length < 25
                 ? Colors.grey
                 : kPrimaryColor,
-            text: 'Push The Offer',
+            text: state is MakeOfferLoading ?'':'Push The Offer',
+            isLoading: state is MakeOfferLoading,
             onPressed: () async {
               if (DetailsCubit.get(context).detailsController.text.length <
                   25) {
                 return;
               } else {
+                if(state is MakeOfferInitial || state is MakeOfferFailure){
                 await MakeOfferCubit.get(context).makeOffer(
                     OfferDetails: OfferDetails(
                       taskId: GetTaskDetailsCubit.get(context)
@@ -202,6 +223,9 @@ class OfferMessage extends StatelessWidget {
                       message: DetailsCubit.get(context).detailsController.text,
                       price: BudgetCubit.get(context).newBudget,
                     ));
+              }else{
+                  return;
+                }
               }
             },
           );

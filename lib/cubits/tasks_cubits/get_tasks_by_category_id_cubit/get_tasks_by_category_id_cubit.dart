@@ -13,8 +13,8 @@ class GetTasksByCategoryIdCubit extends Cubit<GetTasksByCategoryIdState> {
 
   Future<void> getTasksByCategoryId(
       {required String categoryId}) async {
+    emit(GetTasksByCategoryIdLoading());
     try {
-      emit(GetTasksByCategoryIdLoading());
       var response = (await DioApiHelper.getData(
           url: EndPoints.tasks,
           query: {

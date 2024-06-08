@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 
 import '../../constants/constants.dart';
+import '../../models/message_model.dart';
 
 class ChatBubble extends StatelessWidget {
   const ChatBubble({
     super.key,
-    // required this.message,
+    required this.message,
     required this.alignment,
     required this.color,
     required this.borderRadius,
   });
 
-  // final MessageModel message;
+  final String message;
   final Alignment alignment;
   final Color color;
   final BorderRadius borderRadius;
@@ -33,11 +34,10 @@ class ChatBubble extends StatelessWidget {
           borderRadius: borderRadius,
         ),
         child: Text(
-          // message.message,
-          '',
+          message,
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 22,
+            fontSize: 15,
             fontFamily: 'pacifico',
           ),
         ),
@@ -48,17 +48,17 @@ class ChatBubble extends StatelessWidget {
 
 class SenderChatBubble extends StatelessWidget {
   const SenderChatBubble({super.key,
-    // required this.message
+    required this.message
   });
 
-  // final MessageModel message;
+  final String message;
 
   @override
   Widget build(BuildContext context) {
     return ChatBubble(
-      // message: 'message',
+      message: message,
       alignment: Alignment.centerLeft,
-      color: kSecondaryColor,
+      color: kPrimaryColor,
       borderRadius: const BorderRadius.only(
         topLeft: Radius.circular(30),
         topRight: Radius.circular(30),
@@ -70,15 +70,15 @@ class SenderChatBubble extends StatelessWidget {
 
 class ReceiverChatBubble extends StatelessWidget {
   const ReceiverChatBubble({super.key,
-    // required this.message
+    required this.message
   });
 
-  // final MessageModel message;
+  final String message;
 
   @override
   Widget build(BuildContext context) {
     return ChatBubble(
-      // message: message,
+      message: message,
       alignment: Alignment.centerRight,
       color: kThirdColor,
       borderRadius: const BorderRadius.only(

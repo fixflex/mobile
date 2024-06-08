@@ -234,11 +234,14 @@ class FloatingActionButtonInPostATask extends StatelessWidget {
       {super.key,
       required this.text,
       required this.onPressed,
-      required this.backgroundColor});
+      required this.backgroundColor,
+        this.isLoading
+      });
 
   final String text;
   final void Function() onPressed;
   final Color backgroundColor;
+  final bool? isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -252,7 +255,7 @@ class FloatingActionButtonInPostATask extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(40),
           ),
-          child: Text(
+          child: isLoading == true ? Center(child: CircularProgressIndicator(color: Colors.white,),):Text(
             text,
             style: TextStyle(color: Colors.white, fontSize: 18),
           ),

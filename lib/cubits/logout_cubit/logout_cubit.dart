@@ -3,6 +3,7 @@ import 'package:fix_flex/cubits/register_cubit/register_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_task_details_cubit/get_task_details_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_tasks_by_category_id_cubit/get_tasks_by_category_id_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_tasks_by_user_id/get_tasks_by_user_id_cubit.dart';
+import 'package:fix_flex/cubits/tasks_cubits/make_offer_cubit/make_offer_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/post_task_cubit/post_task_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/become_a_tasker_cubit/become_a_tasker_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/check_my_role_cubit/check_my_role_cubit.dart';
@@ -48,6 +49,7 @@ void logout(BuildContext context) async {
   LoginCubit.get(context).resetLoginCubit();
   RegisterCubit.get(context).resetRegisterCubit();
   MapCubit.get(context).resetLocationCubit(context);
+  MakeOfferCubit.get(context).resetMakeOfferCubit();
 
   emit(LogoutSuccessState());
 }

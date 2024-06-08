@@ -18,7 +18,7 @@ class BecomeATaskerCubit extends Cubit<BecomeATaskerState> {
     emit(BecomeATaskerLoading());
     try {
       var response = await DioApiHelper.postData(
-        url: EndPoints.BecomeATasker(),
+        url: EndPoints.becomeATasker(),
         data: {
           "categories": [CategoryController.text],
           "location": {

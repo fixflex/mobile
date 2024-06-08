@@ -3,11 +3,13 @@ import 'package:fix_flex/constants/constants.dart';
 import 'package:fix_flex/cubits/users_cubits/check_my_role_cubit/check_my_role_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/check_personal_information_cubit/check_personal_information_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/get_my_data_cubit/get_my_data_cubit.dart';
+import 'package:fix_flex/cubits/users_cubits/get_tasker_by_id_cubit/get_tasker_by_id_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/get_user_data_cubit/get_user_data_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/update_profile_picture_cubit/update_profile_picture_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 
 import '../helper/secure_storage/secure_keys/secure_variable.dart';
@@ -55,6 +57,7 @@ class PersonalInformationScreen extends StatelessWidget {
                           if (state is MyPersonalInformation) {
                             return BlocBuilder<GetMyDataCubit, GetMyDataState>(
                                 builder: (context, state) {
+                                  var cubit = UpdateProfilePictureCubit.get(context);
                                   return Column(
                                     children: [
                                       SizedBox(height: 35.0),
@@ -71,8 +74,14 @@ class PersonalInformationScreen extends StatelessWidget {
                                                   Text(cubit.galleryOption),
                                                 ],
                                               ),
-                                              onTap: () {
+                                              onTap: () async {
                                                 cubit.pickImage(cubit.galleryOption);
+                                                await cubit.state is UpdateProfilePicturePickedImage ? cubit.updateProfilePicture(
+                                                    id: SecureVariables.userId as String,
+                                                    token: SecureVariables.token as String,
+                                                    imageFile: cubit.image,
+                                                    context: context,
+                                                  ) : Navigator.pop(context);
                                                 Navigator.pop(context);
                                               },
                                             ),
@@ -86,8 +95,14 @@ class PersonalInformationScreen extends StatelessWidget {
                                                   Text(cubit.cameraOption),
                                                 ],
                                               ),
-                                              onTap: () {
+                                              onTap: () async {
                                                 cubit.pickImage(cubit.cameraOption);
+                                                await cubit.image != null ? cubit.updateProfilePicture(
+                                                    id: SecureVariables.userId as String,
+                                                    token: SecureVariables.token as String,
+                                                    imageFile: cubit.image,
+                                                    context: context,
+                                                  ) : Navigator.pop(context);
                                                 Navigator.pop(context);
                                               },
                                             ),
@@ -214,7 +229,38 @@ class PersonalInformationScreen extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          SizedBox(height: 20.0),
+          SizedBox(height: 5),
+          BlocBuilder<GetTaskerByIdCubit,GetTaskerByIdState>(
+              builder: (context,state) {
+                if (state is GetTaskerByIdSuccess) {
+                 return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    RatingBarIndicator(
+                      itemBuilder: (context, index) {
+                        return Icon(
+                          size: 30,
+                          Icons.star,
+                          color: Colors.amber,
+                        );
+                      },
+                      itemSize: 30,
+                      rating: state.tasker.ratingAverage.toDouble(),
+                    ),
+                    Text(
+                      '(${state.tasker.ratingQuantity})',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                );
+                }else{
+                  return Container();
+                }
+              }
+          ),
           ListTile(
             leading: Icon(
               Icons.person,

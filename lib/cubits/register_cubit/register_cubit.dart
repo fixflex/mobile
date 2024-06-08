@@ -46,7 +46,12 @@ class RegisterCubit extends Cubit<RegisterState> {
         SecureStorage.saveData(
             key: SecureKey.userId, value: response.data["data"]["_id"]);
         emit(RegisterSuccessState());
-      } else {
+      }else if(response.statusCode == 400) {
+        emit(PhoneNumberIsAlreadyExist());
+      }else if(response.statusCode == 409) {
+        emit(EmailIsAlreadyExist());
+      }
+      else {
         emit(RegisterErrorState(error: response.data['errors'][0]['msg'].toString()));
       }
     } on Exception catch (e) {

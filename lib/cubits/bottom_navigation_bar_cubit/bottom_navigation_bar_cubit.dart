@@ -60,19 +60,6 @@ class BottomNavigationBarCubit extends Cubit<BottomNavigationBarState> {
        GetTasksByUserIdCubit.get(context).getTasksByUserId(userId: SecureVariables.userId);
     }else if(index == 1){
        GetMyChatsCubit.get(context).getMyChats(context);
-      // if(GetMyChatsCubit.get(context).state is GetMyChatsSuccess){
-      //   for (var chat in GetMyChatsCubit.get(context).myChats) {
-      //     await GetUserDataCubit.get(context).getUserData(chat.tasker);
-      //     // BlocBuilder<GetUserDataCubit,GetUserDataState>(builder: (context, state) {
-      //     //   if(state is GetUserDataSuccess){
-      //     //     usersDataList = state.userDataList;
-      //     //   }else if(state is GetUserDataFailure){
-      //     //     return Container();
-      //     //   }return Container();
-      //     // }
-      //     // );
-      //   }
-      // }
       }
     emit(AppChangeBottomNavBar());
   }

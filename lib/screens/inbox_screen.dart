@@ -1,13 +1,18 @@
 import 'package:fix_flex/components/chat/chat_label.dart';
-import 'package:fix_flex/cubits/bottom_navigation_bar_cubit/bottom_navigation_bar_cubit.dart';
 import 'package:fix_flex/cubits/chating_cubits/get_my_chats_cubit/get_my_chats_cubit.dart';
+import 'package:fix_flex/helper/secure_storage/secure_keys/secure_variable.dart';
+import 'package:fix_flex/helper/web_socket/socket_service.dart';
+import 'package:fix_flex/models/my_chats_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class InBoxScreen extends StatelessWidget {
-  const InBoxScreen({super.key});
+   InBoxScreen({super.key});
 
   static const String id = 'InBoxScreen';
+  final scrollController = ScrollController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -28,18 +33,38 @@ class InBoxScreen extends StatelessWidget {
           } else if (state is GetMyChatsSuccess) {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: ListView.builder(
-                itemCount: state.chatsHolders.length,
-                itemBuilder: (context, index) {
-                  return ChatLabel(
-                    index: index,
-                    chatId: state.myChatsDataModel[index].id,
-                    image: state.chatsHolders[index].profilePicture?.url != null
-                        ? NetworkImage(state.chatsHolders[index].profilePicture!.url as String) : null,
+              child: StreamBuilder(
+                stream: streamSocket.getChatRoom,
+                builder: (BuildContext context, AsyncSnapshot<Map<String,dynamic>> snapshot) {
+                  final data = snapshot.data;
+                  if (data != null) {
+                    // final myChatsDataModel = MyChatsDataModel.fromJson(data);
+                    // GetMyChatsCubit.get(context).fetchUserData(context, myChatsDataModel.tasker);
+                    // state.myChatsDataModel.add(myChatsDataModel);
+                    // GetMyChatsCubit.get(context).getMyChats(context);
+                    SchedulerBinding.instance.addPostFrameCallback((_) {
+                      scrollController.jumpTo(scrollController.position.minScrollExtent);
+                    });
+                  }
+                  return ListView.builder(
+                    reverse: true,
+                    shrinkWrap: true,
+                    controller: scrollController,
+                    itemCount: state.chatsHolders.length,
+                    itemBuilder: (context, index) {
+                      final String taskerId = state.myChatsDataModel[index].user == SecureVariables.userId ? state.myChatsDataModel[index].tasker : state.myChatsDataModel[index].user;
+                      return ChatLabel(
+                        index: index,
+                        chatId: state.myChatsDataModel[index].id,
+                        taskerId: taskerId,
+                        image: state.chatsHolders[index].profilePicture?.url != null
+                            ? NetworkImage(state.chatsHolders[index].profilePicture!.url as String) : null,
 
-                    chatHolderName: '${state.chatsHolders[index].FirstName} ${state.chatsHolders[index].LastName}',
+                        chatHolderName: '${state.chatsHolders[index].FirstName} ${state.chatsHolders[index].LastName}',
+                      );
+                    },
                   );
-                },
+                }
               ),
             );
           }

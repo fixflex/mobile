@@ -19,7 +19,7 @@ String chatName ='Chat Name';
     emit(GetChatByIdLoading());
     try {
       final response = await DioApiHelper.getData(
-          url:EndPoints.GetChatById(id: id)
+          url:EndPoints.getChatById(id: id)
       );
       if (response.statusCode == 200) {
         // final MyChatsModel myChatsModel = MyChatsModel.fromJson(response.data);

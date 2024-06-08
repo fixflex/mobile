@@ -35,5 +35,9 @@ class MakeOfferCubit extends Cubit<MakeOfferState> {
     }
   }
 
+  void resetMakeOfferCubit() {
+    emit(MakeOfferInitial());
+  }
+
 
 }

@@ -14,6 +14,7 @@ import '../cubits/login_cubit/login_state.dart';
 import '../helper/secure_storage/secure_keys/secure_key.dart';
 import '../helper/secure_storage/secure_keys/secure_variable.dart';
 import '../helper/secure_storage/secure_storage.dart';
+import '../helper/web_socket/socket_service.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({
@@ -68,7 +69,7 @@ class LoginScreen extends StatelessWidget {
                           await GetMyDataCubit.get(context).getMyData();
                           Navigator.pushReplacementNamed(context, HomeScreen.id);
                           LoginCubit.get(context).resetLoginCubit();
-                          OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+                          // OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
                           OneSignal.initialize("6a3a9ea1-b670-44bb-83e9-599aa8ce1a58");
                           OneSignal.Notifications.requestPermission(true);
                           var userId = await SecureStorage.getData(key: SecureKey.userId);

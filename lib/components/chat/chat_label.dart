@@ -1,9 +1,10 @@
+import 'package:fix_flex/cubits/chating_cubits/get_messages_by_chat_id_cubit/get_messages_by_chat_id_cubit.dart';
 import 'package:fix_flex/cubits/chating_cubits/get_my_chats_cubit/get_my_chats_cubit.dart';
+import 'package:fix_flex/cubits/users_cubits/get_user_data_cubit/get_user_data_cubit.dart';
 import 'package:fix_flex/screens/chating_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/constants.dart';
-import '../../cubits/chating_cubits/get_chat_by_id_cubit/get_chat_by_id_cubit.dart';
 
 class ChatLabel extends StatelessWidget {
   const ChatLabel({
@@ -12,11 +13,13 @@ class ChatLabel extends StatelessWidget {
     this.image,
     required this.chatId,
     required this.index,
+    required this.taskerId,
   });
   final chatHolderName;
   final NetworkImage? image;
   final String chatId;
   final int index;
+  final String taskerId ;
 
   @override
   Widget build(BuildContext context) {
@@ -55,10 +58,15 @@ class ChatLabel extends StatelessWidget {
           ),
           Expanded(
             child: GestureDetector(
-              onTap: () async {
+              onTap: (){
                 GetMyChatsCubit.get(context).index = index;
-                await GetChatByIdCubit.get(context).getChatById(id: chatId);
-                Navigator.pushNamed(context, ChatingScreen.id);
+                GetUserDataCubit.get(context).getUserData(taskerId);
+                GetMessagesByChatIdCubit.get(context).getMessagesByChatId(chatId: chatId);
+
+                Navigator.pushNamed(context, ChatingScreen.id , arguments: {
+                  'chatId': chatId,
+                  'taskerId': taskerId,
+                });
               },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

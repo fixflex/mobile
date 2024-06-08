@@ -5,21 +5,31 @@ import 'package:fix_flex/components/phone_number_verification.dart';
 import 'package:fix_flex/components/select_a_budget.dart';
 import 'package:fix_flex/components/task_place.dart';
 import 'package:fix_flex/cubits/bottom_navigation_bar_cubit/bottom_navigation_bar_cubit.dart';
+import 'package:fix_flex/cubits/chating_cubits/create_new_chat_cubit/create_new_chat_cubit.dart';
+import 'package:fix_flex/cubits/chating_cubits/get_messages_by_chat_id_cubit/get_messages_by_chat_id_cubit.dart';
 import 'package:fix_flex/cubits/chating_cubits/get_my_chats_cubit/get_my_chats_cubit.dart';
+import 'package:fix_flex/cubits/chating_cubits/get_my_chats_initial_cubit/get_my_chats_initial_cubit.dart';
+import 'package:fix_flex/cubits/chating_cubits/post_message_cubit/post_message_cubit.dart';
 import 'package:fix_flex/cubits/map_cubit/map_cubit.dart';
 import 'package:fix_flex/cubits/obscure_password_cubit/obscure_password_cubit.dart';
 import 'package:fix_flex/cubits/radio_buttons_cubit/date_radio_button_cubit/date_radio_button_cubit.dart';
 import 'package:fix_flex/cubits/register_cubit/register_cubit.dart';
+import 'package:fix_flex/cubits/tasks_cubits/accept_offer_cash_cubit/accept_offer_cash_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/budget_cubit/budget_cubit.dart';
+import 'package:fix_flex/cubits/tasks_cubits/cansel_task_cubit/cansel_task_cubit.dart';
+import 'package:fix_flex/cubits/tasks_cubits/completed_task_cubit/completed_task_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_address_cubit/get_address_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_task_details_cubit/get_task_details_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/get_tasks_by_category_id_cubit/get_tasks_by_category_id_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/make_offer_cubit/make_offer_cubit.dart';
+import 'package:fix_flex/cubits/tasks_cubits/make_task_open_cubit/make_task_open_cubit.dart';
 import 'package:fix_flex/cubits/tasks_cubits/post_task_cubit/post_task_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/become_a_tasker_cubit/become_a_tasker_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/check_my_role_cubit/check_my_role_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/check_personal_information_cubit/check_personal_information_cubit.dart';
+import 'package:fix_flex/cubits/users_cubits/get_tasker_by_id_cubit/get_tasker_by_id_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/get_user_data_cubit/get_user_data_cubit.dart';
+import 'package:fix_flex/cubits/users_cubits/rate_tasker_cubit/rate_tasker_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/update_phone_number_cubit/update_phone_number_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/update_profile_picture_cubit/update_profile_picture_cubit.dart';
 import 'package:fix_flex/cubits/users_cubits/verification/verify_phone_number_cubit/verify_phone_number_cubit.dart';
@@ -33,6 +43,7 @@ import 'package:fix_flex/screens/make_an_offer_screen.dart';
 import 'package:fix_flex/screens/orders_screen.dart';
 import 'package:fix_flex/screens/personal_information_screen.dart';
 import 'package:fix_flex/screens/post_a_task_screen.dart';
+import 'package:fix_flex/screens/rating_screen.dart';
 import 'package:fix_flex/screens/register_screen.dart';
 import 'package:fix_flex/screens/search_screen.dart';
 import 'package:fix_flex/screens/task_details_screen.dart';
@@ -55,6 +66,7 @@ import 'helper/network/dio_api_helper.dart';
 import 'helper/secure_storage/secure_keys/secure_key.dart';
 import 'helper/secure_storage/secure_keys/secure_variable.dart';
 import 'helper/secure_storage/secure_storage.dart';
+import 'helper/web_socket/socket_service.dart';
 import 'screens/splash_screen.dart';
 
 void main() async {
@@ -65,7 +77,6 @@ void main() async {
 
   SecureVariables.token = await SecureStorage.getData(key: SecureKey.token);
   SecureVariables.userId = await SecureStorage.getData(key: SecureKey.userId);
-
 
   runApp(MyApp());
 }
@@ -78,12 +89,35 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           BlocProvider(
+            create: (context) => GetMyChatsInitialCubit(),
+          ),
+          BlocListener<GetMyChatsInitialCubit,GetMyChatsInitialState>(listener: (context, state) {
+            if(state is GetMyChatsInitialSuccess){
+              List chatsId = [];
+              for(int i = 0; i < state.myChatsDataModel.length; i++){
+                chatsId.add(state.myChatsDataModel[i].id);
+              }
+              connectAndListen(chatsId: chatsId);
+            }else if(state is GetMyChatsInitialNoChats){
+              connectAndListen(chatsId: []);
+            }
+          },),
+          BlocProvider(
             create: (context) => GetMyDataCubit()..getMyData(),
+          ),
+          BlocListener<GetMyDataCubit,GetMyDataState>(listener:
+          (context, state) {
+            if(state is GetMyDataSuccess){
+              GetMyChatsInitialCubit.get(context).getMyChats();
+            }
+          },
           ),
           BlocProvider(
             create: (context) => GetUserDataCubit(),
           ),
-          BlocProvider(create: (context) => BottomNavigationBarCubit()),
+          BlocProvider(
+            create: (context) => BottomNavigationBarCubit(),
+          ),
           BlocProvider(
             create: (context) => UpdateProfilePictureCubit(),
           ),
@@ -94,9 +128,14 @@ class MyApp extends StatelessWidget {
             create: (context) => CheckMyRoleCubit()..checkMyRole(),
           ),
           BlocProvider(
+            create: (context) => GetTaskerByIdCubit(),
+          ),
+          BlocProvider(
             create: (context) => BecomeATaskerCubit(),
           ),
-          BlocProvider(create: (context) => GetTasksByUserIdCubit()),
+          BlocProvider(
+            create: (context) => GetTasksByUserIdCubit(),
+          ),
           BlocProvider(
             create: (context) => ObscurePasswordCubit(),
           ),
@@ -151,13 +190,36 @@ class MyApp extends StatelessWidget {
             create: (context) => MakeOfferCubit(),
           ),
           BlocProvider(
+            create: (context) => GetChatByIdCubit(),
+          ),
+          BlocProvider(
+            create: (context) => TaskCubit(),
+          ),
+          BlocProvider(
             create: (context) => GetMyChatsCubit(),
           ),
           BlocProvider(
-            create: (context) => GetChatByIdCubit(),
+            create: (context) => GetMessagesByChatIdCubit(),
+          ), BlocProvider(
+            create: (context) => PostMessageCubit(),
           ),
-          BlocProvider<TaskCubit>(
-            create: (context) => TaskCubit(),
+          BlocProvider(
+            create: (context) => AcceptOfferCashCubit(),
+          ),
+          BlocProvider(
+            create: (context) => CreateNewChatCubit(),
+          ),
+          BlocProvider(
+            create: (context) => CanselTaskCubit(),
+          ),
+          BlocProvider(
+            create: (context) => MakeTaskOpenCubit(),
+          ),
+          BlocProvider(
+            create: (context) => CompletedTaskCubit(),
+          ),
+          BlocProvider(
+            create: (context) => RateTaskerCubit(),
           ),
         ],
         child: MaterialApp(
@@ -194,6 +256,7 @@ class MyApp extends StatelessWidget {
       OfferMessage.id: (context) => OfferMessage(),
       PhoneNumberVerification.id: (context) => PhoneNumberVerification(),
       ChatingScreen.id: (context) => ChatingScreen(),
+      RatingScreen.id: (context) => RatingScreen(),
       // LastReview.id:(context) => LastReview(),
     };
   }

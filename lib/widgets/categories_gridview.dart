@@ -55,6 +55,7 @@ class BuildCategoriesGrid extends StatelessWidget {
     return SizedBox(
       height: categoriesGridViewHeight,
       child: GridView.builder(
+        physics: NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
           mainAxisSpacing: 5,
