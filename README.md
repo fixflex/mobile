@@ -1,6 +1,9 @@
 # fix_flex
 
-A new Flutter project.
+
+What is FixFlex?
+
+FixFlex is a platform that connects people who need tasks done with individuals willing to complete those tasks for pay. It operates like traditional freelancing platforms such as Upwork, Fiverr, and Freelancer, where users can post tasks or jobs, and taskers make offers on these tasks. The user then selects the most suitable tasker for the job.
 
 ## Getting Started
 
